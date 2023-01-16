@@ -2,7 +2,7 @@
 ---
 ## Project: 
   ### *Stock Simulation*
-    The purpose of this project is to allow users to participate in the stock market risk free while keeping up with the latest news and events.
+  The purpose of this project is to allow users to participate in the stock market risk free while keeping up with the latest news and events.
   
 ---
 ## Members:
