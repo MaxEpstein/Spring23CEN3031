@@ -7,7 +7,7 @@
 ---
 ## Members:
   - Max Epstein
-  - Brayden Bevles
+  - Brayden Bevels
   - Leandro Sanchez
   
 > References: https://golangdocs.com/golang-finance-go-package-stock-quote-options-chart
