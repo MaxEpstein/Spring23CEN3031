@@ -9,5 +9,6 @@
   - Max Epstein
   - Brayden Bevels
   - Leandro Sanchez
+  - Jeanette Foreman
   
 > References: https://golangdocs.com/golang-finance-go-package-stock-quote-options-chart
