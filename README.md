@@ -6,9 +6,9 @@
   
 ---
 ## Members:
-  - Max Epstein
-  - Brayden Bevels
-  - Leandro Sanchez
-  - Jeanette Foreman
+  - Max Epstein (Front End)
+  - Brayden Bevels (Back End)
+  - Leandro Sanchez (Back End)
+  - Jeanette Foreman (Front End)
   
 > References: https://golangdocs.com/golang-finance-go-package-stock-quote-options-chart
