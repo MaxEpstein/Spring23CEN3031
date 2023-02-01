@@ -12,3 +12,4 @@
   - Jeanette Foreman (Front End)
   
 > References: https://golangdocs.com/golang-finance-go-package-stock-quote-options-chart
+>             https://www.typescriptlang.org/docs/handbook/intro.html
