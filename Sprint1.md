@@ -18,6 +18,8 @@
 
     Be able to navigate to 3 different pages using nav bar
 
+    Create graphical appeal on home page
+
 ## Which issues were successfully completed?
 
 ## Which issues were not completed and why?
