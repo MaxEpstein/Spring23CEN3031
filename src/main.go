@@ -1,18 +1,32 @@
 package main
 
 import (
-        "fmt"
-        "n"
+	"flag"
+	"fmt"
+	"github.com/leekchan/accounting"
+	"github.com/piquette/finance-go/quote"
+	"github.com/sirupsen/logrus"
+	"os"
 )
 
 func main() {
-        resp, err := goyhfin.GetTickerData("AAPL", goyhfin.OneMonth, goyhfin.OneDay, false)
-        if err != nil {
-                // NOTE: For library-specific errors, you can check the err against the errors exposed in goyhfin/errors.go
-                fmt.Println("Error fetching Yahoo Finance data:", err)
-                panic(err)
-        }
-        for ind := range resp.Quotes {
-                fmt.Println("The day's high was", resp.Quotes[ind].High, "on the", resp.Quotes[ind].OpensAt.Day(), "day of", resp.Quotes[ind].OpensAt.Month(), "of", resp.Quotes[ind].OpensAt.Year())
-        }
+	flag.Parse()
+
+	if len(flag.Args()) == 0 {
+		logrus.Fatalf("No argument provided, exected at least one stock symbol. Example: %v cldr goog aapl intc amd ...", os.Args[0])
+	}
+
+	cf := accounting.Accounting{Symbol: "$", Precision: 2}
+	smbls := flag.Args()
+
+	iter := quote.List(smbls)
+
+	for iter.Next() {
+		q := iter.Quote()
+		fmt.Printf("------- %v -------\n", q.ShortName)
+		fmt.Printf("Current Price: %v\n", cf.FormatMoney(q.Ask))
+		fmt.Printf("52wk High: %v\n", cf.FormatMoney(q.FiftyTwoWeekHigh))
+		fmt.Printf("52wk Low: %v\n", cf.FormatMoney(q.FiftyTwoWeekLow))
+		fmt.Printf("-----------------\n")
+	}
 }
