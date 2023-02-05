@@ -6,7 +6,7 @@ import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
 import { HomePage } from './pages/HomePage';
 import { NavBar } from './NavBar';
-import { LogInPage } from './pages/LogInPage';
+import { Login } from './pages/LogInPage';
 
 export function App() {
   return (
@@ -17,7 +17,7 @@ export function App() {
           <Route path="/" exact><HomePage /></Route>
           <Route path="/about"><AboutPage /></Route>
           <Route path="/contact"><ContactPage /></Route>
-          <Route path="/login"><LogInPage /></Route>
+          <Route path="/login"><Login /></Route>
         </Switch>
       </BrowserRouter>
     </>

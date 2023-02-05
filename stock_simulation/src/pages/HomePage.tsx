@@ -1,3 +1,12 @@
+import "./pageStyles.css";
+
+
+
 export function HomePage() {
-    return <h1>Home Page</h1>;
+    return(
+      <div className="Background">
+        <h1 className="Header">Mind My Wallet</h1>
+      </div>
+      
+    );
   }
