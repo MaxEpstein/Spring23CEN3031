@@ -18,7 +18,10 @@
 
     Be able to navigate to 3 different pages using nav bar
 
-    Create graphical appeal on home page
+    Create graphical appeal on home page, about page, and contact page
+
+    Create footer to display 
+
 
 ## Which issues were successfully completed?
 
