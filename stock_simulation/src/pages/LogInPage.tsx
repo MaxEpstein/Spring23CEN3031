@@ -66,6 +66,7 @@ export function Login() {
   const { username, password, isLoading, error, isLoggedIn } = state;
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    
     e.preventDefault();
     dispatch({ type: "login" });
 
@@ -116,9 +117,10 @@ export function Login() {
                 })
               }
             />
-            <button type="submit" className="submit" disabled={isLoading}>
-              {isLoading ? "Loggin in....." : "Login In"}
+            <button type="submit" className="submit" id="action" value="login" disabled={isLoading}>
+              {isLoading ? "Logging in....." : "Login In / Sign up"}
             </button>
+           
           </form>
         )}
       </div>
