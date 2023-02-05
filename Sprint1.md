@@ -16,6 +16,8 @@
 
     Be able to search a database within the website by ticker.
 
+    Be able to navigate to 3 different pages using nav bar
+
 ## Which issues were successfully completed?
 
 ## Which issues were not completed and why?
