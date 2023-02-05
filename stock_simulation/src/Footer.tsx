@@ -2,13 +2,14 @@ import { NavLink } from "react-router-dom";
 
 import "./styles.css";
 
-import * as data from './navbar.json'
+import * as data from './footer.json'
 const linksString = JSON.stringify(data);
 const links = JSON.parse(linksString).links;
 
 type Link = {
   label: string;
   href: string;
+  target: string;
 }
 
 const Links: React.FC<{links: Link[]}> = ({ links }) => {
@@ -17,8 +18,9 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
       
           {links.map((link: Link) => {
               return (
+
                   <div key={link.href} className='link'>
-                      <a href={link.href}>
+                      <a href={link.href} target={link.target}>
                           {link.label}
                       </a>
                   </div>
@@ -28,9 +30,9 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
   )
 }
 
-export function NavBar() {
+export function Footer() {
   return (
-    <nav className="navbar-container">
+    <nav className="Footer-container">
       <div className='logo-container'>
             <span>Logo</span>
       </div>

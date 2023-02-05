@@ -1,17 +1,18 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import './App.css';
 
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
 import { HomePage } from './pages/HomePage';
 import { NavBar } from './NavBar';
 import { Login } from './pages/LogInPage';
+import { Footer } from './Footer';
 
 export function App() {
   return (
     <>
-      <BrowserRouter>
+    <div className="body">
+    <BrowserRouter>
         <NavBar />
         <Switch>
           <Route path="/" exact><HomePage /></Route>
@@ -20,6 +21,11 @@ export function App() {
           <Route path="/login"><Login /></Route>
         </Switch>
       </BrowserRouter>
+
+        <Footer />
+    </div>
+      
+
     </>
   );
 }
