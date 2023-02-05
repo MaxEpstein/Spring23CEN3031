@@ -9,9 +9,13 @@
 
     As a site administrator, I want to be able to see the gains and losses of each user in one place so that the success of the simulation can be gauged.
 
-## What issues your team planned to address?
+## What issues did your team plan to address?
+    Be able to use an external website to collect price data by ticker for future use in our website.
 
+    Create a database within the website that stores price points by ticker and by day using external data.
+
+    Be able to search a database within the website by ticker.
 
 ## Which issues were successfully completed?
 
-## Which issues were not and why?
+## Which issues were not completed and why?
