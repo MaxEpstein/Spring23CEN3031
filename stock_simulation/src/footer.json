@@ -1,0 +1,29 @@
+{
+    "links":[
+        {
+            "label": "Home",
+            "href": "/",
+            "target": "_self"
+        },
+
+        {
+            "label": "About",
+            "href": "/about",
+            "target": "_self"
+        },
+
+        {
+            "label": "Contact",
+            "href": "/contact",
+            "target": "_self"
+        },
+
+        {
+            "label": "Github",
+            "href": "https://github.com/MaxEpstein/Spring23CEN3031",
+            "target": "_blank"
+        }
+        
+        
+    ]
+}
