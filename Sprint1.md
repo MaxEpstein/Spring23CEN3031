@@ -23,6 +23,8 @@
     Create footer to display 
 
 
+    Create Contact and About pages 
+
 ## Which issues were successfully completed?
 
 ## Which issues were not completed and why?
