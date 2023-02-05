@@ -14,6 +14,6 @@ func main() {
 		panic(err)
 	}
 	for ind := range resp.Quotes {
-		fmt.Println("The day's high was", resp.Quotes[ind].High, "on the", resp.Quotes[ind].OpensAt.Day(), "day of", resp.Quotes[ind].OpensAt.Month(), "of", resp.Quotes[ind].OpensAt.Year())
+		fmt.Println("The day's high was", resp.Quotes[ind].Open, "on the", resp.Quotes[ind].OpensAt.Day(), "day of", resp.Quotes[ind].OpensAt.Month(), "of", resp.Quotes[ind].OpensAt.Year())
 	}
 }
