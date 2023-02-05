@@ -16,6 +16,8 @@
 
     Be able to search a database within the website by ticker.
 
+    Choose data source real time data or manufactured data based of of equations or trends.
+
     Be able to navigate to 3 different pages using nav bar
 
     Create graphical appeal on home page, about page, and contact page
