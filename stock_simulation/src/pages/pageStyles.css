@@ -128,9 +128,7 @@
       background-size: cover;
       min-height: 45%;
       font-family: -apple-system;
-
-  }
-
+      }
 
 
   .AboutBottom{
@@ -141,6 +139,7 @@
       left: 50%;
       align-items: center;
       text-align: center;
+
 
   }
   .AboutBottom p{
