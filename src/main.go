@@ -36,7 +36,7 @@ func add_historic_data(qt *finance.Quote, temp_stock *stock) {
 	iter := chart.Get(p)
 
 	// Iterate over results. Will exit upon any error.
-	for iter.Next() {
+	for iter.Next() { //
 		b := iter.Bar()
 		fmt.Println(b)
 
