@@ -2,17 +2,19 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	finance "github.com/piquette/finance-go"
 	chart "github.com/piquette/finance-go/chart"
 	"github.com/piquette/finance-go/datetime"
 	"github.com/piquette/finance-go/quote"
-	"time"
 )
 
 type stock struct {
 	symbol string
 	name   string
 	data   map[int64]uint
+	s_type string
 	//@TODO any additional features needed add here
 }
 
@@ -74,6 +76,7 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 			temp_stock.data = make(map[int64]uint)
 			temp_stock.symbol = item
 			temp_stock.name = qt.ShortName
+			temp_stock.s_type = st_type
 			add_historic_data(qt, temp_stock)
 			//@TODO any additional features needed add here
 			//https://piquette.io/projects/finance-go/ website for full list of things
@@ -103,18 +106,54 @@ func update_data_list(working_list *data_list) {
 		}
 	}
 }
+func getDataByTicker(ticker string) *stock { //take ticker input
+	qt, err := quote.Get(ticker)
+	if err != nil {
+		panic(err)
+	}
+	//=========================
+	temp_stock := new(stock)
+	temp_stock.data = make(map[int64]uint)
+	temp_stock.symbol = ticker
+	temp_stock.name = qt.ShortName
+	add_historic_data(qt, temp_stock)
+	//@TODO any additional features needed add here
+	//https://piquette.io/projects/finance-go/ website for full list of things
+	//========================
+	//fmt.Println(temp_stock) // comment out when ready to continue
+	return temp_stock
+
+	//temp as stock, find some way to get stock type, eft, crypto, etc
+}
+
+func addStockToMain(stockToAdd *stock, main_list *data_list) {
+	main_list.data[stockToAdd.s_type] = append(main_list.data[stockToAdd.s_type], *stockToAdd)
+}
 
 func main() {
 
-	s_type_name := []string{"stock", "stock", "stock"}
-	s_type_sym := []string{"aapl", "aal", "intc"}
+	//s_type_name := []string{"stock", "stock", "stock"} //stock, eft, crypto, etc
+	//_type_sym := []string{"aapl", "aal", "intc"} //ticker
 	//Way to specify what type and symbol
-	main_working_list := setup_main_working_list(s_type_name, s_type_sym)
+	//main_working_list := setup_main_working_list(s_type_name, s_type_sym)
+
+	var s_type_name_user []string
+	fmt.Scanln(&s_type_name_user)
+	var s_type_sym_user []string
+	fmt.Scanln(&s_type_sym_user)
+
+	main_working_list := setup_main_working_list(s_type_name_user, s_type_sym_user)
+
+	var singularStockUser string
+	fmt.Scanln(&singularStockUser)
+
+	addStockToMain(getDataByTicker(singularStockUser), main_working_list)
 
 	//wrap in some kind of time based loop
 	//for {
-	update_data_list(main_working_list)
-	fmt.Println(main_working_list)
+	//update_data_list(main_working_list)
 	//}
+	//for future frequent updates of specific stock info
 
+	fmt.Println(main_working_list)
 }
