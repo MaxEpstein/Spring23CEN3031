@@ -91,7 +91,7 @@ export function Login() {
         ) : (
           <form className="form" onSubmit={onSubmit}>
             {error && <p className="error">{error}</p>}
-            <p> Please Login!</p>
+            <h1> Please Login!</h1>
             <input
               type="text"
               placeholder="username"
@@ -118,7 +118,7 @@ export function Login() {
               }
             />
             <button type="submit" className="submit" id="action" value="login" disabled={isLoading}>
-              {isLoading ? "Logging in....." : "Login In / Sign up"}
+              {isLoading ? "Logging in....." : "Log in / Sign up"}
             </button>
            
           </form>
