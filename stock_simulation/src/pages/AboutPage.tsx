@@ -4,7 +4,8 @@ export function AboutPage() {
     return  (
         <div className={"About"}>
             <div className={"AboutTop"}>
-                <h1 style={{textAlign: "center", color: "white", font : "roboto"}}>About Us</h1>
+                <h1 style={{textAlign: "center", color: "white", font : "roboto" , alignItems: "center"
+                    }}>About Us</h1>
             </div>
             <div className = "AboutBottom">
                 <p style = {{font: "roboto"}}>

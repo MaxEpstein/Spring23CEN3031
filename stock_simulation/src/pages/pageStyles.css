@@ -108,12 +108,13 @@
       background: url("../images/bkg3.jpg");
       background-size: cover;
       min-height: 45%;
-      min-width: 1024px;
       font-family: -apple-system;
+
   }
 
   .AboutTop h1{
-      left: 50%;
+
+
   }
 
 
@@ -130,8 +131,6 @@
   .AboutBottom p{
       width: 1200px;
   }
-
-
 
     .contact{
         font-family: -apple-system;
