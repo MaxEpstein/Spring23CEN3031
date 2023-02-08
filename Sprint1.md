@@ -34,6 +34,8 @@
     The contact, about, and login pages were all successfully created and completed.
 
     The navigation bar and footer were also successfully completed. 
+
+    The login page with basic functionality was successfully completed. 
     
 
 ## Which issues were not completed and why?
