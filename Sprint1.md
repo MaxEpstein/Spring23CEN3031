@@ -25,5 +25,8 @@
     Create Contact and About pages 
 
 ## Which issues were successfully completed?
+    The contact, about, and login pages were all successfully completed
+    
 
 ## Which issues were not completed and why?
+    
