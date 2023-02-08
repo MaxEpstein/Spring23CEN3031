@@ -36,7 +36,10 @@
     The navigation bar and footer were also successfully completed. 
 
     The login page with basic functionality was successfully completed. 
-    
+
+    Use of external website to collect price data was successfully set up.
+
+    Created code infrastructure to allow for stock info to be both added and used.
 
 ## Which issues were not completed and why?
     We were not able to add in the "search a database within the website by ticker" issue as the integration between front and back end has not occured. 
