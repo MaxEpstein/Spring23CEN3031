@@ -26,17 +26,17 @@ export function ContactPage() {
         <div className = "contact">
             <div className = "center">
 
-            <h1 style={{textAlign: "center"}}>Contact Us</h1>
+                <h1 style={{textAlign: "center"}}>Contact Us</h1>
 
-            <form ref= {form} onSubmit={sendEmail}>
-                <label>Name</label>
-                <input type="text" name="name" placeholder = "Enter name..."/>
-                <label>Email</label>
-                <input type="email" name="email" placeholder = "Enter email..." />
-                <label>Message</label>
-                <textarea name="message" />
-                <input type="submit" value="Send" />
-            </form>
+                <form ref= {form} onSubmit={sendEmail}>
+                    <label>Name</label>
+                    <input type="text" name="name" placeholder = "Enter name..."/>
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder = "Enter email..." />
+                    <label>Message</label>
+                    <textarea name="message" />
+                    <input type="submit" value="Send" />
+                </form>
 
             </div>
         </div>

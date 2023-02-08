@@ -7,6 +7,10 @@
 
     As a site visitor, I want to be able to search by industry so that it is easier to do research.
 
+    As a site visitor, I want to be able to log into my account to view my "favorited" stocks.
+
+    As a site visitor, I want to be able to contact the developers in the case issues arise. 
+
     As a site administrator, I want to be able to see the gains and losses of each user in one place so that the success of the simulation can be gauged.
 
 ## What issues did your team plan to address?
@@ -18,16 +22,21 @@
 
     Be able to navigate to 3 different pages using nav bar
 
-    Create graphical appeal on home page, about page, and contact page
+    Create graphical appeal on home page, about page, contact page, and login page
 
     Create footer to display 
 
     Create Contact and About pages 
 
-## Which issues were successfully completed?
-    Use of external website to collect price data
+    Add basic functionality to login page
 
-    Created code infrastructure to allow for stock info to be both added and used
+## Which issues were successfully completed?
+    The contact, about, and login pages were all successfully created and completed.
+
+    The navigation bar and footer were also successfully completed. 
+
+    The login page with basic functionality was successfully completed. 
+    
 
 ## Which issues were not completed and why?
-    Being able to search by ticker has not been completed, but have set up ability to add this feature through the main database which holds the info for each stock in it's own section
+    We were not able to add in the "search a database within the website by ticker" issue as the integration between front and back end has not occured. 
