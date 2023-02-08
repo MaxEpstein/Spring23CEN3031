@@ -25,5 +25,9 @@
     Create Contact and About pages 
 
 ## Which issues were successfully completed?
+    Use of external website to collect price data
+
+    Created code infrastructure to allow for stock info to be both added and used
 
 ## Which issues were not completed and why?
+    Being able to search by ticker has not been completed, but have set up ability to add this feature through the main database which holds the info for each stock in it's own section
