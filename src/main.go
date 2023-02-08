@@ -36,7 +36,7 @@ func add_historic_data(qt *finance.Quote, temp_stock *stock) {
 	iter := chart.Get(p)
 
 	// Iterate over results. Will exit upon any error.
-	for iter.Next() {
+	for iter.Next() { //
 		b := iter.Bar()
 		fmt.Println(b)
 
@@ -64,26 +64,12 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 	main_working_list.data = make(map[string][]stock)
 
 	for st_type, symb_arr := range s_types {
-		for i, item := range symb_arr {
-			//here you can add more attributes
-
-			qt, err := quote.Get(item)
-			if err != nil {
-				panic(err)
-			}
-			//=========================
-			temp_stock := new(stock)
-			temp_stock.data = make(map[int64]uint)
-			temp_stock.symbol = item
-			temp_stock.name = qt.ShortName
-			temp_stock.s_type = st_type
-			//add_historic_data(qt, temp_stock)
-			//@TODO any additional features needed add here
-			//https://piquette.io/projects/finance-go/ website for full list of things
-			//========================
-			//fmt.Println(temp_stock) // comment out when ready to continue
-			main_working_list.data[st_type] = append(main_working_list.data[st_type], *temp_stock)
-			i++ // to quite goLang
+		for _, item := range symb_arr {
+			////@TODO any additional features needed add here
+			////https://piquette.io/projects/finance-go/ website for full list of things
+			////========================
+			////fmt.Println(temp_stock) // comment out when ready to continue
+			main_working_list.data[st_type] = append(main_working_list.data[st_type], *getDataByTicker(item, st_type))
 		}
 
 	}
@@ -92,20 +78,18 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 
 func update_data_list(working_list *data_list) {
 
-	for x, st_type := range working_list.data {
+	for _, st_type := range working_list.data {
 
-		for i, st_symb1 := range st_type {
+		for _, st_symb1 := range st_type {
 			qt, err := quote.Get(st_symb1.symbol)
 			if err != nil {
 				panic(err)
 			}
 			st_symb1.data[time.Now().Unix()] = uint(qt.Ask * 100)
-			i++     //ignore
-			x += "" //ignore
 		}
 	}
 }
-func getDataByTicker(ticker string) *stock { //take ticker input
+func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	qt, err := quote.Get(ticker)
 	if err != nil {
 		panic(err)
@@ -115,11 +99,11 @@ func getDataByTicker(ticker string) *stock { //take ticker input
 	temp_stock.data = make(map[int64]uint)
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
-	add_historic_data(qt, temp_stock)
+	temp_stock.s_type = s_type
+	//add_historic_data(qt, temp_stock)
 	//@TODO any additional features needed add here
 	//https://piquette.io/projects/finance-go/ website for full list of things
 	//========================
-	//fmt.Println(temp_stock) // comment out when ready to continue
 	return temp_stock
 
 	//temp as stock, find some way to get stock type, eft, crypto, etc
@@ -131,35 +115,36 @@ func addStockToMain(stockToAdd *stock, main_list *data_list) {
 
 func main() {
 
-	//s_type_name := []string{"stock", "stock", "stock"} //stock, eft, crypto, etc
-	//_type_sym := []string{"aapl", "aal", "intc"} //ticker
-	//Way to specify what type and symbol
-	//main_working_list := setup_main_working_list(s_type_name, s_type_sym)
-
 	var s_type_container []string
 	var s_type_sym_container []string
 
 	var s_type_name_user, s_type_sym_user string
+
 	for s_type_name_user != "stop" {
-		n, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
+
+		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
 		if err != nil {
 			panic(err)
 		}
-		n++
-		s_type_container = append(s_type_container, s_type_name_user)
-		s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
+		if s_type_name_user != "stop" {
+			s_type_container = append(s_type_container, s_type_name_user) //Add it to ness list
+			s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
+		}
 	}
-	fmt.Println(s_type_container, s_type_sym_container)
+
 	main_working_list := setup_main_working_list(s_type_container, s_type_sym_container)
 
-	//var singularStockUser string
-	//fmt.Scanln(&singularStockUser)
-
-	//addStockToMain(getDataByTicker(singularStockUser), main_working_list)
+	//============================Demo Purpose ======================//
+	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
+	if err != nil {
+		panic(err)
+	}
+	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
+	//==========================================================//
 
 	//wrap in some kind of time based loop
 	//for {
-	//update_data_list(main_working_list)
+	update_data_list(main_working_list)
 	//}
 	//for future frequent updates of specific stock info
 
