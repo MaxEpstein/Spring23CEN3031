@@ -77,14 +77,13 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 			temp_stock.symbol = item
 			temp_stock.name = qt.ShortName
 			temp_stock.s_type = st_type
-			add_historic_data(qt, temp_stock)
+			//add_historic_data(qt, temp_stock)
 			//@TODO any additional features needed add here
 			//https://piquette.io/projects/finance-go/ website for full list of things
 			//========================
 			//fmt.Println(temp_stock) // comment out when ready to continue
 			main_working_list.data[st_type] = append(main_working_list.data[st_type], *temp_stock)
 			i++ // to quite goLang
-
 		}
 
 	}
@@ -137,17 +136,26 @@ func main() {
 	//Way to specify what type and symbol
 	//main_working_list := setup_main_working_list(s_type_name, s_type_sym)
 
-	var s_type_name_user []string
-	fmt.Scanln(&s_type_name_user)
-	var s_type_sym_user []string
-	fmt.Scanln(&s_type_sym_user)
+	var s_type_container []string
+	var s_type_sym_container []string
 
-	main_working_list := setup_main_working_list(s_type_name_user, s_type_sym_user)
+	var s_type_name_user, s_type_sym_user string
+	for s_type_name_user != "stop" {
+		n, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
+		if err != nil {
+			panic(err)
+		}
+		n++
+		s_type_container = append(s_type_container, s_type_name_user)
+		s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
+	}
+	fmt.Println(s_type_container, s_type_sym_container)
+	main_working_list := setup_main_working_list(s_type_container, s_type_sym_container)
 
-	var singularStockUser string
-	fmt.Scanln(&singularStockUser)
+	//var singularStockUser string
+	//fmt.Scanln(&singularStockUser)
 
-	addStockToMain(getDataByTicker(singularStockUser), main_working_list)
+	//addStockToMain(getDataByTicker(singularStockUser), main_working_list)
 
 	//wrap in some kind of time based loop
 	//for {
