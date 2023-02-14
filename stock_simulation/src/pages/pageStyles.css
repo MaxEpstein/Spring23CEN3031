@@ -195,6 +195,28 @@
       border: none;
   }
 
+  .SearchTop{
+    font-family: -apple-system;
+    display: flex;
+
+    margin: auto;
+    position: fixed;
+    width: 50%;
+    left: 50%;
+    transform: translate(-80%, 100%);
+    margin-right: 25px;
+}
+.SearchTop input{
+  width: 150%;
+}
+.SearchTop button{
+  width: 25%;
+  display: flex;
+  margin-left: 10px;
+  margin: auto;
+  height: 40px;
+
+}
 
 
 
