@@ -22,6 +22,10 @@
         {
             "label": "Log In",
             "href": "/LogIn"
+        },
+        {
+            "label": "GraphTest",
+            "href": "/graphTest"
         }
         
         
