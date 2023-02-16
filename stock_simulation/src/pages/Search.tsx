@@ -58,11 +58,11 @@ const data = [
   }
 ];
 
-
+let userSearched = false;
 
 export function Search() {
     const [message, setMessage] = useState('');
-    const [updated, setUpdated] = useState('');
+    const [prevMessage, setPrevMessage] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
@@ -74,10 +74,15 @@ export function Search() {
     }
 };
 
+
   const handleClick = () => {
+    setPrevMessage(message.toUpperCase())
     setMessage("");
     console.log(message.toUpperCase())
+
+    userSearched = true;
   };
+
 
     return  (
       <>        
@@ -85,32 +90,37 @@ export function Search() {
                 <input type="text" placeholder="Stock Ticker" onChange={handleChange} value={message} name="message" id="message" onKeyDown={handleKeyDown}/>
                 <button className="submit" type="submit" onClick={handleClick}>Search</button>
         </div>
-        <div className="graph">
-          <LineChart
-            width={500}
-            height={300}
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="pv"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-      </LineChart>
-          </div>
+        {userSearched === true &&
+            <div className="stockInfo" >
+              <h1>Stock: {prevMessage}</h1>
+              <div className="graph">
+                <LineChart
+                  width={500}
+                  height={300}
+                  data={data}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="pv"
+                    stroke="#8884d8"
+                    activeDot={{ r: 8 }}
+                  />
+                  <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            </LineChart>
+                </div>
+              </div>
+}
         </>
   );
 }
