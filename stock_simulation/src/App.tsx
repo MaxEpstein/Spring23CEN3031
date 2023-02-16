@@ -9,6 +9,7 @@ import { Login } from './pages/LogInPage';
 import { Footer } from './Footer';
 import { Search } from './pages/Search';
 
+
 export function App() {
   return (
     <>
