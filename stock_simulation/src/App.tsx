@@ -9,8 +9,6 @@ import { Login } from './pages/LogInPage';
 import { Footer } from './Footer';
 import { Search } from './pages/Search';
 
-import { Graph } from './pages/graphtest';
-
 
 export function App() {
   return (
@@ -24,7 +22,6 @@ export function App() {
           <Route path="/contact"><ContactPage /></Route>
           <Route path="/search"><Search /></Route>
           <Route path="/login"><Login /></Route>
-          <Route path="/graphTest"><Graph /></Route>
         </Switch>
       </BrowserRouter>
 
