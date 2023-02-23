@@ -8,6 +8,7 @@ import { NavBar } from './NavBar';
 import { Login } from './pages/LogInPage';
 import { Footer } from './Footer';
 import { Search } from './pages/Search';
+import { Dash } from './pages/Dash';
 
 
 export function App() {
@@ -22,6 +23,7 @@ export function App() {
           <Route path="/contact"><ContactPage /></Route>
           <Route path="/search"><Search /></Route>
           <Route path="/login"><Login /></Route>
+          <Route path="/dashboard"><Dash /></Route>
         </Switch>
       </BrowserRouter>
 
