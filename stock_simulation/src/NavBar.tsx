@@ -1,10 +1,13 @@
 import { NavLink } from "react-router-dom";
-
+import React from 'react';
+import {BsFillBarChartFill} from "react-icons/bs";
 import "./styles.css";
 
 import * as data from './navbar.json'
+import {HomePage} from "./pages/HomePage";
 const linksString = JSON.stringify(data);
 const links = JSON.parse(linksString).links;
+
 
 type Link = {
   label: string;
@@ -29,12 +32,20 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
 }
 
 export function NavBar() {
+
   return (
     <nav className="navbar-container">
       <div className='logo-container'>
-            <span>Logo</span>
+          <NavLink to={'/'}>
+         <span style={{font: 'roboto', }}>
+             {" "}
+            <BsFillBarChartFill />  Mind My Wallet  {""}
+         </span>
+      </NavLink>
       </div>
-      <Links links={links}/>
+        <Links links={links}/>
     </nav>
   );
 }
+
+
