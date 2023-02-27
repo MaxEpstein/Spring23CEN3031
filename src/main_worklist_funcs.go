@@ -118,7 +118,7 @@ func checkIfStockExist(ticker string) bool {
 	return false
 }
 
-func main() {
+func mainForWorklistFuncs() {
 
 	var s_type_container []string
 	var s_type_sym_container []string

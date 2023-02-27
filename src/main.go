@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"regexp"
+
+	"github.com/gorilla/websocket"
 )
 
 // We'll need to define an Upgrader
@@ -31,6 +33,16 @@ func reader(conn *websocket.Conn) {
 			log.Println(err)
 			return
 		}
+
+		r := regexp.MustCompile("[^\\s]+")
+		inputArray := r.FindAllString(string(p), -1)
+		inputType := inputArray[0]
+
+		switch choose := inputType; choose { //depending on button/passed in input type, do required functionality
+		case "search":
+			//current := searchByString(inputArray[1], data_list)
+		}
+
 		// print out that message for clarity
 		fmt.Println(string(p))
 
