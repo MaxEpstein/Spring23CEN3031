@@ -172,6 +172,37 @@
       border: none;
   }
 
+
+.SearchTop{
+  font-family: -apple-system;
+  display: flex;
+
+  position: fixed;
+  width: 50%;
+  left: 50%;
+  transform: translate(-50%, 100%);
+}
+.SearchTop input{
+  width: 150%;
+}
+
+
+.SearchTop button{
+  width: 20%;
+  margin: auto;
+  height: 40px;
+  margin-left: 20px;
+
+}
+
+.graph{
+  position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+}
+
 .AboutTop{
     width: 100%;
     background: url("../images/bkg3.jpg");
@@ -290,10 +321,3 @@
         align-items: center;
         margin-left: 20px;
     }
-
-
-
-
-
-
-

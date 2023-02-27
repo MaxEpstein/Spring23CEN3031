@@ -14,11 +14,15 @@
             "label": "Contact",
             "href": "/contact"
         },
+        {
+            "label": "Search",
+            "href": "/search"
+        },
 
         {
             "label": "Log In",
             "href": "/LogIn"
-        }
+        }       
         
         
     ]

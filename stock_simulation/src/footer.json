@@ -13,9 +13,9 @@
         },
 
         {
-            "label": "Contact",
-            "href": "/contact",
-            "target": "_self"
+            "label": "CNBC",
+            "href": "https://www.cnbc.com/us-markets/",
+            "target": "_blank"
         },
 
         {

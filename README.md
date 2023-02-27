@@ -13,4 +13,8 @@
   
 > References: https://golangdocs.com/golang-finance-go-package-stock-quote-options-chart
 >             https://www.typescriptlang.org/docs/handbook/intro.html
->  Login form: https://codesandbox.io/s/x4h6w
+>             
+> Login form: https://codesandbox.io/s/x4h6w
+>             
+> https://recharts.org/en-US/examples/LegendEffectOpacity
+> 
