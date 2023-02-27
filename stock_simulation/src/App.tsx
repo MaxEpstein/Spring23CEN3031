@@ -10,8 +10,7 @@ import { Footer } from './Footer';
 import { Search } from './pages/Search';
 import { Dash } from './pages/Dash';
 
-import { connect } from './index';
-
+import { connect } from './server';
 
 export function App() {
   connect();
