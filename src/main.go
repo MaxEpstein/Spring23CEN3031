@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"time"
 
-	finance "github.com/piquette/finance-go"
 	chart "github.com/piquette/finance-go/chart"
 	"github.com/piquette/finance-go/datetime"
 	"github.com/piquette/finance-go/quote"
@@ -22,12 +22,11 @@ type data_list struct {
 	data map[string][]stock //For future scalability for etf's, stocks, crypto
 }
 
-func add_historic_data(qt *finance.Quote, temp_stock *stock) {
+func add_historic_data(temp_stock *stock) {
 	//@TODO figure out pointer situaion and get maps to update accross
-	//@TODO add historic data  anythin behind 01/01/1970 UTC midnight is a negative int
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
-		Start:  &datetime.Datetime{Month: 1, Day: 1, Year: 1970},
+		Start:  &datetime.Datetime{Month: 5, Day: 2, Year: 1792},
 		End: &datetime.Datetime{Month: int(time.Now().Month()),
 			Day:  int(time.Now().Day()),
 			Year: int(time.Now().Year())},
@@ -38,19 +37,13 @@ func add_historic_data(qt *finance.Quote, temp_stock *stock) {
 	// Iterate over results. Will exit upon any error.
 	for iter.Next() { //
 		b := iter.Bar()
-		fmt.Println(b)
-
-		// Meta-data for the iterator - (*finance.ChartMeta).
-		//fmt.Println(iter.Meta())
+		//RoundFloor or RoundUp
+		open_price, _ := b.Open.Float64()                                               //Open Price for that day
+		close_price, _ := b.Close.Float64()                                             //Close Price for that day
+		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))        //Timestamp is for the days open  09:30:00 EST
+		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
+		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
-
-	// Catch an error, if there was one.
-	//if iter.Err() != nil {
-	// Uh-oh!
-	//	panic(err)
-	//}
-	//It has something to do with
-	//func GetHistoricalQuote(symbol string, month int, day int, year int) (*finance.ChartBar, error)
 }
 
 func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_list {
@@ -100,7 +93,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	//add_historic_data(qt, temp_stock)
+	add_historic_data(temp_stock)
 	//@TODO any additional features needed add here
 	//https://piquette.io/projects/finance-go/ website for full list of things
 	//========================
@@ -113,13 +106,16 @@ func addStockToMain(stockToAdd *stock, main_list *data_list) {
 	main_list.data[stockToAdd.s_type] = append(main_list.data[stockToAdd.s_type], *stockToAdd)
 }
 
+//func checkIfTickReal(string tick) {
+
+// }
 func main() {
 
 	var s_type_container []string
 	var s_type_sym_container []string
 
 	var s_type_name_user, s_type_sym_user string
-
+	fmt.Println("Type in type and ticker and then stop stop to exit loop")
 	for s_type_name_user != "stop" {
 
 		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
@@ -134,6 +130,7 @@ func main() {
 
 	main_working_list := setup_main_working_list(s_type_container, s_type_sym_container)
 
+	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
 	//============================Demo Purpose ======================//
 	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
 	if err != nil {
@@ -142,7 +139,6 @@ func main() {
 	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
 	//==========================================================//
 
-	//wrap in some kind of time based loop
 	//for {
 	update_data_list(main_working_list)
 	//}
