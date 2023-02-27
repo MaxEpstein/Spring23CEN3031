@@ -10,8 +10,11 @@ import { Footer } from './Footer';
 import { Search } from './pages/Search';
 import { Dash } from './pages/Dash';
 
+import { connect } from './index';
+
 
 export function App() {
+  connect();
   return (
     <>
     <div className="body">
