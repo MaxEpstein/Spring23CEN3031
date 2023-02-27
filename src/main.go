@@ -38,19 +38,35 @@ func reader(conn *websocket.Conn) {
 		inputArray := r.FindAllString(string(p), -1)
 		inputType := inputArray[0]
 
+		var current []stock
+
 		switch choose := inputType; choose { //depending on button/passed in input type, do required functionality
 		case "search":
-			//current := searchByString(inputArray[1], data_list)
+			current = searchByString(inputArray[1], &data_list{})
+		case "display": // "display 1day", ie "inputType, button input function"
+			switch displayChoose := inputArray[1]; displayChoose {
+			case "1day":
+
+			case "5day":
+
+			case "10day":
+
+			case "1month": //etc
+
+			}
+		case "home": //return to home page?
+
+		case "other": //other button functionality
+
+			// print out that message for clarity
+			fmt.Println(string(p))
+
+			if err := conn.WriteMessage(messageType, p); err != nil {
+				log.Println(err)
+				return
+			}
+
 		}
-
-		// print out that message for clarity
-		fmt.Println(string(p))
-
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
-		}
-
 	}
 }
 
