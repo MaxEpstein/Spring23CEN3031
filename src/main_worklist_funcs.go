@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"time"
 
@@ -118,40 +117,40 @@ func checkIfStockExist(ticker string) bool {
 	return false
 }
 
-func main() {
+// func main() {
 
-	var s_type_container []string
-	var s_type_sym_container []string
+// 	var s_type_container []string
+// 	var s_type_sym_container []string
 
-	var s_type_name_user, s_type_sym_user string
-	fmt.Println("Type in type and ticker and then stop stop to exit loop")
-	for s_type_name_user != "stop" {
+// 	var s_type_name_user, s_type_sym_user string
+// 	fmt.Println("Type in type and ticker and then stop stop to exit loop")
+// 	for s_type_name_user != "stop" {
 
-		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
-		if err != nil {
-			panic(err)
-		}
-		if s_type_name_user != "stop" {
-			s_type_container = append(s_type_container, s_type_name_user) //Add it to ness list
-			s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
-		}
-	}
+// 		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
+// 		if err != nil {
+// 			panic(err)
+// 		}
+// 		if s_type_name_user != "stop" {
+// 			s_type_container = append(s_type_container, s_type_name_user) //Add it to ness list
+// 			s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
+// 		}
+// 	}
 
-	main_working_list := setup_main_working_list(s_type_container, s_type_sym_container)
+// 	main_working_list := setup_main_working_list(s_type_container, s_type_sym_container)
 
-	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
-	//============================Demo Purpose ======================//
-	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
-	if err != nil {
-		panic(err)
-	}
-	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
-	//==========================================================//
+// 	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
+// 	//============================Demo Purpose ======================//
+// 	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
+// 	//==========================================================//
 
-	//for {
-	update_data_list(main_working_list)
-	//}
-	//for future frequent updates of specific stock info
+// 	//for {
+// 	update_data_list(main_working_list)
+// 	//}
+// 	//for future frequent updates of specific stock info
 
-	fmt.Println(main_working_list)
-}
+// 	fmt.Println(main_working_list)
+// }
