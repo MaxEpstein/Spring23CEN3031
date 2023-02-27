@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
-
+import React from 'react';
+import {BsFillBarChartFill} from "react-icons/bs";
 import "./styles.css";
 
 import * as data from './footer.json'
@@ -34,7 +35,10 @@ export function Footer() {
   return (
     <nav className="Footer-container">
       <div className='logo-container'>
-            <span>Logo</span>
+          <h3 style={{font: 'roboto'}}>
+              {" "}
+              <BsFillBarChartFill />  Mind My Wallet  {""}
+          </h3>
       </div>
       <Links links={links}/>
     </nav>

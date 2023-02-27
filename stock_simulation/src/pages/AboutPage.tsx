@@ -1,6 +1,7 @@
 import React from 'react';
 import "./pageStyles.css";
-import "../images/ForemanAbout.jpg";
+
+
 
 
 export function AboutPage() {
@@ -19,13 +20,13 @@ export function AboutPage() {
             </div>
 
             <div className ="splitScreen">
-                <h1 style={{textAlign: "center", color: "black", font : "roboto" , alignItems: "center"
+                <h1 style={{textAlign: "center", color: "midnightblue", font : "roboto" , alignItems: "center",
                 }}> Meet the Makers!</h1>
 
                 <div className = "jeanetteInfo">
 
-                    <img src = "../images/bkg.jpg" height = "200" width = "200"/>
 
+                    <img src ={require("../images/plsWork.jpeg")} height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
                         Jeanette
                     </p>
@@ -34,21 +35,21 @@ export function AboutPage() {
                 </div>
 
                 <div className = 'maxInfo'>
-                    <img src = "../images/bkg.jpg" height = "200" width = "200"/>
+                    <img src = {require("../images/plsWork.jpeg")} height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
                         Max
                     </p>
 
                 </div>
                 <div className = 'leandroInfo'>
-                    <img src = "../images/bkg.jpg" height = "200" width = "200"/>
+                    <img src = {require("../images/plsWork.jpeg")}  height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
                         Leandro
                     </p>
 
                 </div>
                 <div className = 'braydenInfo'>
-                    <img src = "../images/bkg.jpg" height = "200" width = "200"/>
+                    <img src = {require("../images/plsWork.jpeg")}  height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
                         Brayden
                     </p>
