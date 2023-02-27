@@ -1,6 +1,8 @@
 import * as React from "react";
 import "./pageStyles.css";
 import { login } from "./login";
+import { Dash } from "./Dash";
+import { useHistory } from 'react-router-dom';
 
 interface LoginState {
   password: string;
@@ -79,16 +81,12 @@ export function Login() {
   };
 
   return (
+    
     <div className="App">
       <div className="login-container">
         {isLoggedIn ? (
-          <>
-            <p>{`Hello ${username}`}</p>
-            <button type="button" onClick={() => dispatch({ type: "logout" })}>
-              Log out
-            </button>
-          </>
-        ) : (
+            <Dash />
+) : (
           <form className="form" onSubmit={onSubmit}>
             {error && <p className="error">{error}</p>}
             <h1> Please Login!</h1>
