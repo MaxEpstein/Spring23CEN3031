@@ -53,3 +53,8 @@
   text-decoration: none;
   color:rgba(25, 10, 238, 0.7);
 }
+
+.logo-container h3{
+  margin-bottom:10%;
+  font-family: -apple-system;
+}
