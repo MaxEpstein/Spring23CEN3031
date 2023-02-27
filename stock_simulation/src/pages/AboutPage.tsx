@@ -1,3 +1,6 @@
+import React from 'react';
+import "./pageStyles.css";
+import "../images/ForemanAbout.jpg";
 
 
 export function AboutPage() {
@@ -7,13 +10,53 @@ export function AboutPage() {
                 <h1 style={{textAlign: "center", color: "white", font : "roboto" , alignItems: "center"
                     }}>About Us</h1>
             </div>
-            <div className = "AboutBottom">
-                <p style = {{font: "roboto"}}>
+            <div className = "rightSide">
+                <p style = {{font: "roboto", textAlign: "center"}}>
                     The purpose of this project is to allow users
                     to participate in the stock market risk free while
                     keeping up with the latest news and events.
                 </p>
             </div>
+
+            <div className ="splitScreen">
+                <h1 style={{textAlign: "center", color: "black", font : "roboto" , alignItems: "center"
+                }}> Meet the Makers!</h1>
+
+                <div className = "jeanetteInfo">
+
+                    <img src = "../images/bkg.jpg" height = "200" width = "200"/>
+
+                    <p style={{textAlign: "center", font: "roboto"}}>
+                        Jeanette
+                    </p>
+
+
+                </div>
+
+                <div className = 'maxInfo'>
+                    <img src = "../images/bkg.jpg" height = "200" width = "200"/>
+                    <p style={{textAlign: "center", font: "roboto"}}>
+                        Max
+                    </p>
+
+                </div>
+                <div className = 'leandroInfo'>
+                    <img src = "../images/bkg.jpg" height = "200" width = "200"/>
+                    <p style={{textAlign: "center", font: "roboto"}}>
+                        Leandro
+                    </p>
+
+                </div>
+                <div className = 'braydenInfo'>
+                    <img src = "../images/bkg.jpg" height = "200" width = "200"/>
+                    <p style={{textAlign: "center", font: "roboto"}}>
+                        Brayden
+                    </p>
+
+                </div>
+
+            </div>
         </div>
     );
-  }
+}
+
