@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FormatCodeSettings } from 'typescript';
 
-import { sendMsg } from '../index';
+import { sendMsg } from '../server';
 
 import "./pageStyles.css";
 import React from "react";
@@ -83,7 +83,6 @@ export function Search() {
     console.log(message.toUpperCase())
 
     userSearched = true;
-
     sendMsg(message);
   };
 
