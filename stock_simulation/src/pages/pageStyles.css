@@ -122,29 +122,6 @@
     transform: translate(-50%, -50%);
   }
 
-  .AboutTop{
-      width: 100%;
-      background: url("../images/bkg3.jpg");
-      background-size: cover;
-      min-height: 45%;
-      font-family: -apple-system;
-      }
-
-
-  .AboutBottom{
-      font-family: -apple-system;
-      display: flex;
-      height: 55%;
-      top: 55%;
-      left: 50%;
-      align-items: center;
-      text-align: center;
-
-
-  }
-  .AboutBottom p{
-      width: 1200px;
-  }
 
     .contact{
         font-family: -apple-system;
@@ -194,6 +171,127 @@
       height: 40px  ;
       border: none;
   }
+
+.AboutTop{
+    width: 100%;
+    background: url("../images/bkg3.jpg");
+    background-size: auto;
+    min-height: 45%;
+    font-family: -apple-system;
+    margin-top: 0px;
+}
+
+
+.AboutBottom{
+    font-family: -apple-system;
+    display: flex;
+    height: 55%;
+    top: 55%;
+    left: 50%;
+    align-items: center;
+    text-align: center;
+
+
+}
+
+
+  .About splitScreen{
+      display: flex;
+      flex-direction: column;
+  }
+
+  .jeanetteInfo{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+
+  }
+  .jeanetteInfo p {
+      margin-left: 50%;
+      margin-top: -13%;
+      text-align: center;
+      margin-right: 5%;
+
+  }
+  .jeanetteInfo img{
+      margin-right: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 20px;
+
+  }
+  .maxInfo{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 13%;
+      margin-bottom:10%;
+  }
+  .maxInfo p{
+      margin-left: 50%;
+      margin-top: -13%;
+      text-align: center;
+      margin-right:10%;
+  }
+
+  .maxInfo img{
+      margin-right: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 20px;
+  }
+    .leandroInfo{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 13%;
+        margin-bottom:10%;
+    }
+    .leandroInfo p{
+        margin-left: 50%;
+        margin-top: -13%;
+        text-align: center;
+        margin-right:10%;
+    }
+
+    .leandroInfo img{
+        margin-right: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 20px;
+    }
+
+    .braydenInfo{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 13%;
+        margin-bottom: 13%;
+    }
+    .braydenInfo p{
+        margin-left: 50%;
+        margin-top: -13%;
+        text-align: center;
+        margin-right: 10%;
+    }
+
+    .braydenInfo img{
+        margin-right: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 20px;
+    }
+
+
 
 
 
