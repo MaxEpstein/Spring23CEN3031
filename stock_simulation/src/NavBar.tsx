@@ -4,7 +4,7 @@ import {BsFillBarChartFill} from "react-icons/bs";
 import "./styles.css";
 
 import * as data from './navbar.json'
-import {HomePage} from "./pages/HomePage";
+import { HomePage } from "./pages/HomePage";
 const linksString = JSON.stringify(data);
 const links = JSON.parse(linksString).links;
 
@@ -36,12 +36,10 @@ export function NavBar() {
   return (
     <nav className="navbar-container">
       <div className='logo-container'>
-          <NavLink to={'/'}>
-         <span style={{font: 'roboto', }}>
-             {" "}
-            <BsFillBarChartFill />  Mind My Wallet  {""}
-         </span>
-      </NavLink>
+      <h3 style={{font: 'roboto'}}>
+              {" "}
+              <BsFillBarChartFill />  Mind My Wallet  {""}
+          </h3>
       </div>
         <Links links={links}/>
     </nav>
