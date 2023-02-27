@@ -23,7 +23,7 @@ var upgrader = websocket.Upgrader{
 // define a reader which will listen for
 // new messages being sent to our WebSocket
 // endpoint
-func reader(conn *websocket.Conn) {
+func reader(conn *websocket.Conn, main_list data_list) {
 	for {
 		// read in a message
 		messageType, p, err := conn.ReadMessage()
@@ -33,6 +33,7 @@ func reader(conn *websocket.Conn) {
 		}
 		// print out that message for clarity
 		fmt.Println(string(p))
+		addStockToMain(getDataByTicker("stock", string(p)), &main_list)
 
 		if err := conn.WriteMessage(messageType, p); err != nil {
 			log.Println(err)
@@ -54,7 +55,8 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	reader(ws)
+	main_working_list := setup_main_working_list(nil, nil)
+	reader(ws, *main_working_list)
 }
 
 func setupRoutes() {
@@ -66,7 +68,7 @@ func setupRoutes() {
 }
 
 func main() {
-	fmt.Println("Chat App v0.01")
+	fmt.Println("Mind My Wallet")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
 }
