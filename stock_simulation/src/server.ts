@@ -28,6 +28,7 @@ let sendMsg = (msg: string) => {
     return event.data;
   }
 
+
 };
 
 export { connect, sendMsg };

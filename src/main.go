@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // We'll need to define an Upgrader
@@ -23,10 +24,11 @@ var upgrader = websocket.Upgrader{
 // define a reader which will listen for
 // new messages being sent to our WebSocket
 // endpoint
-func reader(conn *websocket.Conn) {
+func reader(conn *websocket.Conn, main_list *data_list) {
 	for {
 		// read in a message
-		messageType, p, err := conn.ReadMessage()
+		_, p, err := conn.ReadMessage()
+
 		if err != nil {
 			log.Println(err)
 			return
@@ -34,9 +36,17 @@ func reader(conn *websocket.Conn) {
 		// print out that message for clarity
 		fmt.Println(string(p))
 
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
+		addStockToMain(getDataByTicker(string(p), "stock"), main_list)
+		update_data_list(main_list)
+		temp_stock := main_list.data["stock"][0]
+		msg := ""
+
+		for key, element := range temp_stock.data {
+			msg = strconv.FormatUint(uint64(key), 10) + ":" + strconv.FormatUint(uint64(element), 10)
+			if err := conn.WriteMessage(1, []byte(msg)); err != nil {
+				log.Println(err)
+				return
+			}
 		}
 
 	}
@@ -54,7 +64,9 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	reader(ws)
+	fmt.Println("here")
+	main_working_list := setup_main_working_list(nil, nil)
+	reader(ws, main_working_list)
 }
 
 func setupRoutes() {
