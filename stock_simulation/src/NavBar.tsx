@@ -5,7 +5,7 @@ import {BsFillBarChartFill} from "react-icons/bs";
 import "./styles.css";
 
 import * as data from './navbar.json'
-import {HomePage} from "./pages/HomePage";
+import { HomePage } from "./pages/HomePage";
 const linksString = JSON.stringify(data);
 const links = JSON.parse(linksString).links;
 
