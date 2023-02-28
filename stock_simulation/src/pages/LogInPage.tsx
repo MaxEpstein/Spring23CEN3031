@@ -2,7 +2,8 @@ import * as React from "react";
 import "./pageStyles.css";
 import { login } from "./login";
 import { Dash } from "./Dash";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
+
 
 interface LoginState {
   password: string;
@@ -80,12 +81,14 @@ export function Login() {
     }
   };
 
+ 
+
   return (
     
     <div className="App">
       <div className="login-container">
         {isLoggedIn ? (
-            <Dash />
+          <Dash/>
 ) : (
           <form className="form" onSubmit={onSubmit}>
             {error && <p className="error">{error}</p>}
