@@ -28,28 +28,29 @@ export function AboutPage() {
 
                     <img src ={require("../images/plsWork.jpeg")} height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
-                        Jeanette
+                        Jeanette is a second year computer science major at the University of Florida. She is one of
+                        our front-end developers!
                     </p>
 
 
                 </div>
 
                 <div className = 'maxInfo'>
-                    <img src = {require("../images/plsWork.jpeg")} height = "200" width = "200"/>
+                    <img src = {require("../images/bkg.jpg")} height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
                         Max
                     </p>
 
                 </div>
                 <div className = 'leandroInfo'>
-                    <img src = {require("../images/plsWork.jpeg")}  height = "200" width = "200"/>
+                    <img src = {require("../images/bkg3.jpg")}  height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
                         Leandro
                     </p>
 
                 </div>
                 <div className = 'braydenInfo'>
-                    <img src = {require("../images/plsWork.jpeg")}  height = "200" width = "200"/>
+                    <img src = {require("../images/bkg2.jpg")}  height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
                         Brayden
                     </p>
