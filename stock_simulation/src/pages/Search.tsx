@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { FormatCodeSettings } from 'typescript';
 
+import { sendMsg } from '../server';
+
 import "./pageStyles.css";
 import React from "react";
 import {
@@ -58,6 +60,7 @@ const data = [
   }
 ];
 
+
 let userSearched = false;
 
 export function Search() {
@@ -75,12 +78,22 @@ export function Search() {
 };
 
 
-  const handleClick = () => {
-    setPrevMessage(message.toUpperCase())
-    setMessage("");
-    console.log(message.toUpperCase())
 
-    userSearched = true;
+
+  const handleClick = () => {
+    let map = sendMsg(message);
+    if (map == null){
+      setPrevMessage("Invalid Stock Ticker");
+    }
+    else{
+      setPrevMessage(message.toUpperCase() + "- $" + map);
+      setMessage("");
+      console.log(message.toUpperCase());
+
+      userSearched = true;
+    }
+    
+    
   };
 
 
@@ -92,7 +105,7 @@ export function Search() {
         </div>
         {userSearched === true &&
             <div className="stockInfo" >
-              <h1>Stock: {prevMessage}</h1>
+              <h1 style={{paddingLeft: "2%"}}>Stock: {prevMessage}</h1>
               <div className="graph">
                 <LineChart
                   width={500}
