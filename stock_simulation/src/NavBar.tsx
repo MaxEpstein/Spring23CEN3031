@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+
 import React from 'react';
 import {BsFillBarChartFill} from "react-icons/bs";
 import "./styles.css";
@@ -34,14 +35,13 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
 export function NavBar() {
 
   return (
+
     <nav className="navbar-container">
-      <div className='logo-container'>
-          <NavLink to={'/'}>
-         <span style={{font: 'roboto', }}>
-             {" "}
-            <BsFillBarChartFill />  Mind My Wallet  {""}
-         </span>
-      </NavLink>
+      <div className='logo-container' key={"/"}>
+        <a href = "/">
+                 {" "}
+                <BsFillBarChartFill />  Mind My Wallet  {""}
+        </a>
       </div>
         <Links links={links}/>
     </nav>
