@@ -38,7 +38,7 @@ export function NavBar() {
 
     <nav className="navbar-container">
       <div className='logo-container' key={"/"}>
-        <a href = "/">
+        <a href = "/" style={{textDecoration: "none", color: "black"}}>
                  {" "}
                 <BsFillBarChartFill />  Mind My Wallet  {""}
         </a>
