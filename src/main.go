@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/gorilla/websocket"
 )
@@ -24,22 +25,49 @@ var upgrader = websocket.Upgrader{
 // define a reader which will listen for
 // new messages being sent to our WebSocket
 // endpoint
-func reader(conn *websocket.Conn) {
+func reader(conn *websocket.Conn, main_list *data_list) {
 	for {
 		// read in a message
-		messageType, p, err := conn.ReadMessage()
+		_, p, err := conn.ReadMessage()
+
 		if err != nil {
 			log.Println(err)
 			return
 		}
-		// print out that message for clarity
-		fmt.Println(string(p))
 
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
+		r := regexp.MustCompile("[^\\s]+")
+		inputArray := r.FindAllString(string(p), -1)
+		inputType := inputArray[0]
+
+		var current []stock
+
+		switch choose := inputType; choose { //depending on button/passed in input type, do required functionality
+		case "search":
+			current = searchByString(inputArray[1], &data_list{})
+		case "display": // "display 1day", ie "inputType, button input function"
+			switch displayChoose := inputArray[1]; displayChoose {
+			case "1day":
+
+			case "5day":
+
+			case "10day":
+
+			case "1month": //etc
+
+			}
+		case "home": //return to home page?
+
+		case "other": //other button functionality
+
+			// print out that message for clarity
+			fmt.Println(string(p))
+
+			if err := conn.WriteMessage(messageType, p); err != nil {
+				log.Println(err)
+				return
+			}
+
 		}
-
 	}
 }
 
@@ -55,7 +83,9 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	reader(ws)
+	fmt.Println("here")
+	main_working_list := setup_main_working_list(nil, nil)
+	reader(ws, main_working_list)
 }
 
 func setupRoutes() {

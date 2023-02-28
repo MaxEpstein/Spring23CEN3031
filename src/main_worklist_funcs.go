@@ -10,15 +10,16 @@ import (
 )
 
 type stock struct {
-	symbol string
-	name   string
-	data   map[int64]uint
-	s_type string
+	symbol      string
+	name        string
+	data        map[int64]uint
+	s_type      string
+	recentPrice uint
 	//@TODO any additional features needed add here
 }
 
 type data_list struct {
-	data map[string][]stock //For future scalability for etf's, stocks, crypto
+	data map[string]map[string]stock //For future scalability for etf's, stocks, crypto
 }
 
 func add_historic_data(temp_stock *stock) {
@@ -37,10 +38,11 @@ func add_historic_data(temp_stock *stock) {
 	for iter.Next() { //
 		b := iter.Bar()
 		//RoundFloor or RoundUp
-		open_price, _ := b.Open.Float64()                                               //Open Price for that day
-		close_price, _ := b.Close.Float64()                                             //Close Price for that day
-		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))        //Timestamp is for the days open  09:30:00 EST
-		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
+		open_price, _ := b.Open.Float64()                                        //Open Price for that day
+		close_price, _ := b.Close.Float64()                                      //Close Price for that day
+		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST
+		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100))
+		// Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
 }
@@ -53,21 +55,42 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 	}
 
 	main_working_list := new(data_list)
-	main_working_list.data = make(map[string][]stock)
+	main_working_list.data = make(map[string]map[string]stock)
+
+	//make(map[string][]stock)
 
 	for st_type, symb_arr := range s_types {
+		main_working_list.data[st_type] = make(map[string]stock)
 		for _, item := range symb_arr {
 			////@TODO any additional features needed add here
 			////https://piquette.io/projects/finance-go/ website for full list of things
 			////========================
-
 			if checkIfStockExist(item) {
-				main_working_list.data[st_type] = append(main_working_list.data[st_type], *getDataByTicker(item, st_type))
+				main_working_list.data[st_type][item] = *getDataByTicker(item, st_type)
 			}
 		}
 
 	}
 	return main_working_list
+}
+
+func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
+	qt, err := quote.Get(ticker)
+	if err != nil {
+		panic(err)
+	}
+	//=========================
+	temp_stock := new(stock)
+	temp_stock.data = make(map[int64]uint)
+	temp_stock.symbol = ticker
+	temp_stock.name = qt.ShortName
+	temp_stock.s_type = s_type
+	//add_historic_data(temp_stock)
+	//@TODO any additional features needed add here
+	//https://piquette.io/projects/finance-go/ website for full list of things
+	//========================
+
+	//temp as stock, find some way to get stock type, eft, crypto, etc
 }
 
 func update_data_list(working_list *data_list) {
@@ -80,31 +103,13 @@ func update_data_list(working_list *data_list) {
 				panic(err)
 			}
 			st_symb1.data[time.Now().Unix()] = uint(qt.Ask * 100)
+			st_symb1.recentPrice = uint(qt.Ask)
 		}
 	}
 }
-func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
-	qt, err := quote.Get(ticker)
-	if err != nil {
-		panic(err)
-	}
-	//=========================
-	temp_stock := new(stock)
-	temp_stock.data = make(map[int64]uint)
-	temp_stock.symbol = ticker
-	temp_stock.name = qt.ShortName
-	temp_stock.s_type = s_type
-	add_historic_data(temp_stock)
-	//@TODO any additional features needed add here
-	//https://piquette.io/projects/finance-go/ website for full list of things
-	//========================
-	return temp_stock
-
-	//temp as stock, find some way to get stock type, eft, crypto, etc
-}
 
 func addStockToMain(stockToAdd *stock, main_list *data_list) {
-	main_list.data[stockToAdd.s_type] = append(main_list.data[stockToAdd.s_type], *stockToAdd)
+	main_list.data[stockToAdd.s_type][stockToAdd.symbol] = *getDataByTicker(stockToAdd.name, stockToAdd.s_type)
 }
 
 func checkIfStockExist(ticker string) bool {
@@ -118,6 +123,7 @@ func checkIfStockExist(ticker string) bool {
 }
 
 // func main() {
+func mainForWorklistFuncs() {
 
 // 	var s_type_container []string
 // 	var s_type_sym_container []string

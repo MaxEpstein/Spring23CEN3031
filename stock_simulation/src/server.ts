@@ -23,6 +23,12 @@ let connect = () => {
 let sendMsg = (msg: string) => {
   console.log("sending msg: ", msg);
   socket.send(msg);
+
+  socket.onmessage = (event) => {
+    console.log("Incomming message: " + event.data);
+    return event.data;
+  }
+
 };
 
 export { connect, sendMsg };
