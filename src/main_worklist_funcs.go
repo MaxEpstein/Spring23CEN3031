@@ -94,7 +94,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	add_historic_data(temp_stock)
+	//add_historic_data(temp_stock)
 	//@TODO any additional features needed add here
 	//https://piquette.io/projects/finance-go/ website for full list of things
 	//========================
@@ -116,6 +116,7 @@ func checkIfStockExist(ticker string) bool {
 	}
 	return false
 }
+
 
 // func main() {
 
