@@ -37,10 +37,11 @@ func add_historic_data(temp_stock *stock) {
 	for iter.Next() { //
 		b := iter.Bar()
 		//RoundFloor or RoundUp
-		open_price, _ := b.Open.Float64()                                               //Open Price for that day
-		close_price, _ := b.Close.Float64()                                             //Close Price for that day
-		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))        //Timestamp is for the days open  09:30:00 EST
-		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
+		open_price, _ := b.Open.Float64()                                        //Open Price for that day
+		close_price, _ := b.Close.Float64()                                      //Close Price for that day
+		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST
+		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100))
+		// Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
 }
@@ -60,7 +61,6 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 			////@TODO any additional features needed add here
 			////https://piquette.io/projects/finance-go/ website for full list of things
 			////========================
-
 			if checkIfStockExist(item) {
 				main_working_list.data[st_type] = append(main_working_list.data[st_type], *getDataByTicker(item, st_type))
 			}
@@ -94,7 +94,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	add_historic_data(temp_stock)
+	//add_historic_data(temp_stock)
 	//@TODO any additional features needed add here
 	//https://piquette.io/projects/finance-go/ website for full list of things
 	//========================

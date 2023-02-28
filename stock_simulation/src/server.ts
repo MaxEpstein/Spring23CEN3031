@@ -29,8 +29,6 @@ let sendMsg = (msg: string) => {
     return event.data;
   }
 
-  return 134.26
-
 };
 
 export { connect, sendMsg };
