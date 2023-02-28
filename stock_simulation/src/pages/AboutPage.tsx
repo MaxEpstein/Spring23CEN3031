@@ -20,7 +20,7 @@ export function AboutPage() {
             </div>
 
             <div className ="splitScreen">
-                <h1 style={{textAlign: "center", color: "midnightblue", font : "roboto" , alignItems: "center",
+                <h1 style={{textAlign: "center", color: "midnightblue", font : "roboto" , alignItems: "center", paddingBottom: "50px",
                 }}> Meet the Makers!</h1>
 
                 <div className = "jeanetteInfo">
@@ -38,7 +38,8 @@ export function AboutPage() {
                 <div className = 'maxInfo'>
                     <img src = {require("../images/bkg.jpg")} height = "200" width = "200"/>
                     <p style={{textAlign: "center", font: "roboto"}}>
-                        Max
+                        Max is also a second year computer science major at the University of Florida. He is our 
+                        other front-end developer! 
                     </p>
 
                 </div>
