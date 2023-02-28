@@ -22,7 +22,7 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
           {links.map((link: Link) => {
               return (
                   <div key={link.href} className='link'>
-                      <a href={link.href}>
+                      <a href={link.href} style={{textDecoration: "none", color: "midnightblue"}}>
                           {link.label}
                       </a>
                   </div>
@@ -38,7 +38,7 @@ export function NavBar() {
 
     <nav className="navbar-container">
       <div className='logo-container' key={"/"}>
-        <a href = "/" style={{textDecoration: "none", color: "black"}}>
+        <a href = "/" style={{textDecoration: "none", color: "midnightblue"}}>
 
                  {" "}
                 <BsFillBarChartFill />  Mind My Wallet  {""}
