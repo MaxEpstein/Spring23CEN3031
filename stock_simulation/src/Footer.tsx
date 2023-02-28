@@ -21,7 +21,7 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
               return (
 
                   <div key={link.href} className='link'>
-                      <a href={link.href} target={link.target}>
+                      <a href={link.href} target={link.target} style={{textDecoration: "none", color: "midnightblue"}}>
                           {link.label}
                       </a>
                   </div>
@@ -35,10 +35,11 @@ export function Footer() {
   return (
     <nav className="Footer-container">
       <div className='logo-container'>
-          <h3 style={{font: 'roboto'}}>
-              {" "}
+              <a href = "/" style={{textDecoration: "none", color: "midnightblue"}}>
+
+          {" "}
               <BsFillBarChartFill />  Mind My Wallet  {""}
-          </h3>
+              </a>
       </div>
       <Links links={links}/>
     </nav>
