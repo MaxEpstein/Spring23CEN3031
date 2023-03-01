@@ -48,14 +48,18 @@ func add_historic_data(temp_stock *stock) {
 }
 
 func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_list {
-	s_types := make(map[string][]string)
+	main_working_list := new(data_list)
+	main_working_list.data = make(map[string]map[string]stock)
+	main_working_list.data["stock"] = make(map[string]stock) //jerry riggining the shit
 
+	//if s_type_sym == nil {
+	//	return main_working_list
+	//}
+
+	s_types := make(map[string][]string)
 	for i, item := range s_type_name {
 		s_types[item] = append(s_types[item], s_type_sym[i])
 	}
-
-	main_working_list := new(data_list)
-	main_working_list.data = make(map[string]map[string]stock)
 
 	//make(map[string][]stock)
 
@@ -65,7 +69,6 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 			////@TODO any additional features needed add here
 			////https://piquette.io/projects/finance-go/ website for full list of things
 			////========================
-
 			if checkIfStockExist(item) {
 				main_working_list.data[st_type][item] = *getDataByTicker(item, st_type)
 			}
@@ -86,7 +89,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	add_historic_data(temp_stock)
+	//add_historic_data(temp_stock)
 
 	return temp_stock
 
@@ -113,7 +116,7 @@ func update_data_list(working_list *data_list) {
 }
 
 func addStockToMain(stockToAdd *stock, main_list *data_list) {
-	main_list.data[stockToAdd.s_type][stockToAdd.symbol] = *getDataByTicker(stockToAdd.name, stockToAdd.s_type)
+	main_list.data[stockToAdd.s_type][stockToAdd.symbol] = *stockToAdd
 }
 
 func checkIfStockExist(ticker string) bool {
