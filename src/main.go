@@ -44,6 +44,7 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			continue
 		}
 		addStockToMain(getDataByTicker(string(p), "stock"), main_list)
+		updateMainWorkingList(main_list)
 		temp_stock := main_list.data["stock"][string(p)]
 		msg := ""
 		for key, element := range temp_stock.data {
@@ -105,6 +106,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
 	main_working_list := initializeWorkingList(nil, nil)
+
 	reader(ws, main_working_list)
 }
 

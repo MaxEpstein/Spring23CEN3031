@@ -94,8 +94,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 }
 
 // get latest information for tickers within workinglist
-func updateMainWorkingList(working_list *data_list) *data_list {
-
+func updateMainWorkingList(working_list *data_list) {
 	for _, st_type := range working_list.data {
 
 		for _, st_symb1 := range st_type {
@@ -107,7 +106,6 @@ func updateMainWorkingList(working_list *data_list) *data_list {
 			st_symb1.recentPrice = uint(qt.Ask)
 		}
 	}
-	return working_list
 }
 
 func addStockToMain(stockToAdd *stock, main_list *data_list) {
