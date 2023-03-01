@@ -39,7 +39,7 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 		addStockToMain(getDataByTicker(string(p), "stock"), main_list)
 		update_data_list(main_list) //take away later
 		temp_stock := main_list.data["stock"][string(p)]
-		//fmt.Println(temp_stock)
+
 		msg := ""
 		for key, element := range temp_stock.data {
 			msg = strconv.FormatUint(uint64(key), 10) + ":" + strconv.FormatUint(uint64(element), 10)
