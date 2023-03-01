@@ -29,7 +29,7 @@ let sendMsg =  async (msg: string): Promise<any> => {
   console.log("sending msg: ", msg);
   socket.send(msg);
 
-  let price:number|null = null;
+  let price:number|null = -1;
 
    await socket.addEventListener('message', (event) => {
     console.log("Incomming message: " + event.data);
@@ -41,10 +41,10 @@ let sendMsg =  async (msg: string): Promise<any> => {
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (price != null) {
+      if (price != -1) {
         resolve(price);
       } else {
-        reject(null);
+        reject(-1);
       }
     }, 1000);
   });
