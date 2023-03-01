@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/websocket"
 )
 
 // We'll need to define an Upgrader
@@ -43,7 +44,7 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			continue
 		}
 		addStockToMain(getDataByTicker(string(p), "stock"), main_list)
-		//update_data_list(main_list) //take away later
+		update_data_list(main_list) //take away later
 		temp_stock := main_list.data["stock"][string(p)]
 		msg := ""
 		for key, element := range temp_stock.data {
