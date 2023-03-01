@@ -8,11 +8,15 @@
     Started configuring dashboard
     Integrated frontend and backend
     User can search and see latest price for stock through search bar
-    
+
 
 
 ## Frontend tests
-    Nav bar test using cypress framework
+    Nav bar test using cypress framework:
+        Tests navigation from home to search
+        Tests navigation from search to home
+        Tests Login Functionality
+        Tests Login redirect to dashboard
 
 
 # Backend tests
