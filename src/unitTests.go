@@ -5,81 +5,62 @@ import (
 )
 
 func unitTests() { //pass in example/testing data to various functions
-	typeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
-	tickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
+	testTypeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
+	testTickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
+	testDataList := new(data_list)
+	testDataList = testInitializeWorkingList(testTypeTickerArray, testTickerArray)
+
+	testStock := testGetDataByTicker("amd", "stock")
+
+	testDataList = testAddStockToMain(testStock, testDataList)
+
+	testCheckIfStockExist("aapl")
+	testCheckIfStockExist("zzzzz")
+}
+
+func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
 	testMainDataStorage := initializeWorkingList(typeTickerArray, tickerArray)
+	//fmt.Println(testMainDataStorage)
 
-	fmt.Println("Print every ticker with its type and name for testMainDataStorage below: ")
-	for ticker, i := range testMainDataStorage.data {
-		fmt.Println("Name: " + i[ticker].name + " -  Ticker: " + i[ticker].symbol + " -  Type: " + i[ticker].s_type)
+	fmt.Println("Example input string ticker array: ")
+	fmt.Println(tickerArray)
+
+	fmt.Println("Print every stock in the test tickerArray with its name, ticker, and type below: ")
+	for _, i := range testMainDataStorage.data["stock"] {
+		fmt.Println("Name: " + i.name + " | Ticker: " + i.symbol + " | Type: " + i.s_type)
 	}
-
-	testMainDataStorage = updateMainWorkingList(testMainDataStorage) //get latest information on each ticker inside the main working list
-
-	fmt.Println("Print every ticker with its latest price for testMainDataStorage below: ")
-	for ticker, i := range testMainDataStorage.data {
-		fmt.Println("Ticker: " + i[ticker].symbol + " -  Latest Price: " + returnCurrentPriceString(i[ticker]))
-	}
-
-	//add stock
-
-	//reprint list
-
-	//check if exists
-
-
-	//split into functions
-
-
-
-	//fmt.Println(testMainDataStorage.data[])
-
+	fmt.Println()
+	return testMainDataStorage
 }
 
-//add function that takes in mainlist from main.go from frontend
+func testGetDataByTicker(testTicker string, testStockType string) *stock {
+	testStock := getDataByTicker(testTicker, testStockType)
+	fmt.Println("Print the fetched data of the given stock: ")
+	fmt.Println("Name: " + testStock.name + " | Ticker: " + testStock.symbol + " | Type: " + testStock.s_type + "\n")
+	return testStock
+}
 
-func testmaun() {
-
-	var s_type_container []string
-	var s_type_sym_container []string
-
-	var s_type_name_user, s_type_sym_user string
-	fmt.Println("Type in type and ticker and then stop stop to exit loop")
-	for s_type_name_user != "stop" {
-
-		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
-		if err != nil {
-			panic(err)
-		}
-		if s_type_name_user != "stop" {
-			s_type_container = append(s_type_container, s_type_name_user) //Add it to ness list
-			s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
-		}
+func testAddStockToMain(testStock *stock, testMainDataStorage *data_list) *data_list {
+	addStockToMain(testStock, testMainDataStorage)
+	fmt.Println("Print every stock, including the newly added stock, in the test tickerArray with its name, ticker, and type below: ")
+	for _, i := range testMainDataStorage.data["stock"] {
+		fmt.Println("Name: " + i.name + " | Ticker: " + i.symbol + " | Type: " + i.s_type)
 	}
-
-	main_working_list := initializeWorkingList(s_type_container, s_type_sym_container)
-
-	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
-	//============================Demo Purpose ======================//
-	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
-	if err != nil {
-		panic(err)
-	}
-	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
-	//==========================================================//
-
-	//for {
-	updateMainWorkingList(main_working_list)
-	//}
-	//for future frequent updates of specific stock info
-
-	fmt.Println(main_working_list)
+	fmt.Println()
+	return testMainDataStorage
 }
 
-func searchTest(input string, main_list *data_list) {
-
+func testCheckIfStockExist(testTicker string) {
+	fmt.Println("Does the ticker " + testTicker + " exist?")
+	fmt.Println(checkIfStockExist(testTicker))
 }
 
-func passTest() {
-
-}
+// func testUpdateDataList(testMainDataStorage *data_list) *data_list {
+// 	testMainDataStorage = updateMainWorkingList(testMainDataStorage)
+// 	fmt.Println("Print every ticker with its latest price for testMainDataStorage below: ")
+// 	for ticker, i := range testMainDataStorage.data {
+// 		tempStock := i[ticker]
+// 		fmt.Println("Ticker: " + i[ticker].symbol + " -  Latest Price: " + (string)(tempStock.recentPrice))
+// 	}
+// 	return testMainDataStorage
+// }
