@@ -18,7 +18,7 @@
         Tests Login Functionality
         Tests Login redirect to dashboard
 
-# Backend tests
+# Backend Functions
 
     main.go 
 
@@ -65,3 +65,9 @@ Adding the individual stock to the main working list. Returns nothing.
 
 Checks to see if the ticker actually exist within the stock market
 to keep the program from accessing invalid pointer.
+
+# Backend Tests
+    testInitializeWorkingList
+    testGetDataByTicker
+    testAddStockToMain
+    testCheckIfStockExist
