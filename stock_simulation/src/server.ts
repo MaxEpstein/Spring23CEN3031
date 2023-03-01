@@ -33,10 +33,12 @@ let sendMsg =  async (msg: string): Promise<any> => {
 
    await socket.addEventListener('message', (event) => {
     console.log("Incomming message: " + event.data);
-    price = parseInt(event.data.substr(event.data.indexOf(":")+1));
-    let intPrice = price/100.00;
-    price = intPrice;
-    console.log("Price: " + intPrice);
+    if (event.data != null){
+      price = parseInt(event.data.substr(event.data.indexOf(":")+1));
+      price = price/100.00;
+    }
+    console.log("Price: " + price);
+    
   });
 
   return new Promise((resolve, reject) => {

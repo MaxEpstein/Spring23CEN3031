@@ -84,7 +84,8 @@ export function Search() {
     let price = await sendMsg(message);
 
     console.log("Price sent: " + price);
-    if (price == null){
+    if (Number.isNaN(price)){
+      console.log("Invalid Ticker");
       setPrevMessage("Invalid Stock Ticker");
     }
     else{
