@@ -23,7 +23,31 @@ type data_list struct {
 	data map[string]map[string]stock //For future scalability for etf's, stocks, crypto
 }
 
-func add_historic_data(temp_stock *stock) {
+func initializeWorkingList(s_type_name []string, s_type_sym []string) *data_list {
+	//s_types := make(map[string][]string)
+
+	// for i, item := range s_type_name {
+	//  	s_types[item] = append(s_types[item], s_type_sym[i])
+	// }
+
+	main_working_list := new(data_list)
+	main_working_list.data = make(map[string]map[string]stock)
+	main_working_list.data["stock"] = make(map[string]stock)
+
+	for _, item := range s_type_sym {
+		////@TODO any additional features needed add here
+		////https://piquette.io/projects/finance-go/ website for full list of things
+		////========================
+
+		if checkIfStockExist(item) {
+			main_working_list.data["stock"][item] = *getDataByTicker(item, "stock")
+		}
+	}
+
+	return main_working_list
+}
+
+func addHistoricalData(temp_stock *stock) {
 	//@TODO figure out pointer situaion and get maps to update accross
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
@@ -45,37 +69,6 @@ func add_historic_data(temp_stock *stock) {
 		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
-}
-
-func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_list {
-	main_working_list := new(data_list)
-	main_working_list.data = make(map[string]map[string]stock)
-	main_working_list.data["stock"] = make(map[string]stock) //jerry riggining the shit
-
-	//if s_type_sym == nil {
-	//	return main_working_list
-	//}
-
-	s_types := make(map[string][]string)
-	for i, item := range s_type_name {
-		s_types[item] = append(s_types[item], s_type_sym[i])
-	}
-
-	//make(map[string][]stock)
-
-	for st_type, symb_arr := range s_types {
-		main_working_list.data[st_type] = make(map[string]stock)
-		for _, item := range symb_arr {
-			////@TODO any additional features needed add here
-			////https://piquette.io/projects/finance-go/ website for full list of things
-			////========================
-			if checkIfStockExist(item) {
-				main_working_list.data[st_type][item] = *getDataByTicker(item, st_type)
-			}
-		}
-
-	}
-	return main_working_list
 }
 
 func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
@@ -100,8 +93,8 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	//temp as stock, find some way to get stock type, eft, crypto, etc
 }
 
-func update_data_list(working_list *data_list) {
-
+// get latest information for tickers within workinglist
+func updateMainWorkingList(working_list *data_list) {
 	for _, st_type := range working_list.data {
 
 		for _, st_symb1 := range st_type {
@@ -129,7 +122,7 @@ func checkIfStockExist(ticker string) bool {
 	return false
 }
 
-func mainForWorklistFuncs() {
+func mainForWorklistFuncs() { //used for testing various functions
 
 	var s_type_container []string
 	var s_type_sym_container []string
@@ -148,7 +141,7 @@ func mainForWorklistFuncs() {
 		}
 	}
 
-	main_working_list := setup_main_working_list(s_type_container, s_type_sym_container)
+	main_working_list := initializeWorkingList(s_type_container, s_type_sym_container)
 
 	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
 	//============================Demo Purpose ======================//
@@ -160,7 +153,7 @@ func mainForWorklistFuncs() {
 	//==========================================================//
 
 	//for {
-	update_data_list(main_working_list)
+	updateMainWorkingList(main_working_list)
 	//}
 	//for future frequent updates of specific stock info
 

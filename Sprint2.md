@@ -1,16 +1,22 @@
-#Sprint 2
+# Sprint 2
 
-#Completed Issues
+## Completed Issues
     Updated About Page
-    Created functioning search bar
-    Include logo and link to home page
-    Start configuring dashboard
+    Created functioning search bar & page
+    Includeed logo and link to home page in navbar
+    Upon login, redirects to dashboard
+    Started configuring dashboard
     Integrated frontend and backend
+    User can search and see latest price for stock through search bar
 
 
-#Frontend tests
-    Nav bar test using cypress framework
 
+## Frontend tests
+    Nav bar test using cypress framework:
+        Tests navigation from home to search
+        Tests navigation from search to home
+        Tests Login Functionality
+        Tests Login redirect to dashboard
 
 # Backend tests
 
@@ -58,12 +64,4 @@ Adding the individual stock to the main working list. Returns nothing.
     checkIfStockExist(ticker string) bool 
 
 Checks to see if the ticker actually exist within the stock market
-to keep the program from accessing invalid pointers
-
-    
-    
-    
-    
-   
-   
-   
+to keep the program from accessing invalid pointer.

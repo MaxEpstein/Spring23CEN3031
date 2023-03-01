@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/websocket"
 )
 
 // We'll need to define an Upgrader
@@ -101,7 +102,8 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	main_working_list := setup_main_working_list(nil, nil)
+	main_working_list := initializeWorkingList(nil, nil)
+
 	reader(ws, main_working_list)
 }
 
@@ -115,6 +117,7 @@ func setupRoutes() {
 }
 
 func main() {
+	unitTests()
 	fmt.Println("Chat App v0.01")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
