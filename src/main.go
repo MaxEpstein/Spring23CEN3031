@@ -44,7 +44,6 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			continue
 		}
 		addStockToMain(getDataByTicker(string(p), "stock"), main_list)
-		update_data_list(main_list) //take away later
 		temp_stock := main_list.data["stock"][string(p)]
 		msg := ""
 		for key, element := range temp_stock.data {
@@ -105,7 +104,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	main_working_list := setup_main_working_list(nil, nil)
+	main_working_list := initializeWorkingList(nil, nil)
 	reader(ws, main_working_list)
 }
 
@@ -119,6 +118,7 @@ func setupRoutes() {
 }
 
 func main() {
+	unitTests()
 	fmt.Println("Chat App v0.01")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)

@@ -31,10 +31,10 @@ func showFiveDay() {
 
 }
 
-func returnCurrentPriceString(currentStock *stock) string {
-	return strconv.FormatUint(uint64(currentStock.recentPrice), 16)
+func returnCurrentPriceString(currentStock stock) string {
+	return strconv.FormatUint(uint64(currentStock.recentPrice), 10)
 }
 
-func returnCurrentPriceUInt(currentStock *stock) uint {
+func returnCurrentPriceUInt(currentStock stock) uint {
 	return currentStock.recentPrice
 }
