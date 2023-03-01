@@ -34,6 +34,7 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 		}
 		// print out that message for clarity
 		//fmt.Println(string(p))
+		//
 		if checkIfStockExist(string(p)) != true {
 			if err := conn.WriteMessage(1, []byte(nil)); err != nil {
 				log.Println(err)
