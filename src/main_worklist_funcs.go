@@ -89,7 +89,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	//add_historic_data(temp_stock)
+	add_historic_data(temp_stock)
 
 	return temp_stock
 
