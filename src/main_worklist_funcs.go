@@ -65,7 +65,6 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 			////@TODO any additional features needed add here
 			////https://piquette.io/projects/finance-go/ website for full list of things
 			////========================
-
 			if checkIfStockExist(item) {
 				main_working_list.data[st_type][item] = *getDataByTicker(item, st_type)
 			}
@@ -76,6 +75,7 @@ func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_li
 }
 
 func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
+	fmt.Println(ticker)
 	qt, err := quote.Get(ticker)
 	if err != nil {
 		panic(err)
@@ -113,7 +113,7 @@ func update_data_list(working_list *data_list) {
 }
 
 func addStockToMain(stockToAdd *stock, main_list *data_list) {
-	main_list.data[stockToAdd.s_type][stockToAdd.symbol] = *getDataByTicker(stockToAdd.name, stockToAdd.s_type)
+	main_list.data[stockToAdd.s_type][stockToAdd.symbol] = *stockToAdd
 }
 
 func checkIfStockExist(ticker string) bool {
