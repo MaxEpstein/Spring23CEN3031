@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { FormatCodeSettings } from 'typescript';
 
 import { sendMsg } from '../server';
 
@@ -80,13 +79,17 @@ export function Search() {
 
 
 
-  const handleClick = () => {
-    let map = sendMsg(message);
-    if (map == null){
+  const  handleClick = async () => {
+
+    let price = await sendMsg(message);
+
+    console.log("Price sent: " + price);
+    if (Number.isNaN(price)){
+      console.log("Invalid Ticker");
       setPrevMessage("Invalid Stock Ticker");
     }
     else{
-      setPrevMessage(message.toUpperCase() + "- $" + map);
+      setPrevMessage(message.toUpperCase() + "- $" + price);
       setMessage("");
       console.log(message.toUpperCase());
 
