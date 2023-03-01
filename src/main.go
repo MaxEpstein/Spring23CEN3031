@@ -55,7 +55,7 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 
 	}
 }
-@
+
 //for {
 //	// read in a message
 //	_, p, err := conn.ReadMessage()
