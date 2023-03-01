@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"time"
 
@@ -38,24 +39,27 @@ func add_historic_data(temp_stock *stock) {
 	for iter.Next() { //
 		b := iter.Bar()
 		//RoundFloor or RoundUp
-		open_price, _ := b.Open.Float64()                                        //Open Price for that day
-		close_price, _ := b.Close.Float64()                                      //Close Price for that day
-		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST
-		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100))
-		// Timestamp is for the days close at  16:00:00 EST
+		open_price, _ := b.Open.Float64()                                               //Open Price for that day
+		close_price, _ := b.Close.Float64()                                             //Close Price for that day
+		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))        //Timestamp is for the days open  09:30:00 EST
+		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
 }
 
 func setup_main_working_list(s_type_name []string, s_type_sym []string) *data_list {
-	s_types := make(map[string][]string)
+	main_working_list := new(data_list)
+	main_working_list.data = make(map[string]map[string]stock)
+	main_working_list.data["stock"] = make(map[string]stock) //jerry riggining the shit
 
+	//if s_type_sym == nil {
+	//	return main_working_list
+	//}
+
+	s_types := make(map[string][]string)
 	for i, item := range s_type_name {
 		s_types[item] = append(s_types[item], s_type_sym[i])
 	}
-
-	main_working_list := new(data_list)
-	main_working_list.data = make(map[string]map[string]stock)
 
 	//make(map[string][]stock)
 
@@ -86,6 +90,9 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
 	//add_historic_data(temp_stock)
+
+	return temp_stock
+
 	//@TODO any additional features needed add here
 	//https://piquette.io/projects/finance-go/ website for full list of things
 	//========================
@@ -109,7 +116,7 @@ func update_data_list(working_list *data_list) {
 }
 
 func addStockToMain(stockToAdd *stock, main_list *data_list) {
-	main_list.data[stockToAdd.s_type][stockToAdd.symbol] = *getDataByTicker(stockToAdd.name, stockToAdd.s_type)
+	main_list.data[stockToAdd.s_type][stockToAdd.symbol] = *stockToAdd
 }
 
 func checkIfStockExist(ticker string) bool {
@@ -122,41 +129,40 @@ func checkIfStockExist(ticker string) bool {
 	return false
 }
 
-// func main() {
 func mainForWorklistFuncs() {
 
-// 	var s_type_container []string
-// 	var s_type_sym_container []string
+	var s_type_container []string
+	var s_type_sym_container []string
 
-// 	var s_type_name_user, s_type_sym_user string
-// 	fmt.Println("Type in type and ticker and then stop stop to exit loop")
-// 	for s_type_name_user != "stop" {
+	var s_type_name_user, s_type_sym_user string
+	fmt.Println("Type in type and ticker and then stop stop to exit loop")
+	for s_type_name_user != "stop" {
 
-// 		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
-// 		if err != nil {
-// 			panic(err)
-// 		}
-// 		if s_type_name_user != "stop" {
-// 			s_type_container = append(s_type_container, s_type_name_user) //Add it to ness list
-// 			s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
-// 		}
-// 	}
+		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
+		if err != nil {
+			panic(err)
+		}
+		if s_type_name_user != "stop" {
+			s_type_container = append(s_type_container, s_type_name_user) //Add it to ness list
+			s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
+		}
+	}
 
-// 	main_working_list := setup_main_working_list(s_type_container, s_type_sym_container)
+	main_working_list := setup_main_working_list(s_type_container, s_type_sym_container)
 
-// 	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
-// 	//============================Demo Purpose ======================//
-// 	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
-// 	//==========================================================//
+	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
+	//============================Demo Purpose ======================//
+	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
+	if err != nil {
+		panic(err)
+	}
+	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
+	//==========================================================//
 
-// 	//for {
-// 	update_data_list(main_working_list)
-// 	//}
-// 	//for future frequent updates of specific stock info
+	//for {
+	update_data_list(main_working_list)
+	//}
+	//for future frequent updates of specific stock info
 
-// 	fmt.Println(main_working_list)
-// }
+	fmt.Println(main_working_list)
+}
