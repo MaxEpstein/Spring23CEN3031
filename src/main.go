@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gorilla/websocket"
 )
@@ -23,8 +22,10 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
+// define a reader which will listen for
+// new messages being sent to our WebSocket
+// endpoint
 func reader(conn *websocket.Conn, main_list *data_list) {
-	//This defined reader will listen for the messages in the front end.
 	for {
 		// read in a message
 		_, p, err := conn.ReadMessage()
@@ -32,34 +33,26 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			log.Println(err)
 			return
 		}
-		//"ticker:1yr"
-		ticker := string(p)
-		data_interval := strings.Split(ticker, ":")
-
-		//Check if the stock being submitted in is real, otherwise continue listening for an input
-		if checkIfStockExist(data_interval[0]) != true {
+		// print out that message for clarity
+		//fmt.Println(string(p))
+		//
+		if checkIfStockExist(string(p)) != true {
 			if err := conn.WriteMessage(1, []byte(nil)); err != nil {
-				//Return nill to front end with not found.
 				log.Println(err)
 				return
 			}
 			continue
 		}
-		addStockToMain(getDataByTicker(data_interval[0], "stock", data_interval[1]), main_list)
-		//updateMainWorkingList(main_list) //take away later
-		temp_stock := main_list.data["stock"][ticker]
+		addStockToMain(getDataByTicker(string(p), "stock"), main_list)
+		updateMainWorkingList(main_list)
+		temp_stock := main_list.data["stock"][string(p)]
 		msg := ""
 		for key, element := range temp_stock.data {
-			//Send all the data within the current map
 			msg = strconv.FormatUint(uint64(key), 10) + ":" + strconv.FormatUint(uint64(element), 10)
 			if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 				log.Println(err)
 				return
 			}
-		}
-		if err := conn.WriteMessage(1, []byte("L")); err != nil {
-			log.Println(err)
-			return
 		}
 
 	}
@@ -98,6 +91,8 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 //
 //case "other": //other button functionality
 
+// print out
+
 // define our WebSocket endpoint
 func serveWs(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Host)
@@ -110,7 +105,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	main_working_list := initializeWorkingList(nil, nil, "nil")
+	main_working_list := initializeWorkingList(nil, nil)
 
 	reader(ws, main_working_list)
 }
@@ -122,7 +117,7 @@ func setupRoutes() {
 	// mape our `/ws` endpoint to the `serveWs` function
 	http.HandleFunc("/ws", serveWs)
 
-} //
+}
 
 func main() {
 	unitTests()
