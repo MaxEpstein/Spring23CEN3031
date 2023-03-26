@@ -49,7 +49,7 @@ func initializeWorkingList(s_type_name []string, s_type_sym []string) *data_list
 
 func addHistoricalData(temp_stock *stock, timeFrame string) {
 	//@TODO figure out pointer situaion and get maps to update accross
-	timeFrameDate := getTimeFrame(timeFrame)
+	timeFrameDate, timeInterval := getTimeFrame(timeFrame)
 
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
@@ -57,7 +57,7 @@ func addHistoricalData(temp_stock *stock, timeFrame string) {
 		End: &datetime.Datetime{Month: int(time.Now().Month()),
 			Day:  int(time.Now().Day()),
 			Year: int(time.Now().Year())},
-		Interval: datetime.ThirtyMins, //@Todo might want to change this later
+		Interval: timeInterval, //@Todo might want to change this later
 	}
 	iter := chart.Get(p)
 
@@ -74,30 +74,30 @@ func addHistoricalData(temp_stock *stock, timeFrame string) {
 
 }
 
-func getTimeFrame(timeFrame string) *datetime.Datetime {
+func getTimeFrame(timeFrame string) (*datetime.Datetime, datetime.Interval) {
 	switch choose := timeFrame; choose {
 	case "1day":
 		adjustedTime := time.Now().AddDate(0, 0, -1)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}
+		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
 	case "5day":
 		adjustedTime := time.Now().AddDate(0, 0, -5)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}
+		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
 	case "1month":
 		adjustedTime := time.Now().AddDate(0, -1, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}
+		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
 	case "3month":
 		adjustedTime := time.Now().AddDate(0, -3, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}
+		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
 	case "6month":
 		adjustedTime := time.Now().AddDate(0, -6, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}
+		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
 	case "YTD":
-		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}
+		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, datetime.OneDay
 	case "1year":
 		adjustedTime := time.Now().AddDate(-1, 0, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}
+		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
 	}
-	return &datetime.Datetime{Month: 1, Day: 1, Year: 1000}
+	return &datetime.Datetime{Month: 1, Day: 1, Year: 1000}, datetime.OneDay
 }
 
 func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
