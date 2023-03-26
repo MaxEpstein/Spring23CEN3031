@@ -29,22 +29,21 @@ let sendMsg =  async (msg: string): Promise<any> => {
   console.log("sending msg: ", msg);
   socket.send(msg);
 
-  let price:number|null = -1;
+  let messages:string[] = [];
+
+  let price:number|null = -2;
+  let message:string = "no message"
 
    await socket.addEventListener('message', (event) => {
     console.log("Incomming message: " + event.data);
-    if (event.data != null){
-      price = parseInt(event.data.substr(event.data.indexOf(":")+1));
-      price = price/100.00;
-    }
-    console.log("Price: " + price);
-    
+    message = event.data;
+    messages.push(message);
   });
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (price != -1) {
-        resolve(price);
+        resolve(messages);
       } else {
         reject(-1);
       }

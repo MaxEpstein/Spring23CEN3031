@@ -51,7 +51,7 @@ func addHistoricalData(temp_stock *stock) {
 	//@TODO figure out pointer situaion and get maps to update accross
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
-		Start:  &datetime.Datetime{Month: 5, Day: 2, Year: 1792},
+		Start:  &datetime.Datetime{Month: 3, Day: 15, Year: 2023},
 		End: &datetime.Datetime{Month: int(time.Now().Month()),
 			Day:  int(time.Now().Day()),
 			Year: int(time.Now().Year())},
@@ -82,7 +82,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	//add_historic_data(temp_stock)
+	addHistoricalData(temp_stock)
 
 	return temp_stock
 
