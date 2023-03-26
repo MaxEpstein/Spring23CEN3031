@@ -5,6 +5,7 @@ import { sendMsg } from '../server';
 import "./pageStyles.css";
 import React from "react";
 import {
+  ResponsiveContainer,
   LineChart,
   Line,
   XAxis,
@@ -12,55 +13,13 @@ import {
   CartesianGrid,
   Tooltip,
   Legend
-} from "recharts";
-
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100
-  }
-];
-
+} from "recharts"; 
 
 let userSearched = false;
+let validStock = false;
+let data = [{date: "3/26/2023 15:17",price:  280.95}]
+let priceMin = 1000;
+let priceMax= 0;
 
 export function Search() {
     const [message, setMessage] = useState('');
@@ -76,29 +35,56 @@ export function Search() {
     }
 };
 
-
-
-
   const  handleClick = async () => {
+    data.splice(0);
+    priceMax = 0;
+    priceMin = 1000;
 
-    let price = await sendMsg(message);
+    let incomming:string[] = [];
+      incomming = await sendMsg(message);
+      console.log(incomming);
+      incomming.sort();
+      for (let s of incomming) {
+        let price = s;
+        let date = parseInt(s.substr(0,s.indexOf(":")));
 
-    console.log("Price sent: " + price);
-    if (Number.isNaN(price)){
-      console.log("Invalid Ticker");
-      setPrevMessage("Invalid Stock Ticker");
-    }
-    else{
-      setPrevMessage(message.toUpperCase() + "- $" + price);
-      setMessage("");
-      console.log(message.toUpperCase());
+        let dateDate = new Date(date * 1000); // convert to current time
+        let dateStr =  (dateDate.getMonth() +1) + "/" + dateDate.getDate()+ "/"  + dateDate.getFullYear() +  " " + dateDate.getHours() + ":" + dateDate.getMinutes();
 
-      userSearched = true;
-    }
+        let priceInt = parseInt(s.substr(s.indexOf(":")+1));
+        priceInt = priceInt/100.00;
+
+        if (priceInt > priceMax){
+          priceMax = priceInt;
+        }
+          
+        if (priceInt < priceMin){
+          priceMin = priceInt;
+        }
+
+        console.log("Price sent: " + priceInt  + "  Date: " + date);
+        if (Number.isNaN(priceInt)){
+          console.log("Invalid Ticker");
+          setPrevMessage("Invalid Stock Ticker");
+          userSearched = true;
+        }
+        else{
+
+          setPrevMessage(message.toUpperCase() + "- $" + priceInt);
+          setMessage("");
+          console.log(message.toUpperCase());
+
+          data.push({date: dateStr, price: priceInt});
+          console.log(data);
+
+          userSearched = true;
+          validStock = true;
+        }
     
-    
+      }
+
+      console.log("Min: " + priceMin + "  Max: " + priceMax);
   };
-
 
     return  (
       <>        
@@ -109,8 +95,9 @@ export function Search() {
         {userSearched === true &&
             <div className="stockInfo" >
               <h1 style={{paddingLeft: "2%"}}>Stock: {prevMessage}</h1>
-              <div className="graph">
-                <LineChart
+              {validStock === true &&
+                <div className="graph">
+                    <LineChart
                   width={500}
                   height={300}
                   data={data}
@@ -122,21 +109,22 @@ export function Search() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
+                  <XAxis dataKey="date" />
+                  <YAxis type="number" domain={[Math.floor(priceMin*0.98), Math.ceil((priceMax*1.02))]}/>
                   <Tooltip />
                   <Legend />
                   <Line
                     type="monotone"
-                    dataKey="pv"
+                    dataKey="price"
                     stroke="#8884d8"
                     activeDot={{ r: 8 }}
                   />
-                  <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
             </LineChart>
-                </div>
-              </div>
+                  </div>
 }
+              </div>
+  }
+
         </>
   );
 }

@@ -53,6 +53,7 @@ func addHistoricalData(temp_stock *stock, timeFrame string) {
 
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
+
 		Start:  timeFrameDate,
 		End: &datetime.Datetime{Month: int(time.Now().Month()),
 			Day:  int(time.Now().Day()),
@@ -112,6 +113,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
 	addHistoricalData(temp_stock, "1day")
+
 
 	return temp_stock
 
