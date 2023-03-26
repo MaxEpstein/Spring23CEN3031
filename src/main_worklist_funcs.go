@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"math"
+	"strconv"
+	"strings"
 	"time"
 
 	chart "github.com/piquette/finance-go/chart"
@@ -21,9 +23,10 @@ type stock struct {
 
 type data_list struct {
 	data map[string]map[string]stock //For future scalability for etf's, stocks, crypto
+
 }
 
-func initializeWorkingList(s_type_name []string, s_type_sym []string, data_interval string) *data_list {
+func initializeWorkingList(s_type_name []string, s_type_sym []string) *data_list {
 	//s_types := make(map[string][]string)
 
 	// for i, item := range s_type_name {
@@ -40,64 +43,56 @@ func initializeWorkingList(s_type_name []string, s_type_sym []string, data_inter
 		////========================
 
 		if checkIfStockExist(item) {
-			main_working_list.data["stock"][item] = *getDataByTicker(item, "stock", data_interval)
+			main_working_list.data["stock"][item] = *getDataByTicker(item, "stock")
 		}
 	}
 
 	return main_working_list
 }
 
-func addHistoricalData(temp_stock *stock, timeFrame string) {
+func addHistoricalData(temp_stock *stock, time_scale string) {
 	//@TODO figure out pointer situaion and get maps to update accross
-	timeFrameDate, timeInterval := getTimeFrame(timeFrame)
-
+	timeVal_dict := map[string]string{
+		//Month , day, year
+		"1day": "0,-1,0",
+		"5day": "0,-5,0",
+		"1mth": "-1,0,0",
+		"3mth": "-3,0,0",
+		"6mth": "-6,0,0",
+		"1yr":  "0,0,-1",
+		"5yr":  "0,0,-5",
+		"ALL":  "0,0,-100",
+		"YTD":  "0,0,0",
+	}
+	time_Values := strings.Split(timeVal_dict[time_scale], ",")
+	month, _ := strconv.Atoi(time_Values[0])
+	day, _ := strconv.Atoi(time_Values[1])
+	fmt.Println(day)
+	year, _ := strconv.Atoi(time_Values[2])
 	p := &chart.Params{
+		//time.AddDate(year, month , date)
 		Symbol: temp_stock.symbol,
-		Start:  timeFrameDate,
+		Start:  &datetime.Datetime{int(time.Now().AddDate(year, month, day).Month())},
 		End: &datetime.Datetime{Month: int(time.Now().Month()),
 			Day:  int(time.Now().Day()),
 			Year: int(time.Now().Year())},
-		Interval: timeInterval, //@Todo might want to change this later
+		Interval: datetime.OneHour,
 	}
 	iter := chart.Get(p)
+
 	// Iterate over results. Will exit upon any error.
 	for iter.Next() { //
 		b := iter.Bar()
 		//RoundFloor or RoundUp
-		open_price, _ := b.Open.Float64()                                        //Open Price for that day
-		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST // Timestamp is for the days close at  16:00:00 EST
+		open_price, _ := b.Open.Float64() //Open Price for that day
+		//close_price, _ := b.Close.Float64()                                            //Close Price for that day
+		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST
+		//temp_stock.data[int64(b.Timestamp)] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
-
+	fmt.Println(temp_stock.data)
 }
-
-func getTimeFrame(timeFrame string) (*datetime.Datetime, datetime.Interval) {
-	switch choose := timeFrame; choose {
-	case "1day":
-		adjustedTime := time.Now().AddDate(0, 0, -2)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.FifteenMins
-	case "5day":
-		adjustedTime := time.Now().AddDate(0, 0, -6)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneHour
-	case "1month":
-		adjustedTime := time.Now().AddDate(0, -1, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
-	case "3month":
-		adjustedTime := time.Now().AddDate(0, -3, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
-	case "6month":
-		adjustedTime := time.Now().AddDate(0, -6, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
-	case "YTD":
-		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, datetime.OneMonth
-	case "1year":
-		adjustedTime := time.Now().AddDate(-1, 0, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
-	}
-	return &datetime.Datetime{Month: 1, Day: 1, Year: 1000}, datetime.OneDay
-}
-
-func getDataByTicker(ticker string, s_type string, data_interval string) *stock { //take ticker input
+func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	qt, err := quote.Get(ticker)
 	if err != nil {
 		panic(err)
@@ -108,8 +103,7 @@ func getDataByTicker(ticker string, s_type string, data_interval string) *stock 
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	addHistoricalData(temp_stock, data_interval)
-
+	addHistoricalData(temp_stock, "1day")
 	return temp_stock
 
 	//@TODO any additional features needed add here
@@ -167,19 +161,19 @@ func mainForWorklistFuncs() { //used for testing various functions
 		}
 	}
 
-	main_working_list := initializeWorkingList(s_type_container, s_type_sym_container, "nill")
+	main_working_list := initializeWorkingList(s_type_container, s_type_sym_container)
 
 	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
 	//============================Demo Purpose ======================//
 	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
 	if err != nil {
 		panic(err)
-	} //
-	//addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
+	}
+	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
 	//==========================================================//
 
 	//for {
-	//updateMainWorkingList(main_working_list)
+	updateMainWorkingList(main_working_list)
 	//}
 	//for future frequent updates of specific stock info
 
