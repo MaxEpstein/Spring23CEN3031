@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@emailjs/browser": "^3.10.0",
+    "moment": "^2.29.4",
     "react-icons": "^4.7.1",
     "react-router-dom": "^5.3.0"
   },
