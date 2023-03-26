@@ -23,7 +23,7 @@ type data_list struct {
 	data map[string]map[string]stock //For future scalability for etf's, stocks, crypto
 }
 
-func initializeWorkingList(s_type_name []string, s_type_sym []string) *data_list {
+func initializeWorkingList(s_type_name []string, s_type_sym []string, data_interval string) *data_list {
 	//s_types := make(map[string][]string)
 
 	// for i, item := range s_type_name {
@@ -40,7 +40,7 @@ func initializeWorkingList(s_type_name []string, s_type_sym []string) *data_list
 		////========================
 
 		if checkIfStockExist(item) {
-			main_working_list.data["stock"][item] = *getDataByTicker(item, "stock")
+			main_working_list.data["stock"][item] = *getDataByTicker(item, "stock", data_interval)
 		}
 	}
 
@@ -60,15 +60,12 @@ func addHistoricalData(temp_stock *stock, timeFrame string) {
 		Interval: timeInterval, //@Todo might want to change this later
 	}
 	iter := chart.Get(p)
-
 	// Iterate over results. Will exit upon any error.
 	for iter.Next() { //
 		b := iter.Bar()
 		//RoundFloor or RoundUp
-		open_price, _ := b.Open.Float64()                                               //Open Price for that day
-		close_price, _ := b.Close.Float64()                                             //Close Price for that day
-		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))        //Timestamp is for the days open  09:30:00 EST
-		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
+		open_price, _ := b.Open.Float64()                                        //Open Price for that day
+		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST // Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
 
@@ -77,11 +74,11 @@ func addHistoricalData(temp_stock *stock, timeFrame string) {
 func getTimeFrame(timeFrame string) (*datetime.Datetime, datetime.Interval) {
 	switch choose := timeFrame; choose {
 	case "1day":
-		adjustedTime := time.Now().AddDate(0, 0, -1)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
+		adjustedTime := time.Now().AddDate(0, 0, -2)
+		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.FifteenMins
 	case "5day":
-		adjustedTime := time.Now().AddDate(0, 0, -5)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
+		adjustedTime := time.Now().AddDate(0, 0, -6)
+		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneHour
 	case "1month":
 		adjustedTime := time.Now().AddDate(0, -1, 0)
 		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
@@ -92,7 +89,7 @@ func getTimeFrame(timeFrame string) (*datetime.Datetime, datetime.Interval) {
 		adjustedTime := time.Now().AddDate(0, -6, 0)
 		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
 	case "YTD":
-		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, datetime.OneDay
+		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, datetime.OneMonth
 	case "1year":
 		adjustedTime := time.Now().AddDate(-1, 0, 0)
 		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
@@ -100,7 +97,7 @@ func getTimeFrame(timeFrame string) (*datetime.Datetime, datetime.Interval) {
 	return &datetime.Datetime{Month: 1, Day: 1, Year: 1000}, datetime.OneDay
 }
 
-func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
+func getDataByTicker(ticker string, s_type string, data_interval string) *stock { //take ticker input
 	qt, err := quote.Get(ticker)
 	if err != nil {
 		panic(err)
@@ -111,7 +108,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	addHistoricalData(temp_stock, "1day")
+	addHistoricalData(temp_stock, data_interval)
 
 	return temp_stock
 
@@ -170,7 +167,7 @@ func mainForWorklistFuncs() { //used for testing various functions
 		}
 	}
 
-	main_working_list := initializeWorkingList(s_type_container, s_type_sym_container)
+	main_working_list := initializeWorkingList(s_type_container, s_type_sym_container, "nill")
 
 	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
 	//============================Demo Purpose ======================//
@@ -178,7 +175,7 @@ func mainForWorklistFuncs() { //used for testing various functions
 	if err != nil {
 		panic(err)
 	}
-	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
+	//addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
 	//==========================================================//
 
 	//for {

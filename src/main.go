@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/websocket"
 )
@@ -31,9 +32,12 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			log.Println(err)
 			return
 		}
+		//"ticker:1yr"
 		ticker := string(p)
+		data_interval := strings.Split(ticker, ":")
+
 		//Check if the stock being submitted in is real, otherwise continue listening for an input
-		if checkIfStockExist(ticker) != true {
+		if checkIfStockExist(data_interval[0]) != true {
 			if err := conn.WriteMessage(1, []byte(nil)); err != nil {
 				//Return nill to front end with not found.
 				log.Println(err)
@@ -41,8 +45,8 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			}
 			continue
 		}
-		addStockToMain(getDataByTicker(ticker, "stock"), main_list)
-		updateMainWorkingList(main_list) //take away later
+		addStockToMain(getDataByTicker(data_interval[0], "stock", data_interval[1]), main_list)
+		//updateMainWorkingList(main_list) //take away later
 		temp_stock := main_list.data["stock"][ticker]
 		msg := ""
 		for key, element := range temp_stock.data {
@@ -52,6 +56,10 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 				log.Println(err)
 				return
 			}
+		}
+		if err := conn.WriteMessage(1, []byte("L")); err != nil {
+			log.Println(err)
+			return
 		}
 
 	}
@@ -102,7 +110,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	main_working_list := initializeWorkingList(nil, nil)
+	main_working_list := initializeWorkingList(nil, nil, "nil")
 
 	reader(ws, main_working_list)
 }
