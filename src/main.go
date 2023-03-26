@@ -122,7 +122,7 @@ func setupRoutes() {
 	// mape our `/ws` endpoint to the `serveWs` function
 	http.HandleFunc("/ws", serveWs)
 
-}
+} //
 
 func main() {
 	unitTests()

@@ -174,7 +174,7 @@ func mainForWorklistFuncs() { //used for testing various functions
 	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
 	if err != nil {
 		panic(err)
-	}
+	} //
 	//addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
 	//==========================================================//
 
