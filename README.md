@@ -13,7 +13,7 @@
   
 > References: https://golangdocs.com/golang-finance-go-package-stock-quote-options-chart
 >             https://www.typescriptlang.org/docs/handbook/intro.html
->             
+>             Search server: https://tutorialedge.net/golang/go-websocket-tutorial/
 > Login form: https://codesandbox.io/s/x4h6w
 >             
 > https://recharts.org/en-US/examples/LegendEffectOpacity

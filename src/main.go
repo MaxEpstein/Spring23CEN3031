@@ -22,10 +22,8 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-// define a reader which will listen for
-// new messages being sent to our WebSocket
-// endpoint
 func reader(conn *websocket.Conn, main_list *data_list) {
+	//This defined reader will listen for the messages in the front end.
 	for {
 		// read in a message
 		_, p, err := conn.ReadMessage()
@@ -33,21 +31,22 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			log.Println(err)
 			return
 		}
-		// print out that message for clarity
-		//fmt.Println(string(p))
-		//
-		if checkIfStockExist(string(p)) != true {
+		ticker := string(p)
+		//Check if the stock being submitted in is real, otherwise continue listening for an input
+		if checkIfStockExist(ticker) != true {
 			if err := conn.WriteMessage(1, []byte(nil)); err != nil {
+				//Return nill to front end with not found.
 				log.Println(err)
 				return
 			}
 			continue
 		}
-		addStockToMain(getDataByTicker(string(p), "stock"), main_list)
+		addStockToMain(getDataByTicker(ticker, "stock"), main_list)
 		update_data_list(main_list) //take away later
-		temp_stock := main_list.data["stock"][string(p)]
+		temp_stock := main_list.data["stock"][ticker]
 		msg := ""
 		for key, element := range temp_stock.data {
+			//Send all the data within the current map
 			msg = strconv.FormatUint(uint64(key), 10) + ":" + strconv.FormatUint(uint64(element), 10)
 			if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 				log.Println(err)
@@ -91,8 +90,6 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 //
 //case "other": //other button functionality
 
-// print out
-
 // define our WebSocket endpoint
 func serveWs(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Host)
@@ -105,7 +102,8 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	main_working_list := setup_main_working_list(nil, nil)
+	main_working_list := initializeWorkingList(nil, nil)
+
 	reader(ws, main_working_list)
 }
 
@@ -119,6 +117,7 @@ func setupRoutes() {
 }
 
 func main() {
+	unitTests()
 	fmt.Println("Chat App v0.01")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
