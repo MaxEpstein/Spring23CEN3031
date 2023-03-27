@@ -141,7 +141,6 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	//https://piquette.io/projects/finance-go/ website for full list of things
 	//========================
 
-	//temp as stock, find some way to get stock type, eft, crypto, etc
 }
 
 // get latest information for tickers within workinglist

@@ -57,39 +57,6 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 	}
 }
 
-//for {
-//	// read in a message
-//	_, p, err := conn.ReadMessage()
-//
-//	if err != nil {
-//		log.Println(err)
-//		return
-//	}
-//
-//	r := regexp.MustCompile("[^\\s]+")
-//	inputArray := r.FindAllString(string(p), -1)
-//	inputType := inputArray[0]
-
-//var current []stock
-//
-//switch choose := inputType; choose { //depending on button/passed in input type, do required functionality
-//case "search":
-//	current = searchByString(inputArray[1], &data_list{})
-//case "display": // "display 1day", ie "inputType, button input function"
-//	switch displayChoose := inputArray[1]; displayChoose {
-//	case "1day":
-//
-//	case "5day":
-//
-//	case "10day":
-//
-//	case "1month": //etc
-//
-//	}
-//case "home": //return to home page?
-//
-//case "other": //other button functionality
-
 // define our WebSocket endpoint
 func serveWs(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Host)
@@ -121,4 +88,5 @@ func main() {
 	fmt.Println("Chat App v0.01")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
+	updateMainWorkingList(main_list) //take away later
 }
