@@ -90,8 +90,11 @@ func signalHandler(sig os.Signal) {
 }
 
 func main() {
-	unitTests()
+	//unitTests()
 	fmt.Println("Chat App v0.01")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
+	for {
+		http.Handle()
+	}
 }
