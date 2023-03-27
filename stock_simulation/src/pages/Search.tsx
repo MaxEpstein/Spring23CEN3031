@@ -37,7 +37,7 @@ export function Search() {
 };
 
   const  handleClick = async (id:string) => {
-    console.log("Id: " + id);
+    //console.log("Id: " + id);
     data.splice(0);
     priceMax = 0;
     priceMin = 1000;
@@ -53,9 +53,11 @@ export function Search() {
         incomming = await sendMsg(prevTicker+":"+id);
       }
         
-      //console.log(incomming);
+      console.log("Incomming: " + incomming);
       incomming.sort();
+      let i = 0;
       for (let s of incomming) {
+        
         let price = s;
         let date = parseInt(s.substr(0,s.indexOf(":")));
 
@@ -73,7 +75,8 @@ export function Search() {
           priceMin = priceInt;
         }
 
-        console.log("Price sent: " + priceInt  + "  Date: " + date);
+
+        //console.log("Price sent: " + priceInt  + "  Date: " + date);
         if (Number.isNaN(priceInt)){
           console.log("Invalid Ticker");
           setPrevMessage("Invalid Stock Ticker");
@@ -88,16 +91,17 @@ export function Search() {
             setPrevMessage(prevTicker.toUpperCase() + "- $" + priceInt);
 
           setMessage("");
-          console.log(message.toUpperCase());
+          //console.log(message.toUpperCase());
 
           data.push({date: dateStr, price: priceInt});
-          console.log(data);
+          //console.log(data);
 
           userSearched = true;
           validStock = true;
         }
     
       }
+      console.log(data);
 
       console.log("Min: " + priceMin + "  Max: " + priceMax);
   };
@@ -125,7 +129,7 @@ export function Search() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
+                  <XAxis dataKey="date" allowDataOverflow={false}/>
                   <YAxis type="number" domain={[Math.floor(priceMin*0.98), Math.ceil((priceMax*1.02))]}/>
                   <Tooltip />
                   <Legend />
@@ -137,14 +141,14 @@ export function Search() {
                   />
             </LineChart>
             
-            <button className='Graph Button' key={"1Day"} onClick={(e) => handleClick("1day:15min")}>1 Day</button>
-            <button className='Graph Button' key={"5Day"} onClick={(e) => handleClick("5day:1hour")}>5 Day</button>
-            <button className='Graph Button' key={"1Month"} onClick={(e) => handleClick("1month:1day")}>1 Month</button>
-            <button className='Graph Button' key={"3Month"} onClick={(e) => handleClick("3month:1day")}>3 Month</button>
-            <button className='Graph Button' key={"6Month"} onClick={(e) => handleClick("6month:1day")}>6 Month</button>
-            <button className='Graph Button' key={"1Year"} onClick={(e) => handleClick("1year:1day")}>1 Year</button>
-            <button className='Graph Button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")}>YTD</button>
-            <button className='Graph Button' key={"All"} onClick={(e) => handleClick("All:1day")}>All</button>
+            <button className='Graph_button' key={"1Day"} onClick={(e) => handleClick("1day:15min")}>1 Day</button>
+            <button className='Graph_button' key={"5Day"} onClick={(e) => handleClick("5day:1hour")}>5 Day</button>
+            <button className='Graph_button' key={"1Month"} onClick={(e) => handleClick("1month:1day")}>1 Month</button>
+            <button className='Graph_button' key={"3Month"} onClick={(e) => handleClick("3month:1day")}>3 Month</button>
+            <button className='Graph_button' key={"6Month"} onClick={(e) => handleClick("6month:1day")}>6 Month</button>
+            <button className='Graph_button' key={"1Year"} onClick={(e) => handleClick("1year:1day")}>1 Year</button>
+            <button className='Graph_button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")}>YTD</button>
+            <button className='Graph_button' key={"All"} onClick={(e) => handleClick("All:1day")}>All</button>
                   </div>
 }
               </div>
