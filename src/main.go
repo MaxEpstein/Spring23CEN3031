@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
-
-	"github.com/gorilla/websocket"
 )
 
 // We'll need to define an Upgrader
@@ -83,6 +83,9 @@ func setupRoutes() {
 	})
 	// mape our `/ws` endpoint to the `serveWs` function
 	http.HandleFunc("/ws", serveWs)
+
+}
+func signalHandler(sig os.Signal) {
 
 }
 
