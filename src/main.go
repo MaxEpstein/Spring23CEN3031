@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/websocket"
 )
@@ -32,8 +33,10 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			return
 		}
 		ticker := string(p)
+		//Expected message ticker:interval:time_interval
+		msg_cont := strings.Split(ticker, ":")
 		//Check if the stock being submitted in is real, otherwise continue listening for an input
-		if checkIfStockExist(ticker) != true {
+		if checkIfStockExist(msg_cont[0]) != true {
 			if err := conn.WriteMessage(1, []byte(nil)); err != nil {
 				//Return nill to front end with not found.
 				log.Println(err)
@@ -41,9 +44,9 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			}
 			continue
 		}
-		addStockToMain(getDataByTicker(ticker, "stock"), main_list)
-		updateMainWorkingList(main_list) //take away later
-		temp_stock := main_list.data["stock"][ticker]
+		addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
+		//updateMainWorkingList(main_list) //take away later
+		temp_stock := main_list.data["stock"][msg_cont[2]]
 		msg := ""
 		for key, element := range temp_stock.data {
 			//Send all the data within the current map
@@ -69,7 +72,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	main_working_list := initializeWorkingList(nil, nil)
+	main_working_list := initializeWorkingList(nil, nil, "", "")
 
 	reader(ws, main_working_list)
 }
@@ -88,5 +91,4 @@ func main() {
 	fmt.Println("Chat App v0.01")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
-	updateMainWorkingList(main_list) //take away later
 }

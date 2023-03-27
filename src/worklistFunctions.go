@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"time"
 
@@ -23,33 +22,30 @@ type data_list struct {
 	data map[string]map[string]stock //For future scalability for etf's, stocks, crypto
 }
 
-func initializeWorkingList(s_type_name []string, s_type_sym []string) *data_list {
-	//s_types := make(map[string][]string)
-
-	// for i, item := range s_type_name {
-	//  	s_types[item] = append(s_types[item], s_type_sym[i])
-	// }
-
+func initializeWorkingList(s_type_name []string, s_type_sym []string, data_interval string, data_time_interval string) *data_list {
 	main_working_list := new(data_list)
 	main_working_list.data = make(map[string]map[string]stock)
 	main_working_list.data["stock"] = make(map[string]stock)
 
+	data_time_interval = "15min" //remove in future
+
+	if data_interval == "" || data_time_interval == "" {
+		return main_working_list
+	}
 	for _, item := range s_type_sym {
 		////@TODO any additional features needed add here
 		////https://piquette.io/projects/finance-go/ website for full list of things
 		////========================
-
 		if checkIfStockExist(item) {
-			main_working_list.data["stock"][item] = *getDataByTicker(item, "stock")
+			main_working_list.data["stock"][item] = *getDataByTicker(item, "stock", data_interval, data_time_interval)
 		}
 	}
 
 	return main_working_list
 }
 
-func addHistoricalData(temp_stock *stock, timeFrame string) {
-	//@TODO figure out pointer situaion and get maps to update accross
-	timeFrameDate, timeInterval := getTimeFrame(timeFrame)
+func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string) {
+	timeFrameDate, timeInterval := getTimeFrame(timeFrame, chartInterval)
 
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
@@ -66,39 +62,33 @@ func addHistoricalData(temp_stock *stock, timeFrame string) {
 	for iter.Next() { //
 		b := iter.Bar()
 		//RoundFloor or RoundUp
-		open_price, _ := b.Open.Float64()                                               //Open Price for that day
-		close_price, _ := b.Close.Float64()                                             //Close Price for that day
-		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))        //Timestamp is for the days open  09:30:00 EST
-		temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
+		open_price, _ := b.Open.Float64() //Open Price for that day
+		//close_price, _ := b.Close.Float64()                                             //Close Price for that day
+		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST
+		//temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
 
 }
 
-func getTimeFrame(timeFrame string) (*datetime.Datetime, datetime.Interval) {
+func getTimeFrame(timeFrame string, chartIntervalString string) (*datetime.Datetime, datetime.Interval) {
 	adjustedTime := time.Now()
-	chartInterval := datetime.OneMin
+	chartInterval := getChartInterval(chartIntervalString)
 	switch choose := timeFrame; choose {
 	case "1day":
 		adjustedTime = passWeekends(1)
-		chartInterval = datetime.OneMin
 	case "5day":
 		adjustedTime = passWeekends(5)
-		chartInterval = datetime.FiveMins
 	case "1month":
 		adjustedTime = skipWeekends(time.Now().AddDate(0, -1, 0))
-		chartInterval = datetime.OneHour
 	case "3month":
 		adjustedTime = skipWeekends(time.Now().AddDate(0, -3, 0))
-		chartInterval = datetime.OneDay
 	case "6month":
 		adjustedTime = skipWeekends(time.Now().AddDate(0, -6, 0))
-		chartInterval = datetime.FiveDay
 	case "YTD":
-		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, datetime.OneMonth
+		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, chartInterval
 	case "1year":
 		adjustedTime = skipWeekends(time.Now().AddDate(-1, 0, 0))
-		chartInterval = datetime.OneMin
 	}
 	return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, chartInterval
 }
@@ -122,7 +112,32 @@ func skipWeekends(adjustedTime time.Time) time.Time {
 	return adjustedTime
 }
 
-func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
+func getChartInterval(chartIntervalString string) datetime.Interval {
+	chartInterval := datetime.OneMin
+	switch choose := chartIntervalString; choose {
+	case "1min":
+		chartInterval = datetime.OneMin
+	case "5min":
+		chartInterval = datetime.FiveMins
+	case "15min":
+		chartInterval = datetime.FifteenMins
+	case "1hour":
+		chartInterval = datetime.OneHour
+	case "1day":
+		chartInterval = datetime.OneDay
+	case "1month":
+		chartInterval = datetime.OneMonth
+	case "3month":
+		chartInterval = datetime.ThreeMonth
+	case "1year":
+		chartInterval = datetime.OneYear
+	}
+	return chartInterval
+}
+
+func getDataByTicker(ticker string, s_type string, data_interval string, data_time_interval string) *stock { //take ticker input
+	//data_interval = Amount of info needed, 1 day etc
+	//data_time_interval = Time intervals, 15 mins etc
 	qt, err := quote.Get(ticker)
 	if err != nil {
 		panic(err)
@@ -133,7 +148,7 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	addHistoricalData(temp_stock, "1day")
+	addHistoricalData(temp_stock, data_time_interval, data_interval)
 
 	return temp_stock
 
@@ -172,6 +187,7 @@ func checkIfStockExist(ticker string) bool {
 	return false
 }
 
+/*
 func mainForWorklistFuncs() { //used for testing various functions
 
 	var s_type_container []string
@@ -199,7 +215,7 @@ func mainForWorklistFuncs() { //used for testing various functions
 	if err != nil {
 		panic(err)
 	}
-	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user), main_working_list)
+	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user, ), main_working_list)
 	//==========================================================//
 
 	//for {
@@ -209,3 +225,4 @@ func mainForWorklistFuncs() { //used for testing various functions
 
 	fmt.Println(main_working_list)
 }
+*/
