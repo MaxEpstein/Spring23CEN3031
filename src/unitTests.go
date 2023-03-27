@@ -2,20 +2,31 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
+//go run main_worklist_funcs.go main.go unitTests.go
+
 func unitTests() { //pass in example/testing data to various functions
-	testTypeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
-	testTickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
-	testDataList := new(data_list)
-	testDataList = testInitializeWorkingList(testTypeTickerArray, testTickerArray)
+	//testTypeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
+	//testTickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
+	//testDataList := new(data_list)
+	//testDataList = testInitializeWorkingList(testTypeTickerArray, testTickerArray)
 
-	testStock := testGetDataByTicker("amd", "stock")
+	//testStock := testGetDataByTicker("amd", "stock")
 
-	testDataList = testAddStockToMain(testStock, testDataList)
+	//testDataList = testAddStockToMain(testStock, testDataList)
 
-	testCheckIfStockExist("aapl")
-	testCheckIfStockExist("zzzzz")
+	//testCheckIfStockExist("aapl")
+	//testCheckIfStockExist("zzzzz")
+	//fmt.Println()
+	testGetTimeFrame("1day")
+	testGetTimeFrame("5day")
+	testGetTimeFrame("1month")
+	testGetTimeFrame("3month")
+	testGetTimeFrame("YTD")
+	testGetTimeFrame("1year")
+	//testAddHistoricalData(testStock, "1year")
 }
 
 func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
@@ -55,6 +66,22 @@ func testCheckIfStockExist(testTicker string) {
 	fmt.Println(checkIfStockExist(testTicker))
 }
 
+func testGetTimeFrame(timeFrame string) {
+	timeFrameDate, timeInterval := getTimeFrame(timeFrame)
+	fmt.Println("Day, Month, Year of starting date of requested period of time:")
+	fmt.Println(timeFrameDate)
+	fmt.Println("\n" + "Time interval used in creating chart data from API:")
+	fmt.Println(timeInterval)
+	fmt.Println()
+}
+
+func testAddHistoricalData(temp_stock *stock, timeFrame string) {
+	addHistoricalData(temp_stock, timeFrame)
+	fmt.Println(temp_stock.data)
+	t := time.Unix(1679664600, 0)
+	fmt.Println(t)
+}
+
 // func testUpdateDataList(testMainDataStorage *data_list) *data_list {
 // 	testMainDataStorage = updateMainWorkingList(testMainDataStorage)
 // 	fmt.Println("Print every ticker with its latest price for testMainDataStorage below: ")
@@ -64,3 +91,5 @@ func testCheckIfStockExist(testTicker string) {
 // 	}
 // 	return testMainDataStorage
 // }
+
+//go run main_worklist_funcs.go main.go unitTests.go
