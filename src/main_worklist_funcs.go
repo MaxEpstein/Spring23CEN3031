@@ -54,7 +54,7 @@ func addHistoricalData(temp_stock *stock, timeFrame string) {
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
 
-		Start:  timeFrameDate,
+		Start: timeFrameDate,
 		End: &datetime.Datetime{Month: int(time.Now().Month()),
 			Day:  int(time.Now().Day()),
 			Year: int(time.Now().Year())},
@@ -76,29 +76,50 @@ func addHistoricalData(temp_stock *stock, timeFrame string) {
 }
 
 func getTimeFrame(timeFrame string) (*datetime.Datetime, datetime.Interval) {
+	adjustedTime := time.Now()
+	chartInterval := datetime.OneMin
 	switch choose := timeFrame; choose {
 	case "1day":
-		adjustedTime := time.Now().AddDate(0, 0, -1)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
+		adjustedTime = passWeekends(1)
+		chartInterval = datetime.OneMin
 	case "5day":
-		adjustedTime := time.Now().AddDate(0, 0, -5)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
+		adjustedTime = passWeekends(5)
+		chartInterval = datetime.FiveMins
 	case "1month":
-		adjustedTime := time.Now().AddDate(0, -1, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
+		adjustedTime = skipWeekends(time.Now().AddDate(0, -1, 0))
+		chartInterval = datetime.OneHour
 	case "3month":
-		adjustedTime := time.Now().AddDate(0, -3, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
+		adjustedTime = skipWeekends(time.Now().AddDate(0, -3, 0))
+		chartInterval = datetime.OneDay
 	case "6month":
-		adjustedTime := time.Now().AddDate(0, -6, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
+		adjustedTime = skipWeekends(time.Now().AddDate(0, -6, 0))
+		chartInterval = datetime.FiveDay
 	case "YTD":
-		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, datetime.OneDay
+		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, datetime.OneMonth
 	case "1year":
-		adjustedTime := time.Now().AddDate(-1, 0, 0)
-		return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, datetime.OneDay
+		adjustedTime = skipWeekends(time.Now().AddDate(-1, 0, 0))
+		chartInterval = datetime.OneMin
 	}
-	return &datetime.Datetime{Month: 1, Day: 1, Year: 1000}, datetime.OneDay
+	return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, chartInterval
+}
+
+func passWeekends(numDays int) time.Time {
+	i := 0
+	adjustedTime := time.Now()
+	for i < numDays {
+		adjustedTime = adjustedTime.AddDate(0, 0, -1)
+		if adjustedTime.Weekday() != 0 && adjustedTime.Weekday() != 6 {
+			i++
+		}
+	}
+	return adjustedTime
+}
+
+func skipWeekends(adjustedTime time.Time) time.Time {
+	for adjustedTime.Weekday() == 0 || adjustedTime.Weekday() == 6 {
+		adjustedTime = adjustedTime.AddDate(0, 0, 1)
+	}
+	return adjustedTime
 }
 
 func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
@@ -113,7 +134,6 @@ func getDataByTicker(ticker string, s_type string) *stock { //take ticker input
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
 	addHistoricalData(temp_stock, "1day")
-
 
 	return temp_stock
 
