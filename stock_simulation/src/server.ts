@@ -26,7 +26,7 @@ let connect = () => {
 const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
 
 let sendMsg =  async (msg: string): Promise<any> => {
-  console.log("sending msg:", msg);
+  console.log("sending msg: ", msg);
   socket.send(msg);
 
   let messages:string[] = [];
