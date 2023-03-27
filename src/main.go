@@ -44,6 +44,7 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			}
 			continue
 		}
+		fmt.Println(msg_cont)
 		addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
 		//updateMainWorkingList(main_list) //take away later
 		temp_stock := main_list.data["stock"][msg_cont[2]]
