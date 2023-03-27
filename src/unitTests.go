@@ -32,7 +32,7 @@ func unitTests() { //pass in example/testing data to various functions
 }
 
 func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
-	testMainDataStorage := initializeWorkingList(typeTickerArray, tickerArray)
+	testMainDataStorage := initializeWorkingList(typeTickerArray, tickerArray, "1day", "1min")
 	//fmt.Println(testMainDataStorage)
 
 	fmt.Println("Example input string ticker array: ")
@@ -47,7 +47,7 @@ func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *
 }
 
 func testGetDataByTicker(testTicker string, testStockType string) *stock {
-	testStock := getDataByTicker(testTicker, testStockType)
+	testStock := getDataByTicker(testTicker, testStockType, "1day", "1min")
 	fmt.Println("Print the fetched data of the given stock: ")
 	fmt.Println("Name: " + testStock.name + " | Ticker: " + testStock.symbol + " | Type: " + testStock.s_type + "\n")
 	return testStock
