@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/websocket"
 )
@@ -32,8 +33,10 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			return
 		}
 		ticker := string(p)
+		//Expected message ticker:interval:time_interval
+		msg_cont := strings.Split(ticker, ":")
 		//Check if the stock being submitted in is real, otherwise continue listening for an input
-		if checkIfStockExist(ticker) != true {
+		if checkIfStockExist(msg_cont[0]) != true {
 			if err := conn.WriteMessage(1, []byte(nil)); err != nil {
 				//Return nill to front end with not found.
 				log.Println(err)
@@ -41,9 +44,9 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			}
 			continue
 		}
-		addStockToMain(getDataByTicker(ticker, "stock"), main_list)
-		updateMainWorkingList(main_list) //take away later
-		temp_stock := main_list.data["stock"][ticker]
+		addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
+		//updateMainWorkingList(main_list) //take away later
+		temp_stock := main_list.data["stock"][msg_cont[2]]
 		msg := ""
 		for key, element := range temp_stock.data {
 			//Send all the data within the current map
@@ -57,39 +60,6 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 	}
 }
 
-//for {
-//	// read in a message
-//	_, p, err := conn.ReadMessage()
-//
-//	if err != nil {
-//		log.Println(err)
-//		return
-//	}
-//
-//	r := regexp.MustCompile("[^\\s]+")
-//	inputArray := r.FindAllString(string(p), -1)
-//	inputType := inputArray[0]
-
-//var current []stock
-//
-//switch choose := inputType; choose { //depending on button/passed in input type, do required functionality
-//case "search":
-//	current = searchByString(inputArray[1], &data_list{})
-//case "display": // "display 1day", ie "inputType, button input function"
-//	switch displayChoose := inputArray[1]; displayChoose {
-//	case "1day":
-//
-//	case "5day":
-//
-//	case "10day":
-//
-//	case "1month": //etc
-//
-//	}
-//case "home": //return to home page?
-//
-//case "other": //other button functionality
-
 // define our WebSocket endpoint
 func serveWs(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Host)
@@ -102,7 +72,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	main_working_list := initializeWorkingList(nil, nil)
+	main_working_list := initializeWorkingList(nil, nil, "", "")
 
 	reader(ws, main_working_list)
 }
