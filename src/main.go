@@ -23,7 +23,7 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-func reader(conn *websocket.Conn, main_list *data_list) {
+func reader(conn *websocket.Conn) {
 	//This defined reader will listen for the messages in the front end.
 	for {
 		// read in a message
@@ -44,9 +44,10 @@ func reader(conn *websocket.Conn, main_list *data_list) {
 			}
 			continue
 		}
+		main_list := initializeWorkingList(nil, nil, "", "")
 		addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
 		//updateMainWorkingList(main_list) //take away later
-		temp_stock := main_list.data["stock"][msg_cont[2]]
+		temp_stock := main_list.data["stock"][msg_cont[0]]
 		msg := ""
 		for key, element := range temp_stock.data {
 			//Send all the data within the current map
@@ -72,9 +73,8 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	main_working_list := initializeWorkingList(nil, nil, "", "")
 
-	reader(ws, main_working_list)
+	reader(ws)
 }
 
 func setupRoutes() {
@@ -91,7 +91,7 @@ func signalHandler(sig os.Signal) {
 
 func main() {
 	//unitTests()
-	fmt.Println("Chat App v0.01")
+	fmt.Println("Big boy app 2.0")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
 }

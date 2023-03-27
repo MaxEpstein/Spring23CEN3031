@@ -27,7 +27,7 @@ func initializeWorkingList(s_type_name []string, s_type_sym []string, data_inter
 	main_working_list.data = make(map[string]map[string]stock)
 	main_working_list.data["stock"] = make(map[string]stock)
 
-	data_time_interval = "15min" //remove in future
+	//data_time_interval = "15min" //remove in future
 
 	if data_interval == "" || data_time_interval == "" {
 		return main_working_list
@@ -46,7 +46,6 @@ func initializeWorkingList(s_type_name []string, s_type_sym []string, data_inter
 
 func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string) {
 	timeFrameDate, timeInterval := getTimeFrame(timeFrame, chartInterval)
-
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
 
@@ -148,8 +147,8 @@ func getDataByTicker(ticker string, s_type string, data_interval string, data_ti
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	addHistoricalData(temp_stock, data_time_interval, data_interval)
-
+	addHistoricalData(temp_stock, data_interval, data_time_interval)
+	//fmt.Println(len(temp_stock.data))
 	return temp_stock
 
 	//@TODO any additional features needed add here
