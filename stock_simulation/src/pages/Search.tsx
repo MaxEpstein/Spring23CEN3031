@@ -17,7 +17,7 @@ import {
 
 let userSearched = false;
 let validStock = false;
-let data = [{date: "3/26/2023 15:17",price:  280.95}]
+let data = [{date: "99/99/9999 15:17",price:  999.99}]
 let priceMin = 1000;
 let priceMax= 0;
 
@@ -32,11 +32,11 @@ export function Search() {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement> ) => {
     if (event.key === 'Enter') {
-      //handleClick();
+      handleClick("Search");
     }
 };
 
-  const  handleClick = async (id:string, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const  handleClick = async (id:string) => {
     console.log("Id: " + id);
     data.splice(0);
     priceMax = 0;
@@ -82,8 +82,11 @@ export function Search() {
         else{
           if (message != "" || id == "Search"){
             setPrevTicker(message);
+            setPrevMessage(message.toUpperCase() + "- $" + priceInt);
           }
-          setPrevMessage(prevTicker.toUpperCase() + "- $" + priceInt);
+          else
+            setPrevMessage(prevTicker.toUpperCase() + "- $" + priceInt);
+
           setMessage("");
           console.log(message.toUpperCase());
 
@@ -103,7 +106,7 @@ export function Search() {
       <>        
       <div className="SearchTop">
                 <input type="text" placeholder="Stock Ticker" onChange={handleChange} value={message} name="message" id="message" onKeyDown={handleKeyDown}/>
-                <button className="submit" type="submit" onClick={(e) => handleClick("Search", e)}>Search</button>
+                <button className="submit" type="submit" onClick={(e) => handleClick("Search")}>Search</button>
         </div>
         {userSearched === true &&
             <div className="stockInfo" >
@@ -134,14 +137,14 @@ export function Search() {
                   />
             </LineChart>
             
-            <button className='Graph Button' key={"1Day"} onClick={(e) => handleClick("1day:15min", e)}>1 Day</button>
-            <button className='Graph Button' key={"5Day"} onClick={(e) => handleClick("5day:1hour", e)}>5 Day</button>
-            <button className='Graph Button' key={"1Month"} onClick={(e) => handleClick("1month:1day", e)}>1 Month</button>
-            <button className='Graph Button' key={"3Month"} onClick={(e) => handleClick("3month:1day", e)}>3 Month</button>
-            <button className='Graph Button' key={"6Month"} onClick={(e) => handleClick("6month:1day", e)}>6 Month</button>
-            <button className='Graph Button' key={"1Year"} onClick={(e) => handleClick("1year:1day", e)}>1 Year</button>
-            <button className='Graph Button' key={"YTD"} onClick={(e) => handleClick("YTD:1day", e)}>YTD</button>
-            <button className='Graph Button' key={"All"} onClick={(e) => handleClick("All:1day", e)}>All</button>
+            <button className='Graph Button' key={"1Day"} onClick={(e) => handleClick("1day:15min")}>1 Day</button>
+            <button className='Graph Button' key={"5Day"} onClick={(e) => handleClick("5day:1hour")}>5 Day</button>
+            <button className='Graph Button' key={"1Month"} onClick={(e) => handleClick("1month:1day")}>1 Month</button>
+            <button className='Graph Button' key={"3Month"} onClick={(e) => handleClick("3month:1day")}>3 Month</button>
+            <button className='Graph Button' key={"6Month"} onClick={(e) => handleClick("6month:1day")}>6 Month</button>
+            <button className='Graph Button' key={"1Year"} onClick={(e) => handleClick("1year:1day")}>1 Year</button>
+            <button className='Graph Button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")}>YTD</button>
+            <button className='Graph Button' key={"All"} onClick={(e) => handleClick("All:1day")}>All</button>
                   </div>
 }
               </div>
