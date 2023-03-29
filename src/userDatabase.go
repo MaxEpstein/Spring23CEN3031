@@ -2,6 +2,8 @@ package main
 
 import (
 	"golang.org/x/crypto/bcrypt"
+	"log"
+	"os"
 	"strings"
 )
 
@@ -20,6 +22,26 @@ func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
+func initDatafile() {
+	//Fix directory issues
+	f, err := os.Create("pw.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+}
+func grabLoginFile() {
+	f, err := os.Open("pw.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+}
+
 func initializeUserDatabase() {
 	userDatabase := make(map[string]user)
 	for k := range userDatabase {
@@ -38,8 +60,15 @@ func getAllUsers(username string, password string) {
 
 }
 
-func addUser() {
+func createEncryptedInfo(username string, pw string, tiker []string) string {
+	stringToAdd := username
+	pwHash, _ := HashPassword(pw)
+	stringToAdd += pwHash
+	for _, element := range tiker {
+		stringToAdd += element
+	}
 
+	return stringToAdd
 }
 
 func removeUser() {

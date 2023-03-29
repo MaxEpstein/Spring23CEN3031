@@ -29,6 +29,7 @@ func unitTests() { //pass in example/testing data to various functions
 
 	testAddHistoricalData(testStock, "1year", "1year")
 	//testAddHistoricalData(testStock, "1year")
+	passwordHashing("helloWorld")
 }
 
 func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
@@ -84,5 +85,11 @@ func testAddHistoricalData(temp_stock *stock, timeFrame string, chartInterval st
 	fmt.Println(t)
 }
 func passwordHashing(password string) {
+	hash, _ := HashPassword(password) // ignore error for the sake of simplicity
 
+	fmt.Println("Password:", password)
+	fmt.Println("Hash:    ", hash)
+
+	match := CheckPasswordHash(password, hash)
+	fmt.Println("Match:   ", match)
 }
