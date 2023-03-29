@@ -85,11 +85,7 @@ func getTimeFrame(timeFrame string, chartIntervalString string) (*datetime.Datet
 			adjustedTime = passWeekends(1)
 		}
 	case "5day":
-		if time.Now().After(time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))) && time.Now().Weekday() != 0 && time.Now().Weekday() != 0 {
-			adjustedTime = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))
-		} else {
-			adjustedTime = passWeekends(5)
-		}
+		adjustedTime = passWeekends(5)
 	case "1month":
 		adjustedTime = skipWeekends(time.Now().AddDate(0, -1, 0))
 	case "3month":
