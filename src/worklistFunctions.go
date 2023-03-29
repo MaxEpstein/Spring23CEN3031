@@ -63,9 +63,9 @@ func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string
 		//RoundFloor or RoundUp
 		open_price, _ := b.Open.Float64() //Open Price for that day
 		//close_price, _ := b.Close.Float64()
-    
+
 		if uint(math.Round(open_price*1000)) != 0 {
-			temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))
+			temp_stock.data[uint64(b.Timestamp)] = uint(math.Round(open_price * 100))
 		}
 		//Timestamp is for the days open  09:30:00 EST
 		//temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST

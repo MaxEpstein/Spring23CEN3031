@@ -58,14 +58,14 @@ const data = [
   }
 ];
 
-export function searchStock() {
-  console.log("reach1");
-  savedSearch("AMZN");
-  <Route path="/search" render={() => <Redirect to="/search" />} />;
-}
-
 
 export function Dash() {
+  
+
+  function searchStock() {
+    savedSearch("AMZN");
+    }
+
     return(
         <>
         <div className="heading">
