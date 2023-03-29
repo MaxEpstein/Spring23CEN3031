@@ -1,6 +1,7 @@
 import "./dash.css";
 import {savedSearch} from "./Search";
 import {Route, Link, Redirect} from "react-router-dom";
+import React, { Component } from 'react';
 
 import {
   LineChart,
@@ -57,7 +58,6 @@ const data = [
     amt: 2100
   }
 ];
-
 
 export function Dash() {
   
