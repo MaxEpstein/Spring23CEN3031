@@ -64,7 +64,7 @@ func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string
 
 		open_price, _ := b.Open.Float64() //Open Price for that day
 		//close_price, _ := b.Close.Float64()
-    
+
 		if uint(math.Round(open_price*1000)) != 0 {
 			temp_stock.data[uint64(b.Timestamp)] = uint(math.Round(open_price * 100))
 		}
