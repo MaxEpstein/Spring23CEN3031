@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"time"
 
@@ -13,7 +12,7 @@ import (
 type stock struct {
 	symbol      string
 	name        string
-	data        map[int64]uint
+	data        map[uint64]uint
 	s_type      string
 	recentPrice uint
 	//@TODO any additional features needed add here
@@ -62,15 +61,18 @@ func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string
 	for iter.Next() { //
 		b := iter.Bar()
 		//RoundFloor or RoundUp
-		open_price, _ := b.Open.Float64() //Open Price for that day
-		//close_price, _ := b.Close.Float64()
+		//open_price, _ := b.Open.Float64() //Open Price for that day
+		open_price, _ := b.Open.Float64()
 		//Close Price for that day
 		if open_price != 0 {
-			temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST
+			temp_stock.data[uint64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST
 		}
 		//temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
+
 	}
+	//qt, _ := quote.Get(temp_stock.symbol)
+	//temp_stock.data[uint64(time.Now().Unix())] = uint(qt.Ask * 100)
 
 }
 
@@ -107,7 +109,6 @@ func passWeekends(numDays int) time.Time {
 		adjustedTime = adjustedTime.AddDate(0, 0, -1)
 		if adjustedTime.Weekday() != 0 && adjustedTime.Weekday() != 6 {
 			i++
-			fmt.Println("hello")
 		}
 	}
 	return adjustedTime
@@ -152,7 +153,7 @@ func getDataByTicker(ticker string, s_type string, data_interval string, data_ti
 	}
 	//=========================
 	temp_stock := new(stock)
-	temp_stock.data = make(map[int64]uint)
+	temp_stock.data = make(map[uint64]uint)
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
@@ -175,7 +176,7 @@ func updateMainWorkingList(working_list *data_list) {
 			if err != nil {
 				panic(err)
 			}
-			st_symb1.data[time.Now().Unix()] = uint(qt.Ask * 100)
+			st_symb1.data[uint64(time.Now().Unix())] = uint(qt.Ask * 100)
 			st_symb1.recentPrice = uint(qt.Ask)
 		}
 	}
@@ -198,39 +199,39 @@ func checkIfStockExist(ticker string) bool {
 /*
 func mainForWorklistFuncs() { //used for testing various functions
 
-	var s_type_container []string
-	var s_type_sym_container []string
+		var s_type_container []string
+		var s_type_sym_container []string
 
-	var s_type_name_user, s_type_sym_user string
-	fmt.Println("Type in type and ticker and then stop stop to exit loop")
-	for s_type_name_user != "stop" {
+		var s_type_name_user, s_type_sym_user string
+		fmt.Println("Type in type and ticker and then stop stop to exit loop")
+		for s_type_name_user != "stop" {
 
-		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
+			_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user) // take in stock type and stock ticker
+			if err != nil {
+				panic(err)
+			}
+			if s_type_name_user != "stop" {
+				s_type_container = append(s_type_container, s_type_name_user) //Add it to ness list
+				s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
+			}
+		}
+
+		main_working_list := initializeWorkingList(s_type_container, s_type_sym_container)
+
+		fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
+		//============================Demo Purpose ======================//
+		_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
 		if err != nil {
 			panic(err)
 		}
-		if s_type_name_user != "stop" {
-			s_type_container = append(s_type_container, s_type_name_user) //Add it to ness list
-			s_type_sym_container = append(s_type_sym_container, s_type_sym_user)
-		}
+		addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user, ), main_working_list)
+		//==========================================================//
+
+		//for {
+		//updateMainWorkingList(main_working_list)
+		//}
+		//for future frequent updates of specific stock info
+
+		fmt.Println(main_working_list)
 	}
-
-	main_working_list := initializeWorkingList(s_type_container, s_type_sym_container)
-
-	fmt.Println("Enter a new type and symbol, mainly used to demo appending a new stock to main list")
-	//============================Demo Purpose ======================//
-	_, err := fmt.Scanln(&s_type_name_user, &s_type_sym_user)
-	if err != nil {
-		panic(err)
-	}
-	addStockToMain(getDataByTicker(s_type_sym_user, s_type_name_user, ), main_working_list)
-	//==========================================================//
-
-	//for {
-	//updateMainWorkingList(main_working_list)
-	//}
-	//for future frequent updates of specific stock info
-
-	fmt.Println(main_working_list)
-}
 */

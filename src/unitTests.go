@@ -83,3 +83,6 @@ func testAddHistoricalData(temp_stock *stock, timeFrame string, chartInterval st
 	t := time.Unix(1679664600, 0)
 	fmt.Println(t)
 }
+func passwordHashing(password string) {
+
+}
