@@ -24,14 +24,17 @@ let data = [{date: 9999,price:  999.99}]
 let newData = [{date: "99/99/9999 15:17",price:  999.99}]
 let priceMin = 1000;
 let priceMax= 0;
+let dashTicker: string;
 
 export function savedSearch(name: string) {
+  window.location.replace('/search');
   console.log(name);
+  dashTicker = name;
   userSearched = true;
-  return <Redirect to={"/search"}/>;
 }
 
 export function Search() {
+  console.log("User Redirect? " + userSearched + "  dashTicker: " +dashTicker);
   const [message, setMessage] = useState('');
   const [prevMessage, setPrevMessage] = useState('');
   const [prevTicker, setPrevTicker] = useState('');  
@@ -67,7 +70,7 @@ export function Search() {
     //send message as stock:timePeriod 
     if (id == "Search") {
       console.log("initial Search: " + message);
-      incomming = await sendMsg(message + ":1month:1day");
+      incomming = await sendMsg(message + ":1day:5min");
     } else {
       console.log("Update Graph: " + prevTicker);
       incomming = await sendMsg(prevTicker + ":" + id);
@@ -90,11 +93,7 @@ export function Search() {
 
 
       //console.log("Price sent: " + priceInt  + "  Date: " + date);
-      if (Number.isNaN(priceInt)) {
-        console.log("Invalid Ticker");
-        setPrevMessage("Invalid Stock Ticker");
-        userSearched = true;
-      } 
+      
 
         setMessage("");
         //console.log(message.toUpperCase());
@@ -115,11 +114,18 @@ export function Search() {
       newData.push({date: dateStr, price: i.price});
     }
 
-    if (message != "" || id == "Search") {
-      setPrevTicker(message);
-      setPrevMessage(message.toUpperCase() + "- $" + newData[newData.length-1].price);
-    } else
-      setPrevMessage(prevTicker.toUpperCase() + "- $" + newData[newData.length-1].price);
+    if (Number.isNaN(newData[newData.length-1].price)) {
+      console.log("Invalid Ticker");
+      setPrevMessage("Invalid Stock Ticker");
+      userSearched = true;
+    } 
+    else{
+      if (message != "" || id == "Search") {
+        setPrevTicker(message);
+        setPrevMessage(message.toUpperCase() + "- $" + newData[newData.length-1].price);
+      } else
+        setPrevMessage(prevTicker.toUpperCase() + "- $" + newData[newData.length-1].price);
+    }
     console.log(newData);
     
 
