@@ -288,3 +288,13 @@
         margin-top: 13%;
         margin-bottom: 13%;
     }
+
+    .savedStocks {
+        margin-left: 1%;
+    }
+
+    .savedStocks a{
+        text-decoration: none;
+
+    }
+

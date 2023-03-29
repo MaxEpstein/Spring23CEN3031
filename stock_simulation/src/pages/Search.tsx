@@ -1,6 +1,7 @@
 import { useState } from 'react';
-
+import "./Dash.tsx";
 import { sendMsg } from '../server';
+import {Login} from "./LogInPage"
 
 import "./pageStyles.css";
 import React from "react";
@@ -21,6 +22,7 @@ let data = [{date: "3/26/2023 15:17",price:  280.95}]
 let priceMin = 1000;
 let priceMax= 0;
 
+
 export function Search() {
     const [message, setMessage] = useState('');
     const [prevMessage, setPrevMessage] = useState('');
@@ -34,6 +36,10 @@ export function Search() {
       handleClick();
     }
 };
+  const saveStock = () => {
+    console.log("Saved Stock");
+
+  };
 
   const  handleClick = async () => {
     data.splice(0);
@@ -120,11 +126,17 @@ export function Search() {
                     activeDot={{ r: 8 }}
                   />
             </LineChart>
-                  </div>
-}
-              </div>
-  }
+                </div >
 
+              }
+
+          <button className="submit" type="submit" onClick={saveStock}> Save to Dashboard </button>
+
+              <div/>
+            </div>
+
+  }
         </>
   );
 }
+
