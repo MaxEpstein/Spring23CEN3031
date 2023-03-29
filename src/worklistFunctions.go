@@ -27,7 +27,7 @@ func initializeWorkingList(s_type_name []string, s_type_sym []string, data_inter
 	main_working_list.data = make(map[string]map[string]stock)
 	main_working_list.data["stock"] = make(map[string]stock)
 
-	data_time_interval = "15min" //remove in future
+	//data_time_interval = "15min" //remove in future
 
 	if data_interval == "" || data_time_interval == "" {
 		return main_working_list
@@ -46,7 +46,6 @@ func initializeWorkingList(s_type_name []string, s_type_sym []string, data_inter
 
 func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string) {
 	timeFrameDate, timeInterval := getTimeFrame(timeFrame, chartInterval)
-
 	p := &chart.Params{
 		Symbol: temp_stock.symbol,
 
@@ -76,9 +75,17 @@ func getTimeFrame(timeFrame string, chartIntervalString string) (*datetime.Datet
 	chartInterval := getChartInterval(chartIntervalString)
 	switch choose := timeFrame; choose {
 	case "1day":
-		adjustedTime = passWeekends(1)
+		if time.Now().After(time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))) && time.Now().Weekday() != 0 && time.Now().Weekday() != 0 {
+			adjustedTime = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))
+		} else {
+			adjustedTime = passWeekends(1)
+		}
 	case "5day":
-		adjustedTime = passWeekends(5)
+		if time.Now().After(time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))) && time.Now().Weekday() != 0 && time.Now().Weekday() != 0 {
+			adjustedTime = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))
+		} else {
+			adjustedTime = passWeekends(5)
+		}
 	case "1month":
 		adjustedTime = skipWeekends(time.Now().AddDate(0, -1, 0))
 	case "3month":
@@ -148,8 +155,8 @@ func getDataByTicker(ticker string, s_type string, data_interval string, data_ti
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
-	addHistoricalData(temp_stock, data_time_interval, data_interval)
-
+	addHistoricalData(temp_stock, data_interval, data_time_interval)
+	//fmt.Println(len(temp_stock.data))
 	return temp_stock
 
 	//@TODO any additional features needed add here
