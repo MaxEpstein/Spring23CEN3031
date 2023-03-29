@@ -20,7 +20,8 @@ import {
 
 let userSearched = false;
 let validStock = false;
-let data = [{date: "99/99/9999 15:17",price:  999.99}]
+let data = [{date: 9999,price:  999.99}]
+let newData = [{date: "99/99/9999 15:17",price:  999.99}]
 let priceMin = 1000;
 let priceMax= 0;
 
@@ -33,7 +34,7 @@ export function savedSearch(name: string) {
 export function Search() {
   const [message, setMessage] = useState('');
   const [prevMessage, setPrevMessage] = useState('');
-  const [prevTicker, setPrevTicker] = useState('');
+  const [prevTicker, setPrevTicker] = useState('');  
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
@@ -44,14 +45,21 @@ export function Search() {
       handleClick("Search");
     }
   };
-  const saveStock = () => {
-    console.log("Saved Stock");
+  const saveStock = (ticker: string) => {
+    console.log("Saved Stock: " + ticker);
 
   };
 
-   const handleClick = async (id: string) => {
+
+  const compareNumbers = (a:{date: number, price: number}, b:{date: number, price:number}):number => {
+    return a.date - b.date;
+  }
+
+  const handleClick = async (id: string) => {
+
     //console.log("Id: " + id);
     data.splice(0);
+    newData.splice(0);
     priceMax = 0;
     priceMin = 1000;
 
@@ -65,16 +73,9 @@ export function Search() {
       incomming = await sendMsg(prevTicker + ":" + id);
     }
 
-    console.log("Incomming: " + incomming);
     incomming.sort();
-    let i = 0;
     for (let s of incomming) {
-
-      let price = s;
       let date = parseInt(s.substr(0, s.indexOf(":")));
-
-      let dateDate = new Date(date * 1000); // convert to current time
-      let dateStr = (dateDate.getMonth() + 1) + "/" + dateDate.getDate() + "/" + dateDate.getFullYear() + " " + dateDate.getHours() + ":" + dateDate.getMinutes();
 
       let priceInt = parseInt(s.substr(s.indexOf(":") + 1));
       priceInt = priceInt / 100.00;
@@ -93,25 +94,34 @@ export function Search() {
         console.log("Invalid Ticker");
         setPrevMessage("Invalid Stock Ticker");
         userSearched = true;
-      } else {
-        if (message != "" || id == "Search") {
-          setPrevTicker(message);
-          setPrevMessage(message.toUpperCase() + "- $" + priceInt);
-        } else
-          setPrevMessage(prevTicker.toUpperCase() + "- $" + priceInt);
+      } 
 
         setMessage("");
         //console.log(message.toUpperCase());
 
-        data.push({date: dateStr, price: priceInt});
+        data.push({date: date, price: priceInt});
         //console.log(data);
 
         userSearched = true;
         validStock = true;
       }
 
+    data.sort(compareNumbers);
+    
+
+    for (let i of data){
+      let dateDate = new Date(i.date * 1000); // convert to current time
+      let dateStr = (dateDate.getMonth() + 1) + "/" + dateDate.getDate() + "/" + dateDate.getFullYear() + " " + dateDate.getHours() + ":" + dateDate.getMinutes();
+      newData.push({date: dateStr, price: i.price});
     }
-    console.log(data);
+
+    if (message != "" || id == "Search") {
+      setPrevTicker(message);
+      setPrevMessage(message.toUpperCase() + "- $" + newData[newData.length-1].price);
+    } else
+      setPrevMessage(prevTicker.toUpperCase() + "- $" + newData[newData.length-1].price);
+    console.log(newData);
+    
 
     console.log("Min: " + priceMin + "  Max: " + priceMax);
   };
@@ -132,13 +142,14 @@ export function Search() {
                       <LineChart
                           width={500}
                           height={300}
-                          data={data}
+                          data={newData}
                           margin={{
                             top: 5,
                             right: 30,
                             left: 20,
                             bottom: 5
                           }}
+                          key={`rc_${data.length}`}
                       >
                         <CartesianGrid strokeDasharray="3 3"/>
                         <XAxis dataKey="date" allowDataOverflow={false}/>
@@ -149,7 +160,9 @@ export function Search() {
                             type="monotone"
                             dataKey="price"
                             stroke="#8884d8"
-                            activeDot={{r: 8}}
+                            dot = {false}
+                            activeDot={{r: 4}}
+                            key={`rc_${data.length}`}
                         />
                       </LineChart>
 
@@ -161,10 +174,11 @@ export function Search() {
                     <button className='Graph_button' key={"6Month"} onClick={(e) => handleClick("6month:1day")}>6 Month</button>
                     <button className='Graph_button' key={"1Year"} onClick={(e) => handleClick("1year:1day")}>1 Year</button>
                     <button className='Graph_button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")}>YTD</button>
-                    <button className='Graph_button' key={"All"} onClick={(e) => handleClick("All:1day")}>All</button>
+                    <button className='Graph_button' key={"All"} onClick={(e) => handleClick("all:1month")}>All</button>
 
-                    <button className="submit" type="submit" onClick={saveStock}> Save to Dashboard </button>
-                    </div>
+
+                    <button className="submit" type="submit" onClick={(e) => saveStock(prevTicker)}> Save to Dashboard </button>
+                    </div>  
                   </div>
               }
             </div>

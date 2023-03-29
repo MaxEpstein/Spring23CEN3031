@@ -12,7 +12,7 @@ import (
 type stock struct {
 	symbol      string
 	name        string
-	data        map[int64]uint
+	data        map[uint64]uint
 	s_type      string
 	recentPrice uint
 	//@TODO any additional features needed add here
@@ -62,8 +62,12 @@ func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string
 		b := iter.Bar()
 		//RoundFloor or RoundUp
 		open_price, _ := b.Open.Float64() //Open Price for that day
-		//close_price, _ := b.Close.Float64()                                             //Close Price for that day
-		temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100)) //Timestamp is for the days open  09:30:00 EST
+		//close_price, _ := b.Close.Float64()
+    
+		if uint(math.Round(open_price*1000)) != 0 {
+			temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))
+		}
+		//Timestamp is for the days open  09:30:00 EST
 		//temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
 		//fmt.Println(b.Open) //b has Timestamp, Open, High, Low, Close, Volume, AdjClose
 	}
@@ -81,11 +85,7 @@ func getTimeFrame(timeFrame string, chartIntervalString string) (*datetime.Datet
 			adjustedTime = passWeekends(1)
 		}
 	case "5day":
-		if time.Now().After(time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))) && time.Now().Weekday() != 0 && time.Now().Weekday() != 0 {
-			adjustedTime = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))
-		} else {
-			adjustedTime = passWeekends(5)
-		}
+		adjustedTime = passWeekends(5)
 	case "1month":
 		adjustedTime = skipWeekends(time.Now().AddDate(0, -1, 0))
 	case "3month":
@@ -96,6 +96,8 @@ func getTimeFrame(timeFrame string, chartIntervalString string) (*datetime.Datet
 		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, chartInterval
 	case "1year":
 		adjustedTime = skipWeekends(time.Now().AddDate(-1, 0, 0))
+	case "all":
+		return &datetime.Datetime{Month: 1, Day: 1, Year: 1970}, chartInterval
 	}
 	return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, chartInterval
 }
@@ -151,7 +153,7 @@ func getDataByTicker(ticker string, s_type string, data_interval string, data_ti
 	}
 	//=========================
 	temp_stock := new(stock)
-	temp_stock.data = make(map[int64]uint)
+	temp_stock.data = make(map[uint64]uint)
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
@@ -174,7 +176,7 @@ func updateMainWorkingList(working_list *data_list) {
 			if err != nil {
 				panic(err)
 			}
-			st_symb1.data[time.Now().Unix()] = uint(qt.Ask * 100)
+			st_symb1.data[uint64(time.Now().Unix())] = uint(qt.Ask * 100)
 			st_symb1.recentPrice = uint(qt.Ask)
 		}
 	}
