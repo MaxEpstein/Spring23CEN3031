@@ -12,7 +12,7 @@ import (
 type stock struct {
 	symbol      string
 	name        string
-	data        map[int64]uint
+	data        map[uint64]uint
 	s_type      string
 	recentPrice uint
 	//@TODO any additional features needed add here
@@ -64,7 +64,7 @@ func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string
 		open_price, _ := b.Open.Float64() //Open Price for that day
 		//close_price, _ := b.Close.Float64()
 		if uint(math.Round(open_price*1000)) != 0 {
-			temp_stock.data[int64(b.Timestamp)] = uint(math.Round(open_price * 100))
+			temp_stock.data[uint64(b.Timestamp)] = uint(math.Round(open_price * 100))
 		}
 		//Timestamp is for the days open  09:30:00 EST
 		//temp_stock.data[int64(b.Timestamp)+23400] = uint(math.Round(close_price * 100)) // Timestamp is for the days close at  16:00:00 EST
@@ -150,7 +150,7 @@ func getDataByTicker(ticker string, s_type string, data_interval string, data_ti
 	}
 	//=========================
 	temp_stock := new(stock)
-	temp_stock.data = make(map[int64]uint)
+	temp_stock.data = make(map[uint64]uint)
 	temp_stock.symbol = ticker
 	temp_stock.name = qt.ShortName
 	temp_stock.s_type = s_type
@@ -173,7 +173,7 @@ func updateMainWorkingList(working_list *data_list) {
 			if err != nil {
 				panic(err)
 			}
-			st_symb1.data[time.Now().Unix()] = uint(qt.Ask * 100)
+			st_symb1.data[uint64(time.Now().Unix())] = uint(qt.Ask * 100)
 			st_symb1.recentPrice = uint(qt.Ask)
 		}
 	}
