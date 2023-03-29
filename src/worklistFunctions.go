@@ -51,7 +51,7 @@ func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string
 
 		Start: timeFrameDate,
 		End: &datetime.Datetime{Month: int(time.Now().Month()),
-			Day:  int(time.Now().Day()),
+			Day:  int(time.Now().Day() + 1),
 			Year: int(time.Now().Year())},
 		Interval: timeInterval, //@Todo might want to change this later
 	}
