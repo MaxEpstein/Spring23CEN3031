@@ -63,6 +63,7 @@ func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string
 		//RoundFloor or RoundUp
 		open_price, _ := b.Open.Float64() //Open Price for that day
 		//close_price, _ := b.Close.Float64()
+    
 		if uint(math.Round(open_price*1000)) != 0 {
 			temp_stock.data[uint64(b.Timestamp)] = uint(math.Round(open_price * 100))
 		}
@@ -95,6 +96,8 @@ func getTimeFrame(timeFrame string, chartIntervalString string) (*datetime.Datet
 		return &datetime.Datetime{Month: 1, Day: 1, Year: time.Now().Year()}, chartInterval
 	case "1year":
 		adjustedTime = skipWeekends(time.Now().AddDate(-1, 0, 0))
+	case "all":
+		return &datetime.Datetime{Month: 1, Day: 1, Year: 1970}, chartInterval
 	}
 	return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, chartInterval
 }
