@@ -1,6 +1,7 @@
 import "./dash.css";
 import {savedSearch} from "./Search";
 import {Route, Link, Redirect} from "react-router-dom";
+import React, { Component } from 'react';
 
 import {
   LineChart,
@@ -61,7 +62,6 @@ const data = [
 export function searchStock() {
   console.log("reach1");
   savedSearch("AMZN");
-  <Route path="/search" render={() => <Redirect to="/search" />} />;
 }
 
 

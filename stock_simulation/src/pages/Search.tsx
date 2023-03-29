@@ -25,9 +25,9 @@ let priceMin = 1000;
 let priceMax= 0;
 
 export function savedSearch(name: string) {
+    window.location.replace('/search');
   console.log(name);
   userSearched = true;
-  return <Redirect to={"/search"}/>;
 }
 
 export function Search() {
