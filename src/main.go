@@ -5,7 +5,6 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -57,7 +56,6 @@ func reader(conn *websocket.Conn) {
 				return
 			}
 		}
-
 	}
 }
 
@@ -85,12 +83,9 @@ func setupRoutes() {
 	http.HandleFunc("/ws", serveWs)
 
 }
-func signalHandler(sig os.Signal) {
-
-}
 
 func main() {
-	//unitTests()
+	unitTests()
 	fmt.Println("Big boy app 2.0")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
