@@ -1,5 +1,6 @@
 import "./Dash.tsx";
 import { ReactComponentElement, useState } from 'react';
+import {Redirect} from 'react-router-dom';
 
 import { sendMsg } from '../server';
 import {Login} from "./LogInPage"
@@ -24,6 +25,12 @@ let newData = [{date: "99/99/9999 15:17",price:  999.99}]
 let priceMin = 1000;
 let priceMax= 0;
 
+export function savedSearch(name: string) {
+  console.log(name);
+  userSearched = true;
+  return <Redirect to={"/search"}/>;
+}
+
 export function Search() {
   const [message, setMessage] = useState('');
   const [prevMessage, setPrevMessage] = useState('');
@@ -43,11 +50,13 @@ export function Search() {
 
   };
 
+
   const compareNumbers = (a:{date: number, price: number}, b:{date: number, price:number}):number => {
     return a.date - b.date;
   }
 
   const handleClick = async (id: string) => {
+
     //console.log("Id: " + id);
     data.splice(0);
     newData.splice(0);
@@ -58,7 +67,7 @@ export function Search() {
     //send message as stock:timePeriod 
     if (id == "Search") {
       console.log("initial Search: " + message);
-      incomming = await sendMsg(message + ":1day:5min");
+      incomming = await sendMsg(message + ":1month:1day");
     } else {
       console.log("Update Graph: " + prevTicker);
       incomming = await sendMsg(prevTicker + ":" + id);
@@ -119,17 +128,17 @@ export function Search() {
 
   return (
       <>
-        <div className="SearchTop">
+        <div className="SearchTop" style={{paddingTop: "2%"}}>
           <input type="text" placeholder="Stock Ticker" onChange={handleChange} value={message} name="message"
-                 id="message" onKeyDown={handleKeyDown}/>
+                 id="message" onKeyDown={handleKeyDown} />
           <button className="submit" type="submit" onClick={(e) => handleClick("Search")}>Search</button>
         </div>
         {userSearched === true &&
             <div className="stockInfo">
-              <h1 style={{paddingLeft: "2%"}}>Stock: {prevMessage}</h1>
+              <h1 style={{paddingLeft: "2%", scrollPaddingBottom: "2%", textAlign: "center"}}>Stock: {prevMessage}</h1>
               {validStock === true &&
                   <div>
-                    <div className="graph">
+                    <div className="graph" style={{paddingTop: "2%", marginTop : "7%"}}>
                       <LineChart
                           width={500}
                           height={300}
@@ -156,7 +165,7 @@ export function Search() {
                             key={`rc_${data.length}`}
                         />
                       </LineChart>
-                   
+
 
                     <button className='Graph_button' key={"1Day"} onClick={(e) => handleClick("1day:15min")}>1 Day</button>
                     <button className='Graph_button' key={"5Day"} onClick={(e) => handleClick("5day:1hour")}>5 Day</button>
@@ -166,6 +175,7 @@ export function Search() {
                     <button className='Graph_button' key={"1Year"} onClick={(e) => handleClick("1year:1day")}>1 Year</button>
                     <button className='Graph_button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")}>YTD</button>
                     <button className='Graph_button' key={"All"} onClick={(e) => handleClick("all:1month")}>All</button>
+
 
                     <button className="submit" type="submit" onClick={(e) => saveStock(prevTicker)}> Save to Dashboard </button>
                     </div>  
