@@ -288,3 +288,29 @@
         margin-top: 13%;
         margin-bottom: 13%;
     }
+
+.Graph_button{
+  margin: 2px;
+  background-color: darkblue; 
+  border: none;
+  color: white;
+  padding: 8px 18px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 20px;
+  border: 1px solid rgb(220, 220, 220);
+}
+
+   .savedStocks {
+        margin-left: 1%;
+    }
+
+    .savedStocks a{
+        text-decoration: none;
+
+    }
+
+

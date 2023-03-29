@@ -35,7 +35,7 @@ let sendMsg =  async (msg: string): Promise<any> => {
   let message:string = "no message"
 
    await socket.addEventListener('message', (event) => {
-    console.log("Incomming message: " + event.data);
+    //console.log("Incomming message: " + event.data);
     message = event.data;
     messages.push(message);
   });

@@ -1,7 +1,7 @@
 # Sprint 3
 
 ## Completed Issues
-    
+    The Graph on the Search page is now customizable to specific time periods for the serached stock
 
 
 

@@ -1,4 +1,6 @@
 import "./dash.css";
+import {Search} from "./Search";
+import {Link, Redirect} from "react-router-dom";
 import {
   LineChart,
   Line,
@@ -54,6 +56,10 @@ const data = [
   }
 ];
 
+export function searchStock() {
+  <Redirect to={"/search"}></Redirect>
+}
+
 
 export function Dash() {
     return(
@@ -97,6 +103,11 @@ export function Dash() {
                   <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
             </LineChart>
                 </div>
+
+          <div className = "savedStocks">
+            <h1>Saved Stocks</h1>
+            <a className = "submit" href="/search"> AAPL </a>
+          </div>
       </>
       
     );
