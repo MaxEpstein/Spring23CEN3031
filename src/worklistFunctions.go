@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"time"
 
@@ -51,7 +52,7 @@ func addHistoricalData(temp_stock *stock, timeFrame string, chartInterval string
 
 		Start: timeFrameDate,
 		End: &datetime.Datetime{Month: int(time.Now().Month()),
-			Day:  int(time.Now().Day()),
+			Day:  int(time.Now().Day() + 1),
 			Year: int(time.Now().Year())},
 		Interval: timeInterval, //@Todo might want to change this later
 	}
@@ -102,6 +103,7 @@ func passWeekends(numDays int) time.Time {
 		adjustedTime = adjustedTime.AddDate(0, 0, -1)
 		if adjustedTime.Weekday() != 0 && adjustedTime.Weekday() != 6 {
 			i++
+			fmt.Println("hello")
 		}
 	}
 	return adjustedTime
