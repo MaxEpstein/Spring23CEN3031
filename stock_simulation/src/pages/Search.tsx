@@ -121,42 +121,44 @@ export function Search() {
             <div className="stockInfo">
               <h1 style={{paddingLeft: "2%"}}>Stock: {prevMessage}</h1>
               {validStock === true &&
-                  <div className="graph">
-                    <LineChart
-                        width={500}
-                        height={300}
-                        data={data}
-                        margin={{
-                          top: 5,
-                          right: 30,
-                          left: 20,
-                          bottom: 5
-                        }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3"/>
-                      <XAxis dataKey="date" allowDataOverflow={false}/>
-                      <YAxis type="number" domain={[Math.floor(priceMin * 0.98), Math.ceil((priceMax * 1.02))]}/>
-                      <Tooltip/>
-                      <Legend/>
-                      <Line
-                          type="monotone"
-                          dataKey="price"
-                          stroke="#8884d8"
-                          activeDot={{r: 8}}
-                      />
-                    </LineChart>
+                  <div>
+                    <div className="graph">
+                      <LineChart
+                          width={500}
+                          height={300}
+                          data={data}
+                          margin={{
+                            top: 5,
+                            right: 30,
+                            left: 20,
+                            bottom: 5
+                          }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3"/>
+                        <XAxis dataKey="date" allowDataOverflow={false}/>
+                        <YAxis type="number" domain={[Math.floor(priceMin * 0.98), Math.ceil((priceMax * 1.02))]}/>
+                        <Tooltip/>
+                        <Legend/>
+                        <Line
+                            type="monotone"
+                            dataKey="price"
+                            stroke="#8884d8"
+                            activeDot={{r: 8}}
+                        />
+                      </LineChart>
+                    </div>
+
+                    <button className='Graph_button' key={"1Day"} onClick={(e) => handleClick("1day:15min")}>1 Day</button>
+                    <button className='Graph_button' key={"5Day"} onClick={(e) => handleClick("5day:1hour")}>5 Day</button>
+                    <button className='Graph_button' key={"1Month"} onClick={(e) => handleClick("1month:1day")}>1 Month</button>
+                    <button className='Graph_button' key={"3Month"} onClick={(e) => handleClick("3month:1day")}>3 Month</button>
+                    <button className='Graph_button' key={"6Month"} onClick={(e) => handleClick("6month:1day")}>6 Month</button>
+                    <button className='Graph_button' key={"1Year"} onClick={(e) => handleClick("1year:1day")}>1 Year</button>
+                    <button className='Graph_button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")}>YTD</button>
+                    <button className='Graph_button' key={"All"} onClick={(e) => handleClick("All:1day")}>All</button>
+
+                    <button className="submit" type="submit" onClick={saveStock}> Save to Dashboard </button>
                   </div>
-
-                <button className='Graph_button' key={"1Day"} onClick={(e) => handleClick("1day:15min")}>1 Day</button>
-                <button className='Graph_button' key={"5Day"} onClick={(e) => handleClick("5day:1hour")}>5 Day</button>
-                <button className='Graph_button' key={"1Month"} onClick={(e) => handleClick("1month:1day")}>1 Month</button>
-                <button className='Graph_button' key={"3Month"} onClick={(e) => handleClick("3month:1day")}>3 Month</button>
-                <button className='Graph_button' key={"6Month"} onClick={(e) => handleClick("6month:1day")}>6 Month</button>
-                <button className='Graph_button' key={"1Year"} onClick={(e) => handleClick("1year:1day")}>1 Year</button>
-                <button className='Graph_button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")}>YTD</button>
-                <button className='Graph_button' key={"All"} onClick={(e) => handleClick("All:1day")}>All</button>
-
-                <button className="submit" type="submit" onClick={saveStock}> Save to Dashboard </button>
               }
             </div>
         }
