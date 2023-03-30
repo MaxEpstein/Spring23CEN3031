@@ -1,6 +1,8 @@
 import "./dash.css";
-import {Search} from "./Search";
-import {Link, Redirect} from "react-router-dom";
+import {savedSearch} from "./Search";
+import {Route, Link, Redirect} from "react-router-dom";
+import React, { Component } from 'react';
+
 import {
   LineChart,
   Line,
@@ -10,6 +12,7 @@ import {
   Tooltip,
   Legend
 } from "recharts";
+import {render} from "react-dom";
 
 const data = [
   {
@@ -56,12 +59,13 @@ const data = [
   }
 ];
 
-export function searchStock() {
-  <Redirect to={"/search"}></Redirect>
-}
-
-
 export function Dash() {
+  
+
+  function searchStock() {
+    savedSearch("AMZN");
+    }
+
     return(
         <>
         <div className="heading">
@@ -106,7 +110,7 @@ export function Dash() {
 
           <div className = "savedStocks">
             <h1>Saved Stocks</h1>
-            <a className = "submit" href="/search"> AAPL </a>
+            <button className = "submit"  onClick={searchStock}> AMZN </button>
           </div>
       </>
       
