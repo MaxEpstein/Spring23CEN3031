@@ -58,6 +58,17 @@
         - checkIfStockExist(ticker string) bool 
             Checks to see if the ticker actually exists within the stock market
             to keep the program from accessing an invalid pointer.
+        -func HashPassword(password string) (string, error)
+            Generates a hashed string for password encryption
+        -func CheckPasswordHash(password, hash string) bool 
+            Returns the hash code back into a regular password. 
+        -func createEncryptedInfo(username string, pw string) string 
+            Helper function to create the inital encrypted message to be stored.
+        -func userNew(username string, pw string) *user 
+            Constructor for the user and their stocks. This contains a username, password, list of 
+            tickers, and an encrypted string that saves once the program is complete. 
+        -func addTicker(currentUser *user, ticker string) 
+            To add a ticker to the users list, and add it to the encryption
 
 ## Frontend Tests
 
