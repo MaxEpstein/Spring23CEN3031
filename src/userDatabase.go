@@ -57,7 +57,7 @@ func initDatafile() {
 	}
 
 	defer f.Close()
-}
+} //
 func grabLoginFile(currUser *user) {
 	f, err := os.Open("info.txt")
 

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-)
+) //
 
 // We'll need to define an Upgrader
 // this will require a Read and Write buffer size
@@ -85,8 +85,7 @@ func setupRoutes() {
 }
 
 func main() {
-	//unitTests()
-	//createEncryptedInfo("bigdog", "ghirng54", ("aapl", "hello"))
+	unitTests()
 	fmt.Println("Big boy app 2.0")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
