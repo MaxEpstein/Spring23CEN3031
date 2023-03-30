@@ -71,6 +71,12 @@
             To add a ticker to the users list, and add it to the encryption
 
 ## Frontend Tests
+    Nav bar test using cypress framework:
+        Tests navigation from home to search
+        Tests navigation from search to home
+    Tests Login Functionality
+    Tests Login redirect to dashboard
+    Graph Change Tests
 
 ## Backend Tests
     Sprint 1/2:
