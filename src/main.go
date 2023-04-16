@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-)
+) //
 
 // We'll need to define an Upgrader
 // this will require a Read and Write buffer size

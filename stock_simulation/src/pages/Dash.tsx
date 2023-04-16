@@ -59,13 +59,13 @@ const data = [
   }
 ];
 
-export function searchStock() {
-  console.log("reach1");
-  savedSearch("AMZN");
-}
-
-
 export function Dash() {
+  
+
+  function searchStock() {
+    savedSearch("AMZN");
+    }
+
     return(
         <>
         <div className="heading">

@@ -29,9 +29,19 @@ func unitTests() { //pass in example/testing data to various functions
 	testSkipWeekends("1year")
 
 	testGetTimeFrame("1day", "1min")
-	testGetTimeFrame("1month", "1day")
 
-	testAddHistoricalData(testStock, "1day", "1hour")
+	//testGetTimeFrame("5day", "5min")
+	//testGetTimeFrame("1month", "15min")
+	//testGetTimeFrame("3month", "1day")
+	//testGetTimeFrame("YTD", "1month")
+	//testGetTimeFrame("1year", "1year")
+  testGetTimeFrame("1month", "1day")
+
+  
+  testAddHistoricalData(testStock, "1day", "1hour")
+	//testAddHistoricalData(testStock, "1year", "1year")
+	//testAddHistoricalData(testStock, "1year")
+	passwordHashing("helloWorld")
 }
 
 func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
@@ -102,5 +112,11 @@ func testAddHistoricalData(temp_stock *stock, timeFrame string, chartInterval st
 	//fmt.Println(t)
 }
 func passwordHashing(password string) {
+	hash, _ := HashPassword(password) // ignore error for the sake of simplicity
 
+	fmt.Println("Password:", password)
+	fmt.Println("Hash:    ", hash)
+
+	match := CheckPasswordHash(password, hash)
+	fmt.Println("Match:   ", match)
 }
