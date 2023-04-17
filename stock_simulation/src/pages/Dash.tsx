@@ -3,6 +3,9 @@ import {savedSearch} from "./Search";
 import {Route, Link, Redirect} from "react-router-dom";
 import React, { Component } from 'react';
 import {sendMsg} from "../server";
+import { useState } from "react";
+import { useRef } from "react";
+
 
 import {
   LineChart,
@@ -60,40 +63,44 @@ const data = [
   }
 ];
 
+
+let pricesArr:string[] = [];
+
+
+const delay = async (ms: number) => new Promise(
+  resolve => setTimeout(resolve, ms)
+)
+
 export function Dash() {
-  
+  const dataFetchedRef = useRef(false);
 
-  function searchStock() {
-    savedSearch("AMZN");
-    }
+   useEffect(() => {    
+    if (dataFetchedRef.current) return;
+    dataFetchedRef.current = true;
+    updateSaved(["AAPL", "MSFT", "GOOG"]);
+  })
 
-  const updateSaved = async(id: string) => {
-      let incomming: string[] = [];
+  const [prices, setPrices] = useState<string[]>([]);
 
-      console.log("initial Search: " + id);
-      incomming = await sendMsg(id + ":1day:5min");
+  const updateSaved = async(id: string[]) => {
+    await delay(100)
+    for (let tick of id){
+        let incomming: string[] = [];
 
-      console.log("Value " + incomming[0]);
-
-      let priceMax = 0;
-      let priceMin = 1000;
+        console.log("initial Search: " + tick);
+        incomming = await sendMsg(tick + ":now");
 
 
-      let date = parseInt(incomming[0].substr(0, incomming[0].indexOf(":")));
+        let priceInt = parseInt(incomming[0].substr(incomming[0].indexOf(":") + 1));
+        priceInt = priceInt / 100.00;
+        
+        console.log("Price: " + priceInt);
+        pricesArr[pricesArr.length] = String(priceInt);
 
-      let priceInt = parseInt(incomming[0].substr(incomming[0].indexOf(":") + 1));
-      priceInt = priceInt / 100.00;
-
-      if (priceInt > priceMax) {
-        priceMax = priceInt;
       }
+      setPrices(pricesArr);
 
-      if (priceInt < priceMin) {
-        priceMin = priceInt;
-      }
-      console.log("Price: " + priceInt);
 
-      return priceInt;
     };
 
     return(
@@ -140,7 +147,11 @@ export function Dash() {
 
           <div className = "savedStocks">
             <h1>Saved Stocks</h1>
-            <p> AAPL: <>{updateSaved("AAPL")}</></p>
+
+            <p> <>AAPL: {prices[0]}</></p>
+            <p> <>MSFT: {prices[1]}</></p>
+            <p> <>GOOG: {prices[2]}</></p>
+
 
           </div>
       </>
