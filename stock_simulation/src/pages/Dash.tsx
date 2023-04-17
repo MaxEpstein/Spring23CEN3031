@@ -1,10 +1,11 @@
 import "./dash.css";
 import {savedSearch} from "./Search";
 import {Route, Link, Redirect} from "react-router-dom";
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import {sendMsg} from "../server";
 import { useState } from "react";
 import { useRef } from "react";
+
 
 import {
   LineChart,
@@ -16,7 +17,6 @@ import {
   Legend
 } from "recharts";
 import {render} from "react-dom";
-import { mockComponent } from "react-dom/test-utils";
 
 const data = [
   {
@@ -63,6 +63,7 @@ const data = [
   }
 ];
 
+
 let pricesArr:string[] = [];
 
 
@@ -89,15 +90,16 @@ export function Dash() {
         console.log("initial Search: " + tick);
         incomming = await sendMsg(tick + ":now");
 
+
         let priceInt = parseInt(incomming[0].substr(incomming[0].indexOf(":") + 1));
         priceInt = priceInt / 100.00;
         
-
         console.log("Price: " + priceInt);
         pricesArr[pricesArr.length] = String(priceInt);
 
       }
       setPrices(pricesArr);
+
 
     };
 
@@ -145,9 +147,11 @@ export function Dash() {
 
           <div className = "savedStocks">
             <h1>Saved Stocks</h1>
+
             <p> <>AAPL: {prices[0]}</></p>
             <p> <>MSFT: {prices[1]}</></p>
             <p> <>GOOG: {prices[2]}</></p>
+
 
           </div>
       </>
