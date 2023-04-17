@@ -4,6 +4,7 @@ import {Route, Link, Redirect} from "react-router-dom";
 import React, { Component, useEffect } from 'react';
 import {sendMsg} from "../server";
 import { useState } from "react";
+import { useRef } from "react";
 
 import {
   LineChart,
@@ -62,36 +63,42 @@ const data = [
   }
 ];
 
-const delay = (ms: number) => new Promise(
+let pricesArr:string[] = [];
+
+
+const delay = async (ms: number) => new Promise(
   resolve => setTimeout(resolve, ms)
 )
 
 export function Dash() {
+  const dataFetchedRef = useRef(false);
 
    useEffect(() => {    
-    updateSaved("AAPL");
+    if (dataFetchedRef.current) return;
+    dataFetchedRef.current = true;
+    updateSaved(["AAPL", "MSFT", "GOOG"]);
   })
 
-  const [prices, setPrices] = useState('');
+  const [prices, setPrices] = useState<string[]>([]);
 
-  const updateSaved = async(id: string) => {
-    await delay(0)
-      let incomming: string[] = [];
+  const updateSaved = async(id: string[]) => {
+    await delay(100)
+    for (let tick of id){
+        let incomming: string[] = [];
 
-      console.log("initial Search: " + id);
-      incomming = await sendMsg(id + ":now");
+        console.log("initial Search: " + tick);
+        incomming = await sendMsg(tick + ":now");
 
-      console.log("Value " + incomming[0]);
+        let priceInt = parseInt(incomming[0].substr(incomming[0].indexOf(":") + 1));
+        priceInt = priceInt / 100.00;
+        
 
-      let priceInt = parseInt(incomming[0].substr(incomming[0].indexOf(":") + 1));
-      priceInt = priceInt / 100.00;
-      
+        console.log("Price: " + priceInt);
+        pricesArr[pricesArr.length] = String(priceInt);
 
-      console.log("Price: " + priceInt);
-      setPrices(String(priceInt));
-      console.log(prices);
+      }
+      setPrices(pricesArr);
 
-      return prices;
     };
 
     return(
@@ -138,7 +145,9 @@ export function Dash() {
 
           <div className = "savedStocks">
             <h1>Saved Stocks</h1>
-            <p> <>AAPL: {prices}</></p>
+            <p> <>AAPL: {prices[0]}</></p>
+            <p> <>MSFT: {prices[1]}</></p>
+            <p> <>GOOG: {prices[2]}</></p>
 
           </div>
       </>
