@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/websocket"
 ) //
 
 // We'll need to define an Upgrader
@@ -43,19 +44,28 @@ func reader(conn *websocket.Conn) {
 			}
 			continue
 		}
-		main_list := initializeWorkingList(nil, nil, "", "")
-		addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
-		//updateMainWorkingList(main_list) //take away later
-		temp_stock := main_list.data["stock"][msg_cont[0]]
-		msg := ""
-		for key, element := range temp_stock.data {
-			//Send all the data within the current map
-			msg = strconv.FormatUint(uint64(key), 10) + ":" + strconv.FormatUint(uint64(element), 10)
-			if err := conn.WriteMessage(1, []byte(msg)); err != nil {
+		if msg_cont[1] == "now" {
+			msgCurrentPrice := strconv.FormatUint(uint64(getCurrentPrice(msg_cont[0])), 10)
+			if err := conn.WriteMessage(1, []byte(msgCurrentPrice)); err != nil {
 				log.Println(err)
 				return
 			}
+		} else {
+			main_list := initializeWorkingList(nil, nil, "", "")
+			addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
+			//updateMainWorkingList(main_list) //take away later
+			temp_stock := main_list.data["stock"][msg_cont[0]]
+			msg := ""
+			for key, element := range temp_stock.data {
+				//Send all the data within the current map
+				msg = strconv.FormatUint(uint64(key), 10) + ":" + strconv.FormatUint(uint64(element), 10)
+				if err := conn.WriteMessage(1, []byte(msg)); err != nil {
+					log.Println(err)
+					return
+				}
+			}
 		}
+
 	}
 }
 
