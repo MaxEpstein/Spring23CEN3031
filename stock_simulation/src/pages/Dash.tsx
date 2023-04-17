@@ -1,8 +1,9 @@
 import "./dash.css";
 import {savedSearch} from "./Search";
 import {Route, Link, Redirect} from "react-router-dom";
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import {sendMsg} from "../server";
+import { useState } from "react";
 
 import {
   LineChart,
@@ -14,6 +15,7 @@ import {
   Legend
 } from "recharts";
 import {render} from "react-dom";
+import { mockComponent } from "react-dom/test-utils";
 
 const data = [
   {
@@ -60,40 +62,36 @@ const data = [
   }
 ];
 
-export function Dash() {
-  
+const delay = (ms: number) => new Promise(
+  resolve => setTimeout(resolve, ms)
+)
 
-  function searchStock() {
-    savedSearch("AMZN");
-    }
+export function Dash() {
+
+   useEffect(() => {    
+    updateSaved("AAPL");
+  })
+
+  const [prices, setPrices] = useState('');
 
   const updateSaved = async(id: string) => {
+    await delay(0)
       let incomming: string[] = [];
 
       console.log("initial Search: " + id);
-      incomming = await sendMsg(id + ":1day:5min");
+      incomming = await sendMsg(id + ":now");
 
       console.log("Value " + incomming[0]);
 
-      let priceMax = 0;
-      let priceMin = 1000;
-
-
-      let date = parseInt(incomming[0].substr(0, incomming[0].indexOf(":")));
-
       let priceInt = parseInt(incomming[0].substr(incomming[0].indexOf(":") + 1));
       priceInt = priceInt / 100.00;
+      
 
-      if (priceInt > priceMax) {
-        priceMax = priceInt;
-      }
-
-      if (priceInt < priceMin) {
-        priceMin = priceInt;
-      }
       console.log("Price: " + priceInt);
+      setPrices(String(priceInt));
+      console.log(prices);
 
-      return priceInt;
+      return prices;
     };
 
     return(
@@ -140,7 +138,7 @@ export function Dash() {
 
           <div className = "savedStocks">
             <h1>Saved Stocks</h1>
-            <p> AAPL: <>{updateSaved("AAPL")}</></p>
+            <p> <>AAPL: {prices}</></p>
 
           </div>
       </>
