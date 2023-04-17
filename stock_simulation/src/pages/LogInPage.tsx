@@ -12,6 +12,8 @@ interface LoginState {
   isLoading: boolean;
   error: string;
   isLoggedIn: boolean;
+  button: number;
+  isLoadingS: boolean;
 }
 
 type LoginAction =
@@ -43,7 +45,9 @@ const loginReducer = (state: LoginState, action: LoginAction): LoginState => {
         isLoggedIn: false,
         username: "",
         password: "",
-        error: "Incorrect username or password!"
+        error: "Incorrect username or password!",
+        button: 1,
+        isLoadingS: false
       };
     }
     case "logout": {
@@ -62,7 +66,9 @@ const initialState: LoginState = {
   username: "",
   isLoading: false,
   error: "",
-  isLoggedIn: false
+  isLoggedIn: false,
+  button: 1,
+  isLoadingS: false
 };
 
 const refreshPage = ()=>{
@@ -73,24 +79,28 @@ const refreshPage = ()=>{
 
 export function Login() {
   const [state, dispatch] = React.useReducer(loginReducer, initialState);
-  const { username, password, isLoading, error, isLoggedIn } = state;
+  const { username, password, isLoading, error, isLoggedIn, button, isLoadingS } = state;
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    
     e.preventDefault();
-    dispatch({ type: "login" });
+    if (state.button == 1){
+      console.log("loggin in");
+    
+      dispatch({ type: "login" });
 
-    try {
-      await login({ username, password });
-      dispatch({ type: "success" });
+      try {
+        await login({ username, password });
+        dispatch({ type: "success" });
 
-    } catch (error) {
-      dispatch({ type: "error" });
+      } catch (error) {
+        dispatch({ type: "error" });
+      }
+    }
+    else if (state.button == 2){
+      console.log("signing up");
+
     }
   };
-
- 
-
 
   return (
     
@@ -127,8 +137,11 @@ export function Login() {
                 })
               }
             />
-            <button type="submit" className="submit" id="action" value="login" disabled={isLoading}>
-              {isLoading ? "Logging in....." : "Log in / Sign up"}
+            <button onClick={() => (state.button = 1)} type="submit" className="submit" id="action" value="login" disabled={isLoading}>
+              {isLoading ? "Logging in....." : "Log in"}
+            </button>
+            <button className="submit" onClick={() => (state.button = 2)} disabled={isLoadingS}>
+              {isLoadingS ? "Signing up....." : "Sign up"}
             </button>
            
           </form>
