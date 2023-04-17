@@ -84,7 +84,7 @@ func getTimeFrame(timeFrame string, chartIntervalString string) (*datetime.Datet
 	chartInterval := getChartInterval(chartIntervalString)
 	switch choose := timeFrame; choose {
 	case "now":
-		adjustedTime = time.Date(time.Now());			
+		adjustedTime = time.Now();		
 	case "1day":
 		if time.Now().After(time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))) && time.Now().Weekday() != 0 && time.Now().Weekday() != 0 {
 			adjustedTime = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 9, 30, 0, 0, time.FixedZone("EST", -5))
@@ -107,6 +107,14 @@ func getTimeFrame(timeFrame string, chartIntervalString string) (*datetime.Datet
 		return &datetime.Datetime{Month: 1, Day: 1, Year: 1970}, chartInterval
 	}
 	return &datetime.Datetime{Month: (int)(adjustedTime.Month()), Day: adjustedTime.Day(), Year: adjustedTime.Year()}, chartInterval
+}
+
+func getCurrentPrice(ticker string) uint64{
+	q, err := quote.Get(ticker)
+	if err != nil {
+		panic(err)
+	}
+	return (uint64)(q.RegularMarketPrice() * 100);
 }
 
 func passWeekends(numDays int) time.Time {
@@ -150,10 +158,6 @@ func getChartInterval(chartIntervalString string) datetime.Interval {
 		chartInterval = datetime.OneYear
 	}
 	return chartInterval
-}
-
-func getRecentPrice(){
-
 }
 
 func getDataByTicker(ticker string, s_type string, data_interval string, data_time_interval string) *stock { //take ticker input
