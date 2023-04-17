@@ -24,28 +24,22 @@ export function AboutPage() {
                 }}> Meet the Makers!</h1>
 
                 <div className = "jeanetteInfo">
-                    <img src ={require("../images/ForemanAbout.jpg")} height = "400" width = "400"/>
-                    <p style={{textAlign: "center", font: "roboto", display: "inline"}}> Jeanette Foreman</p>
+                    <img src ={require("../images/ForemanAbout.jpg")} height = "300" width = "400"/>
+                    <p style={{textAlign: "center", font: "roboto", display: "inline"}}> Jeanette </p>
                 </div>
 
                 <div className = 'maxInfo'>
-                    <img src = {require("../images/bkg.jpg")} height = "400" width = "400"/>
+                    <img src = {require("../images/IMG_3471.jpg")} height = "300" width = "400" />
                     <p style={{textAlign: "center", font: "roboto"}}> Max </p>
 
                 </div>
                 <div className = 'leandroInfo'>
                     <img src = {require("../images/bkg3.jpg")}  height = "400" width = "400"/>
-                    <p style={{textAlign: "center", font: "roboto"}}>
-                        Leandro
-                    </p>
-
+                    <p style={{textAlign: "center", font: "roboto"}}> Leandro </p>
                 </div>
                 <div className = 'braydenInfo'>
                     <img src = {require("../images/bkg2.jpg")}  height = "400" width = "400"/>
-                    <p style={{textAlign: "center", font: "roboto"}}>
-                        Brayden
-                    </p>
-
+                    <p style={{textAlign: "center", font: "roboto"}}> Brayden </p>
                 </div>
 
             </div>

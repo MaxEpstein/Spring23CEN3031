@@ -246,6 +246,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        overflow: hidden;
+        height: 300px;
+        width: 400px;
+        position: relative;
     }
 
     .splitScreen h1{
@@ -261,8 +265,7 @@
 
   }
   .jeanetteInfo img{
-      max-width: 100%;
-      height: 100%;
+
 
   }
 
