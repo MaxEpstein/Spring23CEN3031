@@ -238,6 +238,7 @@
         text-align: center;
         margin-right: 10%;
         font-family: -apple-system;
+        font-size: 40px;
     }
 
     .splitScreen img{
@@ -245,7 +246,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 20px;
     }
 
     .splitScreen h1{
@@ -258,6 +258,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
+  }
+  .jeanetteInfo img{
+      max-width: 100%;
+      height: 100%;
 
   }
 
@@ -308,9 +313,6 @@
         margin-left: 1%;
     }
 
-    .savedStocks a{
-        text-decoration: none;
 
-    }
 
 
