@@ -94,9 +94,11 @@ func setupRoutes() {
 
 }
 
+/*
 func main() {
 	unitTests()
 	fmt.Println("Big boy app 2.0")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
 }
+*/

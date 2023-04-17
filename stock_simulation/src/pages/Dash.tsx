@@ -84,7 +84,7 @@ export function Dash() {
   const [prices, setPrices] = useState<string[]>([]);
 
   const updateSaved = async(id: string[]) => {
-    await delay(100)
+    await delay(0)
     for (let tick of id){
         let incomming: string[] = [];
 
