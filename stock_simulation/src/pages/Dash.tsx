@@ -2,6 +2,7 @@ import "./dash.css";
 import {savedSearch} from "./Search";
 import {Route, Link, Redirect} from "react-router-dom";
 import React, { Component } from 'react';
+import {sendMsg} from "../server";
 
 import {
   LineChart,
@@ -66,6 +67,35 @@ export function Dash() {
     savedSearch("AMZN");
     }
 
+  const updateSaved = async(id: string) => {
+      let incomming: string[] = [];
+
+      console.log("initial Search: " + id);
+      incomming = await sendMsg(id + ":1day:5min");
+
+      console.log("Value " + incomming[0]);
+
+      let priceMax = 0;
+      let priceMin = 1000;
+
+
+      let date = parseInt(incomming[0].substr(0, incomming[0].indexOf(":")));
+
+      let priceInt = parseInt(incomming[0].substr(incomming[0].indexOf(":") + 1));
+      priceInt = priceInt / 100.00;
+
+      if (priceInt > priceMax) {
+        priceMax = priceInt;
+      }
+
+      if (priceInt < priceMin) {
+        priceMin = priceInt;
+      }
+      console.log("Price: " + priceInt);
+
+      return priceInt;
+    };
+
     return(
         <>
         <div className="heading">
@@ -110,7 +140,8 @@ export function Dash() {
 
           <div className = "savedStocks">
             <h1>Saved Stocks</h1>
-            <button className = "submit"  onClick={searchStock}> AMZN </button>
+            <p> AAPL: <>{updateSaved("AAPL")}</></p>
+
           </div>
       </>
       
