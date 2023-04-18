@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/jackc/pgx/v4"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 ) //
@@ -22,7 +25,36 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-func userFinder(conn *websocket.Conn) {
+func userFinder(conn *websocket.Conn, msg_cont []string) {
+	//Format for incoming string LG:1:USERNAME:PW:TIK,TIK:BALANCE
+	//User info gets hashed
+	msg_cont[2], _ = HashPassword(msg_cont[2])
+	msg_cont[3], _ = HashPassword(msg_cont[3])
+	command := msg_cont[1]
+
+	username := msg_cont[2]
+	tikers := msg_cont[4]
+	balance := msg_cont[5]
+	switch command {
+	case "0": // AddUser
+		addUser(strings.Join(msg_cont, ":"))
+	case "1": //Remove user
+		removeUser(username)
+	case "2": //returnUserData
+		msg := returnUserData(username)
+		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
+			log.Println(err)
+			return
+		}
+	case "3": //Update favorite
+		temp := username + "," + tikers
+		updateFavorite(temp)
+	case "4":
+		temp := username + "," + balance
+		updateBalance(temp)
+	case "5":
+
+	}
 
 }
 
@@ -40,7 +72,7 @@ func reader(conn *websocket.Conn) {
 		msg_cont := strings.Split(ticker, ":")
 		if msg_cont[0] == "" {
 			//Check if message should be for the user database
-			userFinder(conn)
+			userFinder(conn, msg_cont)
 
 		} else {
 			//Check if the stock being submitted in is real, otherwise continue listening for an input
@@ -104,7 +136,21 @@ func setupRoutes() {
 }
 
 func main() {
-	//unitTests()
+	//Might want to use Database URL
+	dsn := "postgresql://leandro:bDoDK7mXiGb_dcN_1Mi5mg@cloned-giant-10351.7tt.cockroachlabs.cloud:26257/mindmywallet_userdata?sslmode=verify-full"
+	//dsn := "postgresql://braydenb176:pf07lHgqf9HEqtJ-qYLhZg@humble-pegasus-10349.7tt.cockroachlabs.cloud:26257/mindmywallet?sslmode=verify-full"
+	var err error
+	conn, err = pgx.Connect(context.Background(), dsn)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer conn.Close(context.Background())
+	//For testing we will erase it every time, comment out later
+	deleteTable()
+	//Check if table has been created, create it if not
+	createTable()
+	unitTests()
 	fmt.Println("Big boy app 2.0")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
