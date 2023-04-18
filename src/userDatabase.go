@@ -100,11 +100,14 @@ func returnUserData(inputUsername string) string { //turn into return for both v
 		fmt.Println("Error: No rows")
 
 	case nil:
+
 		return Passwords + ":" + Favorites + ":" + Balance
 	default:
 		panic(err)
 	}
 	return "" //never be reached, panic already entered if error ocurred
+	
+
 }
 
 func updateFavorite(userData string) { //pass in new string with removed or added tickers

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//go run worklistFunctions.go main.go unitTests.go userDatabase.go
+//go run worklistFunctions.go searchServer.go unitTests.go userDatabase.go
 
 func unitTests() { //pass in example/testing data to various functions
 	fmt.Println("Sprint 1 and 2:\n")
@@ -45,8 +45,11 @@ func unitTests() { //pass in example/testing data to various functions
 
 	passwordHashing("123456")
 
-	testAddUser("leo023:0233454:aapl,aal:154.45")
-	testAddUser("bray657:123455:aapl:100")
+	testAddUser("leo023,0233454,aapl:aal,154.45")
+	testAddUser("bray657,123455,aapl,100")
+	testUpdateFavorite("bray657,aapl:amd")
+	testUpdateBalance("leo023,aapl:aal,50")
+
 
 }
 
@@ -128,8 +131,24 @@ func passwordHashing(password string) {
 
 func testAddUser(userData string) {
 	fmt.Println(userData)
-	addUser(userData)
+
+	addUser("leo023,0233454,aapl:aal,154.45")
 	a := returnUserData("leo023")
 	fmt.Println("Favorites, Balances:")
 	fmt.Println(a)
+}
+
+func testUpdateFavorite(userData string) {
+	updateFavorite(userData)
+	a := returnUserData("leo023")
+	fmt.Println("Favorites, Balances:")
+	fmt.Println(a)
+}
+
+func testUpdateBalance(userData string) {
+	updateFavorite(userData)
+	a := returnUserData("leo023")
+	fmt.Println("Favorites, Balances:")
+	fmt.Println(a)
+
 }
