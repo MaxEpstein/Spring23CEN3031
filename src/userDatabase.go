@@ -121,7 +121,7 @@ func removeUser(username string) {
 	}
 }
 
-func returnUserData(inputUsername string) (string, string) { //turn into return for both vars
+func returnUserData(inputUsername string) string { //turn into return for both vars
 	var Favorites string
 	var Balance string
 	query := "SELECT Favorites, Balance FROM userData WHERE Username = $1"
@@ -131,11 +131,10 @@ func returnUserData(inputUsername string) (string, string) { //turn into return 
 		fmt.Println("Error: No rows")
 		panic(err)
 	case nil:
-		return Favorites, Balance
+		return Favorites + ":" + Balance
 	default:
 		panic(err)
 	}
-	return "", "" //never be reached, panic already entered if error ocurred
 }
 
 func updateFavorite(userData string) { //pass in new string with removed or added tickers
