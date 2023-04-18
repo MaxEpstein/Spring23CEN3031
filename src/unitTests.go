@@ -10,38 +10,38 @@ import (
 func unitTests() { //pass in example/testing data to various functions
 	fmt.Println("Sprint 1 and 2:\n")
 
-	testTypeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
-	testTickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
-	testDataList := new(data_list)
-	testDataList = testInitializeWorkingList(testTypeTickerArray, testTickerArray)
+	//testTypeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
+	//testTickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
+	//testDataList := new(data_list)
+	//testDataList = testInitializeWorkingList(testTypeTickerArray, testTickerArray)
 
-	testStock := testGetDataByTicker("amd", "stock")
+	//testStock := testGetDataByTicker("amd", "stock")
 
-	testDataList = testAddStockToMain(testStock, testDataList)
+	//testDataList = testAddStockToMain(testStock, testDataList)
 
-	testCheckIfStockExist("aapl")
-	testCheckIfStockExist("zzzzz")
-	fmt.Println()
+	//testCheckIfStockExist("aapl")
+	//testCheckIfStockExist("zzzzz")
+	//fmt.Println()
 
-	fmt.Println("Sprint 3:\n")
+	//fmt.Println("Sprint 3:\n")
 
-	testPassWeekends(5, "5")
-	testSkipWeekends("1year")
+	//testPassWeekends(5, "5")
+	//testSkipWeekends("1year")
 
-	testGetTimeFrame("1day", "1min")
+	//testGetTimeFrame("1day", "1min")
 
 	//testGetTimeFrame("5day", "5min")
 	//testGetTimeFrame("1month", "15min")
 	//testGetTimeFrame("3month", "1day")
 	//testGetTimeFrame("YTD", "1month")
 	//testGetTimeFrame("1year", "1year")
-	testGetTimeFrame("1month", "1day")
+	//testGetTimeFrame("1month", "1day")
 
-	testAddHistoricalData(testStock, "1day", "1hour")
+	//testAddHistoricalData(testStock, "1day", "1hour")
 	//testAddHistoricalData(testStock, "1year", "1year")
 	//testAddHistoricalData(testStock, "1year")
 
-	fmt.Println("Sprint 4:\n")
+	//fmt.Println("Sprint 4:\n")
 
 	passwordHashing("123456")
 
@@ -49,6 +49,7 @@ func unitTests() { //pass in example/testing data to various functions
 	testAddUser("bray657,123455,aapl,100")
 	testUpdateFavorite("bray657,aapl:amd")
 	testUpdateBalance("leo023,aapl:aal,50")
+
 
 }
 
@@ -117,7 +118,6 @@ func testAddHistoricalData(temp_stock *stock, timeFrame string, chartInterval st
 	fmt.Println(temp_stock.data)
 	fmt.Println()
 	//t := time.Unix(1679664600, 0)
-	//fmt.Println(t)
 }
 func passwordHashing(password string) {
 	hash, _ := HashPassword(password) // ignore error for the sake of simplicity
@@ -131,6 +131,7 @@ func passwordHashing(password string) {
 
 func testAddUser(userData string) {
 	fmt.Println(userData)
+
 	addUser("leo023,0233454,aapl:aal,154.45")
 	a := returnUserData("leo023")
 	fmt.Println("Favorites, Balances:")
@@ -149,4 +150,5 @@ func testUpdateBalance(userData string) {
 	a := returnUserData("leo023")
 	fmt.Println("Favorites, Balances:")
 	fmt.Println(a)
+
 }

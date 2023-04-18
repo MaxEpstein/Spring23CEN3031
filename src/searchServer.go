@@ -31,9 +31,10 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	msg_cont[2], _ = HashPassword(msg_cont[2])
 	msg_cont[3], _ = HashPassword(msg_cont[3])
 	command := msg_cont[1]
-
 	username := msg_cont[2]
+	pw := msg_cont[3]
 	tikers := msg_cont[4]
+
 	balance := msg_cont[5]
 	switch command {
 	case "0": // AddUser
@@ -42,6 +43,12 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 		removeUser(username)
 	case "2": //returnUserData
 		msg := returnUserData(username)
+		temp := strings.Split(msg, ":")[0]
+		if pw != temp {
+			msg = "NIL:0"
+		} else {
+			msg = strings.Join(strings.Split(msg, ":")[:1], ":")
+		}
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			log.Println(err)
 			return
@@ -52,8 +59,6 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	case "4":
 		temp := username + "," + balance
 		updateBalance(temp)
-	case "5":
-
 	}
 
 }
