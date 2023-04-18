@@ -6,6 +6,7 @@ import {sendMsg} from "../server";
 import { useState } from "react";
 import { useRef } from "react";
 import {useEffect} from "react";
+import moment from "moment";
 
 
 import {
@@ -66,6 +67,7 @@ const data = [
 
 
 let pricesArr:string[] = [];
+var format = 'hh:mm:ss'
 
 
 const delay = async (ms: number) => new Promise(
@@ -76,12 +78,20 @@ export function Dash() {
   const dataFetchedRef = useRef(false);
 
    useEffect(() => {    
-    updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
-    const interval = setInterval(() => {
+    if (dataFetchedRef.current) return;
+    else
+    {
       updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
-    }, 10000);
+      dataFetchedRef.current = true;
+    }
+   
+    if (moment().isBetween(moment('9:30:00',format), moment('16:00:00', format))){
+        const interval = setInterval(() => {
+        updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
+      }, 10000);
 
-    return ()=> clearInterval(interval);
+      return ()=> clearInterval(interval);
+  }
       
   })
 
