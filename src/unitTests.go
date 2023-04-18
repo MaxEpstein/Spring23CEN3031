@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//go run worklistFunctions.go main.go unitTests.go
+//go run worklistFunctions.go main.go unitTests.go userDatabase.go
 
 func unitTests() { //pass in example/testing data to various functions
 	fmt.Println("Sprint 1 and 2:\n")
@@ -35,13 +35,19 @@ func unitTests() { //pass in example/testing data to various functions
 	//testGetTimeFrame("3month", "1day")
 	//testGetTimeFrame("YTD", "1month")
 	//testGetTimeFrame("1year", "1year")
-  testGetTimeFrame("1month", "1day")
+	testGetTimeFrame("1month", "1day")
 
-  
-  testAddHistoricalData(testStock, "1day", "1hour")
+	testAddHistoricalData(testStock, "1day", "1hour")
 	//testAddHistoricalData(testStock, "1year", "1year")
 	//testAddHistoricalData(testStock, "1year")
-	passwordHashing("helloWorld")
+
+	fmt.Println("Sprint 4:\n")
+
+	passwordHashing("123456")
+
+	//testAddUser("leo023,0233454,aapl:aal,154.45")
+	//testAddUser("bray657,123455,aapl,100")
+
 }
 
 func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
@@ -119,4 +125,12 @@ func passwordHashing(password string) {
 
 	match := CheckPasswordHash(password, hash)
 	fmt.Println("Match:   ", match)
+}
+
+func testAddUser(userData string) {
+	fmt.Println(userData)
+	addUser("leo023,0233454,aapl:aal,154.45")
+	a, b := returnUserData("leo023")
+	fmt.Println("Favorites, Balances:")
+	fmt.Println(a, b)
 }
