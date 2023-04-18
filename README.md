@@ -10,6 +10,11 @@
   - Brayden Bevels (Back End)
   - Leandro Sanchez (Back End)
   - Jeanette Foreman (Front End)
+
+## How to Run
+run npm install to get dependencies
+run go build searchServer.go and worklistFunctions.go files in src folder
+run npm start in stock_simulation folder
   
 > References: https://golangdocs.com/golang-finance-go-package-stock-quote-options-chart
 >             https://www.typescriptlang.org/docs/handbook/intro.html
