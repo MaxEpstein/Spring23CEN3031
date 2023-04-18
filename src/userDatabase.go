@@ -54,39 +54,6 @@ func createEncryptedInfo(username string, pw string) string {
 	return stringToAdd
 }
 
-// func userNew(username string, pw string) *user {
-// 	newUser := new(user)
-// 	newUser.username = username
-// 	newUser.password = pw
-// 	newUser.encryptedString = createEncryptedInfo(username, pw)
-// 	//tickers will be added else where
-// 	return newUser
-// }
-
-// func addTicker(currentUser *user, ticker string) {
-// 	currentUser.watchlistStocks = append(currentUser.watchlistStocks, ticker)
-// 	currentUser.encryptedString += ticker + ":"
-// }
-// func addMultTicker(currentUser *user, ticker []string) {
-// 	for _, element := range ticker {
-// 		addTicker(currentUser, element)
-// 	}
-// }
-
-// func initializeUserDatabase() {
-// 	userDatabase := make(map[string]user)
-// 	for k := range userDatabase {
-// 		delete(userDatabase, k)
-// 	}
-// }
-
-// func login(loginInfo string) {
-// 	loginInfo = strings.TrimSpace(loginInfo)            //get rid of leading and trailing spaces
-// 	loginInfoSeperated := strings.Split(loginInfo, ",") //replace with delimiter being used
-// 	username, password := loginInfoSeperated[0], loginInfoSeperated[1]
-// 	getAllUsers(username, password)
-// }
-
 func createTable() {
 	_, err := conn.Exec(context.Background(),
 		"CREATE TABLE IF NOT EXISTS userData (Username STRING NOT NULL UNIQUE PRIMARY KEY, Password STRING NOT NULL, Favorites STRING, Balance STRING)")
@@ -105,7 +72,7 @@ func deleteTable() {
 func addUser(userData string) {
 	//Username,Password,Favorites,Balance
 	// 	           Ticker:Ticker:Ticker...
-	userInfo := strings.Split(userData, ",")
+	userInfo := strings.Split(userData, ":")
 	add := "INSERT INTO userData (Username,Password,Favorites,Balance) VALUES ($1,$2,$3,$4)"
 	_, err := conn.Exec(context.Background(), add, userInfo[0], userInfo[1], userInfo[2], userInfo[3])
 	if err != nil {
@@ -121,7 +88,7 @@ func removeUser(username string) {
 	}
 }
 
-func returnUserData(inputUsername string) (string, string) { //turn into return for both vars
+func returnUserData(inputUsername string) string { //turn into return for both vars
 	var Favorites string
 	var Balance string
 	query := "SELECT Favorites, Balance FROM userData WHERE Username = $1"
@@ -131,11 +98,11 @@ func returnUserData(inputUsername string) (string, string) { //turn into return 
 		fmt.Println("Error: No rows")
 		panic(err)
 	case nil:
-		return Favorites, Balance
+		return Favorites + ":" + Balance
 	default:
 		panic(err)
 	}
-	return "", "" //never be reached, panic already entered if error ocurred
+	return "" //never be reached, panic already entered if error ocurred
 }
 
 func updateFavorite(userData string) { //pass in new string with removed or added tickers
