@@ -1,4 +1,4 @@
-# Sprint 3
+# Sprint 4
 
 ## Completed Issues
     - The Graph on the Search page is now customizable to specific time periods for the searched stock
@@ -8,11 +8,16 @@
     - Added Saved Stocks section to redirect back to search page
     - Add save to dashboard function frontend
     - Bug testing for search and dashboard
-    - Dashboard Saved stocks now shows the most recent prices
-    - Title for graphs after searching now shows the most recent price instead of open price
+    
+    Sprint 4
+      - Dashboard Saved stocks "watchlist" now shows the most recent prices
+      - Title for graphs after searching now shows the most recent price instead of open price
+      - User login check completed
+      - User can sign up with new username and password 
+      - User can edit and save stocks to their dashboard "watchlist"
 
 ## Incomplete Issues
-    - Saving user information to a database
+
 
 ## Backend Functions
     main.go
@@ -78,6 +83,8 @@
     Tests Login Functionality
     Tests Login redirect to dashboard
     Graph Change Tests
+    User Login
+    User Signup
 
 ## Backend Tests
     Sprint 1/2:
