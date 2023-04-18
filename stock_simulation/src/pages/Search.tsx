@@ -39,13 +39,6 @@ export function Search() {
   const [prevMessage, setPrevMessage] = useState('');
   const [prevTicker, setPrevTicker] = useState('');  
   const[forceRefresh, setForceRefresh] = useState('');
-  
-  const doNothing = () => {
-    console.log("i'm doing nothing");
-    return;
-  }
-
-
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
