@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
-	"github.com/jackc/pgx/v4"
 	"log"
 	"net/http"
 	"os"
@@ -74,7 +73,7 @@ func reader(conn *websocket.Conn) {
 		}
 		ticker := string(p)
 		//Expected message ticker:interval:time_interval
-		msg_cont := strings.Split(ticker, ":")
+		msg_cont := strings.Split(ticker, "NG:")
 		if msg_cont[0] == "" {
 			//Check if message should be for the user database
 			userFinder(conn, msg_cont)

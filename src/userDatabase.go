@@ -9,7 +9,6 @@ import (
 
 	_ "database/sql"
 
-	"github.com/jackc/pgx/v4"
 	_ "github.com/lib/pq"
 )
 
@@ -106,7 +105,6 @@ func returnUserData(inputUsername string) string { //turn into return for both v
 		panic(err)
 	}
 	return "" //never be reached, panic already entered if error ocurred
-	
 
 }
 

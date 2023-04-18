@@ -3,6 +3,7 @@ import "./pageStyles.css";
 import { login } from "./login";
 import { Dash } from "./Dash";
 import { Redirect, Route, useHistory } from "react-router-dom";
+import {sendMsg} from "../server";
 
 
 
@@ -88,17 +89,19 @@ export function Login() {
     
       dispatch({ type: "login" });
 
-      try {
-        await login({ username, password });
-        dispatch({ type: "success" });
-
-      } catch (error) {
-        dispatch({ type: "error" });
+      //await login({ username, password });
+      let attemptLogin = await sendMsg("LG:2:" + username + ":" + password + "::");
+      if(attemptLogin != "NIL:0") {
+        dispatch({type: "success"});
+      } else {
+        dispatch({type: "error"});
       }
+
     }
     else if (state.button == 2){
       console.log("signing up");
-
+      let signUp = await sendMsg("LG:0:" + username + ":" + password + "::");
+      dispatch({type: "success"});
     }
   };
 
@@ -140,7 +143,7 @@ export function Login() {
             <button onClick={() => (state.button = 1)} type="submit" className="submit" id="action" value="login" disabled={isLoading}>
               {isLoading ? "Logging in....." : "Log in"}
             </button>
-            <button className="submit" onClick={() => (state.button = 2)} disabled={isLoadingS}>
+            <button className="submit" onClick={() => (state.button = 2)} disabled={isLoadingS} >
               {isLoadingS ? "Signing up....." : "Sign up"}
             </button>
            
