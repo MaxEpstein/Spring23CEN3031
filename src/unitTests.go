@@ -115,7 +115,6 @@ func testAddHistoricalData(temp_stock *stock, timeFrame string, chartInterval st
 	fmt.Println(temp_stock.data)
 	fmt.Println()
 	//t := time.Unix(1679664600, 0)
-	//fmt.Println(t)
 }
 func passwordHashing(password string) {
 	hash, _ := HashPassword(password) // ignore error for the sake of simplicity
