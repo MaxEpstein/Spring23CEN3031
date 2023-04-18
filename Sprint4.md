@@ -15,17 +15,21 @@
       - User login check completed
       - User can sign up with new username and password 
       - User can edit and save stocks to their dashboard "watchlist"
+      - User database created using CockroachDB and PostgreSQL drivers, which stores usernames, passwords, and favorited stocks
 
 ## Incomplete Issues
 
 
 ## Backend Functions
-    main.go
+    searchServer.go
         Server for the search page on the front end. Using a
         websocket protocol, the server is waiting for 
         the front end search button to be pressed in order to
         search for the necessary ticker, set up all list, and then 
         return the current price.
+
+    unitTests.go
+        File for functions to test various operations in files below
 
     worklistFunctions.go
         This is the main file for collecting all the necessary data. 
@@ -76,6 +80,30 @@
         -func addTicker(currentUser *user, ticker string) 
             To add a ticker to the users list, and add it to the encryption
 
+    userDatabase.go
+        -func HashPassword(password string) (string, error)
+            With given user password, hash it for storage in database
+        -func CheckPasswordHash(password, hash string) bool
+            Compare entered password with stored hash string in database
+        -func createTable()
+            Make table to store user data using CockroachDB and PostgreSQL
+        -func deleteTable()
+            Delete table created above if required
+        -func addUser(userData string)
+            create new row in database user information 
+        -func removeUser(username string)
+            delete row in datebase based on passed in username
+        -func returnUserData(inputUsername string) string
+            return user information, ie favorited stocks
+        -func updateFavorite(userData string)
+            pass in new favorites string, update coloumn for favorites string
+        -func updateBalance(userData string)
+            pass in new balance string, update coloumn for favorites string
+
+        user     |     password | favorites     | balance
+        leo023   |    1247329   | aapl:aal:amd  |  120
+        bray678  |   2q1hbjk1   | amd           |  108
+        max980   |   hakdo981   | amd:aapl      |  70
 ## Frontend Tests
     Nav bar test using cypress framework:
         Tests navigation from home to search
@@ -97,6 +125,11 @@
         testPassWeekends
         testSkipWeekends
         testAddHistoricalData
+    Sprint 4:
+        testPasswordHashing
+        testAddUser
+        testUpdateFavorite
+        testUpdateBalance
 
 
 
