@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//go run worklistFunctions.go main.go unitTests.go
+//go run worklistFunctions.go searchServer.go unitTests.go
 
 func unitTests() { //pass in example/testing data to various functions
 	fmt.Println("Sprint 1 and 2:\n")
@@ -35,10 +35,9 @@ func unitTests() { //pass in example/testing data to various functions
 	//testGetTimeFrame("3month", "1day")
 	//testGetTimeFrame("YTD", "1month")
 	//testGetTimeFrame("1year", "1year")
-  testGetTimeFrame("1month", "1day")
+	testGetTimeFrame("1month", "1day")
 
-  
-  testAddHistoricalData(testStock, "1day", "1hour")
+	testAddHistoricalData(testStock, "1day", "1hour")
 	//testAddHistoricalData(testStock, "1year", "1year")
 	//testAddHistoricalData(testStock, "1year")
 	passwordHashing("helloWorld")

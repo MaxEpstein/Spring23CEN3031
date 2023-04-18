@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
-
-	"github.com/gorilla/websocket"
 ) //
 
 // We'll need to define an Upgrader
@@ -23,6 +22,10 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
+func userFinder(conn *websocket.Conn) {
+
+}
+
 func reader(conn *websocket.Conn) {
 	//This defined reader will listen for the messages in the front end.
 	for {
@@ -35,37 +38,43 @@ func reader(conn *websocket.Conn) {
 		ticker := string(p)
 		//Expected message ticker:interval:time_interval
 		msg_cont := strings.Split(ticker, ":")
-		//Check if the stock being submitted in is real, otherwise continue listening for an input
-		if checkIfStockExist(msg_cont[0]) != true {
-			if err := conn.WriteMessage(1, []byte(nil)); err != nil {
-				//Return nill to front end with not found.
-				log.Println(err)
-				return
-			}
-			continue
-		}
-		if msg_cont[1] == "now" {
-			msgCurrentPrice := strconv.FormatUint(uint64(getCurrentPrice(msg_cont[0])), 10)
-			if err := conn.WriteMessage(1, []byte(msgCurrentPrice)); err != nil {
-				log.Println(err)
-				return
-			}
+		if msg_cont[0] == "" {
+			//Check if message should be for the user database
+			userFinder(conn)
+
 		} else {
-			main_list := initializeWorkingList(nil, nil, "", "")
-			addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
-			//updateMainWorkingList(main_list) //take away later
-			temp_stock := main_list.data["stock"][msg_cont[0]]
-			msg := ""
-			for key, element := range temp_stock.data {
-				//Send all the data within the current map
-				msg = strconv.FormatUint(uint64(key), 10) + ":" + strconv.FormatUint(uint64(element), 10)
-				if err := conn.WriteMessage(1, []byte(msg)); err != nil {
+			//Check if the stock being submitted in is real, otherwise continue listening for an input
+			if checkIfStockExist(msg_cont[0]) != true {
+				if err := conn.WriteMessage(1, []byte(nil)); err != nil {
+					//Return nill to front end with not found.
 					log.Println(err)
 					return
 				}
+				continue
 			}
-		}
+			if msg_cont[1] == "now" {
+				msgCurrentPrice := strconv.FormatUint(uint64(getCurrentPrice(msg_cont[0])), 10)
+				if err := conn.WriteMessage(1, []byte(msgCurrentPrice)); err != nil {
+					log.Println(err)
+					return
+				}
+			} else {
+				main_list := initializeWorkingList(nil, nil, "", "")
+				addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
+				//updateMainWorkingList(main_list) //take away later
+				temp_stock := main_list.data["stock"][msg_cont[0]]
+				msg := ""
+				for key, element := range temp_stock.data {
+					//Send all the data within the current map
+					msg = strconv.FormatUint(uint64(key), 10) + ":" + strconv.FormatUint(uint64(element), 10)
+					if err := conn.WriteMessage(1, []byte(msg)); err != nil {
+						log.Println(err)
+						return
+					}
+				}
+			}
 
+		}
 	}
 }
 
@@ -94,11 +103,10 @@ func setupRoutes() {
 
 }
 
-/*
 func main() {
-	unitTests()
+	//unitTests()
 	fmt.Println("Big boy app 2.0")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
+
 }
-*/
