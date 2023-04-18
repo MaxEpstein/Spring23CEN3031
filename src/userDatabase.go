@@ -91,14 +91,16 @@ func removeUser(username string) {
 func returnUserData(inputUsername string) string { //turn into return for both vars
 	var Favorites string
 	var Balance string
-	query := "SELECT Favorites, Balance FROM userData WHERE Username = $1"
+	var Passwords string
+	query := "SELECT Password, Favorites, Balance FROM userData WHERE Username = $1"
 	row := conn.QueryRow(context.Background(), query, inputUsername)
-	switch err := row.Scan(&Favorites, &Balance); err {
+
+	switch err := row.Scan(&Passwords, &Favorites, &Balance); err {
 	case pgx.ErrNoRows:
 		fmt.Println("Error: No rows")
-		panic(err)
+
 	case nil:
-		return Favorites + ":" + Balance
+		return Passwords + ":" + Favorites + ":" + Balance
 	default:
 		panic(err)
 	}
