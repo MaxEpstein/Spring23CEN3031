@@ -1,4 +1,4 @@
-import "./Dash.tsx";
+//import "./Dash.tsx";
 import { ReactComponentElement, useState } from 'react';
 import {Redirect} from 'react-router-dom';
 
@@ -123,12 +123,21 @@ export function Search() {
       if (message != "" || id == "Search") {
         setPrevTicker(message);
         setPrevMessage(message.toUpperCase() + "- $" + newData[newData.length-1].price);
-      } else
-        setPrevMessage(prevTicker.toUpperCase() + "- $" + newData[newData.length-1].price);
-    }
+      } 
+      else{
+          incomming = await sendMsg(prevTicker + ":now");
+
+          let priceInt = parseInt(incomming[0].substr(incomming[0].indexOf(":") + 1));
+          priceInt = priceInt / 100.00;
+          
+          console.log("Message: " + prevTicker +" Price: " + priceInt);
+
+          setPrevMessage(prevTicker.toUpperCase() + "- $" + priceInt);
+        }
+      }
+
     console.log(newData);
     
-
     console.log("Min: " + priceMin + "  Max: " + priceMax);
   };
 

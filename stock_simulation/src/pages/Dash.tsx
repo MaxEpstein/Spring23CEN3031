@@ -76,15 +76,20 @@ export function Dash() {
   const dataFetchedRef = useRef(false);
 
    useEffect(() => {    
-    if (dataFetchedRef.current) return;
-    dataFetchedRef.current = true;
-    updateSaved(["AAPL", "MSFT", "GOOG"]);
+    updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
+    const interval = setInterval(() => {
+      updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
+    }, 10000);
+
+    return ()=> clearInterval(interval);
+      
   })
 
   const [prices, setPrices] = useState<string[]>([]);
 
   const updateSaved = async(id: string[]) => {
     await delay(0)
+    pricesArr = [];
     for (let tick of id){
         let incomming: string[] = [];
 
@@ -100,8 +105,6 @@ export function Dash() {
 
       }
       setPrices(pricesArr);
-
-
     };
 
     return(
@@ -147,11 +150,18 @@ export function Dash() {
                 </div>
 
           <div className = "savedStocks">
-            <h1>Saved Stocks</h1>
+            <div className="SavedHeader">
+              <h1>Saved Stocks</h1>
+              <button className="Graph_button">Edit</button>
+            </div>
 
             <p> <>AAPL: {prices[0]}</></p>
             <p> <>MSFT: {prices[1]}</></p>
             <p> <>GOOG: {prices[2]}</></p>
+            <p> <>AAL: {prices[3]}</></p>
+            <p> <>META: {prices[4]}</></p>
+            <p> <>TSLA: {prices[5]}</></p>
+            <p> <>RCL: {prices[6]}</></p>
 
 
           </div>
