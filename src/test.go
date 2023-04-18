@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
 	"strings"
 
 	_ "database/sql"
@@ -14,28 +13,30 @@ import (
 
 var conn *pgx.Conn
 
-func main() {
-	//Might want to use Database URL
-	dsn := "postgresql://leandro:bDoDK7mXiGb_dcN_1Mi5mg@cloned-giant-10351.7tt.cockroachlabs.cloud:26257/mindmywallet_userdata?sslmode=verify-full"
-	//dsn := "postgresql://braydenb176:pf07lHgqf9HEqtJ-qYLhZg@humble-pegasus-10349.7tt.cockroachlabs.cloud:26257/mindmywallet?sslmode=verify-full"
-	var err error
-	conn, err = pgx.Connect(context.Background(), dsn)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
-	}
-	defer conn.Close(context.Background())
+/*
+	func main() {
+		//Might want to use Database URL
+		dsn := "postgresql://leandro:bDoDK7mXiGb_dcN_1Mi5mg@cloned-giant-10351.7tt.cockroachlabs.cloud:26257/mindmywallet_userdata?sslmode=verify-full"
+		//dsn := "postgresql://braydenb176:pf07lHgqf9HEqtJ-qYLhZg@humble-pegasus-10349.7tt.cockroachlabs.cloud:26257/mindmywallet?sslmode=verify-full"
+		var err error
+		conn, err = pgx.Connect(context.Background(), dsn)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+			os.Exit(1)
+		}
+		defer conn.Close(context.Background())
 
-	deleteTable()
-	createTable()
-	addUser("leo023,0233454,aapl:aal,154.45")
-	returnUserData("leo023")
-	updateFavorite("leo023,aapl")
-	updateBalance("leo023,140")
-	returnUserData("leo023")
-	addUser("bry,123456,amd,100")
-	returnUserData("bry")
-}
+		deleteTable()
+		createTable()
+		addUser("leo023,0233454,aapl:aal,154.45")
+		returnUserData("leo023")
+		updateFavorite("leo023,aapl")
+		updateBalance("leo023,140")
+		returnUserData("leo023")
+		addUser("bry,123456,amd,100")
+		returnUserData("bry")
+	}
+*/
 func createTable() {
 	_, err := conn.Exec(context.Background(),
 		"CREATE TABLE IF NOT EXISTS userData (Username STRING NOT NULL UNIQUE PRIMARY KEY, Password STRING NOT NULL, Favorites STRING, Balance STRING)")
