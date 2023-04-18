@@ -36,3 +36,20 @@
   background-color: rgb(109 160 195 / 50%);
   font-weight: bold;
 }
+
+.SavedHeader{
+  width: 500px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+
+}
+.SavedHeader button{
+  margin-left: 50px;
+  margin-top: 2%;
+  width: 105px;
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+}
