@@ -34,7 +34,6 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	username := msg_cont[2]
 	pw := msg_cont[3]
 	tikers := msg_cont[4]
-
 	balance := msg_cont[5]
 	switch command {
 	case "0": // AddUser
@@ -75,7 +74,7 @@ func reader(conn *websocket.Conn) {
 		ticker := string(p)
 		//Expected message ticker:interval:time_interval
 		msg_cont := strings.Split(ticker, ":")
-		if msg_cont[0] == "" {
+		if msg_cont[0] == "NG" {
 			//Check if message should be for the user database
 			userFinder(conn, msg_cont)
 
