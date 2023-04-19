@@ -153,6 +153,7 @@ export function Search() {
       console.log("Invalid Ticker");
       setPrevMessage("Invalid Stock Ticker");
       userSearched = true;
+      validStock = false;
     } 
     else{
       if (message != "" || id == "Search") {
