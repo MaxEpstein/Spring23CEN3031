@@ -42,6 +42,7 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	switch command {
 	case "0": // AddUser
 		msg := addUser(strings.Join(msg_cont[2:], ":"))
+		looggedIn = true
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			log.Println(err)
 			return
