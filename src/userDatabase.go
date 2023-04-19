@@ -13,6 +13,7 @@ import (
 )
 
 var conn *pgx.Conn
+var currentUsername string
 
 // func main() {
 // 	//Might want to use Database URL
@@ -73,27 +74,27 @@ func addUser(userData string) string {
 	// 	           Ticker:Ticker:Ticker...
 	userInfo := strings.Split(userData, ":")
 	add := "INSERT INTO userData (Username,Password,Favorites,Balance) VALUES ($1,$2,$3,$4)"
-	_, err := conn.Exec(context.Background(), add, userInfo[0], userInfo[1], userInfo[2], userInfo[3])
+	_, err := conn.Exec(context.Background(), add, currentUsername, userInfo[1], userInfo[2], userInfo[3])
 	if err != nil {
 		return "NIL:2"
 	}
 	return "0"
 }
 
-func removeUser(username string) {
+func removeUser() {
 	remove := "DELETE FROM userData WHERE Username = $1"
-	_, err := conn.Exec(context.Background(), remove, username)
+	_, err := conn.Exec(context.Background(), remove, currentUsername)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func returnUserData(inputUsername string) string { //turn into return for both vars
+func returnUserData() string { //turn into return for both vars
 	var Favorites string
 	var Balance string
 	var Passwords string
 	query := "SELECT Password, Favorites, Balance FROM userData WHERE Username = $1"
-	row := conn.QueryRow(context.Background(), query, inputUsername)
+	row := conn.QueryRow(context.Background(), query, currentUsername)
 	switch err := row.Scan(&Passwords, &Favorites, &Balance); err {
 	case pgx.ErrNoRows:
 		return "NIL:1"
@@ -105,13 +106,58 @@ func returnUserData(inputUsername string) string { //turn into return for both v
 	return "" //never be reached, panic already entered if error ocurred
 }
 
-func updateFavorite(userData string) { //pass in new string with removed or added tickers
-	userInfo := strings.Split(userData, ":")
-	update := "UPDATE userData SET Username = $1, Favorites = $2"
-	_, err := conn.Exec(context.Background(), update, userInfo[0], userInfo[1])
-	if err != nil {
+func testHelperReturnUserData(username string) string { //turn into return for both vars
+	var Favorites string
+	var Balance string
+	var Passwords string
+	query := "SELECT Password, Favorites, Balance FROM userData WHERE Username = $1"
+	row := conn.QueryRow(context.Background(), query, currentUsername)
+	switch err := row.Scan(&Passwords, &Favorites, &Balance); err {
+	case pgx.ErrNoRows:
+		return "NIL:1"
+	case nil:
+		return Passwords + ":" + Favorites + ":" + Balance
+	default:
 		panic(err)
 	}
+}
+
+func returnFavorites() string {
+	var Favorites string
+	query := "SELECT Favorites FROM userData WHERE Username = $1"
+	row := conn.QueryRow(context.Background(), query, currentUsername)
+	switch err := row.Scan(&Favorites); err {
+	case pgx.ErrNoRows:
+		return "NIL:1"
+	case nil:
+		return Favorites
+	default:
+		panic(err)
+	}
+}
+
+func checkIfTickerAlreadyFavorited(newTicker string, currentList string) bool {
+	temp := strings.Split(currentList, ",")
+	for _, element := range temp {
+		if element == newTicker {
+			return false
+		}
+	}
+	return true
+}
+
+func updateFavorite(newTicker string) string { //pass in new string with removed or added tickers
+	currentFavoritesList := returnFavorites()
+	if checkIfTickerAlreadyFavorited(newTicker, currentFavoritesList) {
+		update := "UPDATE userData SET Favorites = $1"
+		newFavoritesList := currentFavoritesList + ":" + newTicker
+		_, err := conn.Exec(context.Background(), update, newFavoritesList)
+		if err != nil {
+			panic(err)
+		}
+		return "1"
+	}
+	return "0"
 }
 
 func updateBalance(userData string) { //pass in new string with removed or added tickers

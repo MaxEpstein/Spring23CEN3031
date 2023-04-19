@@ -44,14 +44,15 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	case "0": // AddUser
 		msg := addUser(strings.Join(msg_cont[2:], ":"))
 		looggedIn = true
+		currentUsername = username
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			log.Println(err)
 			return
 		}
 	case "1": //Remove user
-		removeUser(username)
+		removeUser()
 	case "2": //returnUserData
-		msg := returnUserData(username)
+		msg := returnUserData()
 		temp := strings.Split(msg, ":")[0]
 		if msg == "NIL:1" { //Wrong USername
 			//do nothing
@@ -61,14 +62,20 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 			msg = strings.Join(strings.Split(msg, ":")[1:], ":")
 			fmt.Println(msg)
 			looggedIn = true
+			currentUsername = username
 		}
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			log.Println(err)
 			return
-		} //
+		}
 	case "3": //Update favorite
-		temp := username + ":" + tikers
-		updateFavorite(temp)
+		if looggedIn {
+			tempFavoriteUpdate := updateFavorite(tikers)
+			if err := conn.WriteMessage(1, []byte(tempFavoriteUpdate)); err != nil {
+				log.Println(err)
+				return
+			}
+		}
 	case "4":
 		temp := username + ":" + balance
 		updateBalance(temp)
@@ -104,6 +111,14 @@ func reader(conn *websocket.Conn) {
 			}
 		} else if msg_cont[0] == "LOGO" {
 			looggedIn = false
+			currentUsername = ""
+		} else if msg_cont[0] == "RF" {
+			favoritesList := returnFavorites()
+			if err := conn.WriteMessage(1, []byte(favoritesList)); err != nil {
+				//Return nill to front end with not found.
+				log.Println(err)
+				return
+			}
 		} else {
 			//Check if the stock being submitted in is real, otherwise continue listening for an input
 
