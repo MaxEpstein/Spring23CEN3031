@@ -106,7 +106,7 @@ func returnUserData(inputUsername string) string { //turn into return for both v
 }
 
 func updateFavorite(userData string) { //pass in new string with removed or added tickers
-	userInfo := strings.Split(userData, ",")
+	userInfo := strings.Split(userData, ":")
 	update := "UPDATE userData SET Username = $1, Favorites = $2"
 	_, err := conn.Exec(context.Background(), update, userInfo[0], userInfo[1])
 	if err != nil {
@@ -115,7 +115,7 @@ func updateFavorite(userData string) { //pass in new string with removed or adde
 }
 
 func updateBalance(userData string) { //pass in new string with removed or added tickers
-	userInfo := strings.Split(userData, ",")
+	userInfo := strings.Split(userData, ":")
 	update := "UPDATE userData SET Username = $1, Balance = $2"
 	_, err := conn.Exec(context.Background(), update, userInfo[0], userInfo[1])
 	if err != nil {

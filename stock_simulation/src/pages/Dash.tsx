@@ -67,24 +67,44 @@ const data = [
 
 
 let pricesArr:string[] = [];
-var format = 'hh:mm:ss'
+var format = 'hh:mm:ss';
+let loggedIn: boolean = true;
 
 
 const delay = async (ms: number) => new Promise(
   resolve => setTimeout(resolve, ms)
 )
 
+
+
 export function Dash() {
   const dataFetchedRef = useRef(false);
 
+  const logged = async() => {
+    await delay(100);
+    let incomming = await sendMsg("LOG");
+    console.log("Incomming about log " + incomming);
+  
+    if (incomming == 1){
+      loggedIn = true;
+    }
+    else if (incomming == 0){ 
+      loggedIn = false;
+    }
+  
+    console.log("Loggedin: " + loggedIn);
+    if (loggedIn == true)
+      updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
+  }
+
    useEffect(() => {    
     if (dataFetchedRef.current) return;
+
     else
     {
-      updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
+      logged();
       dataFetchedRef.current = true;
     }
-   
     if (moment().isBetween(moment('9:30:00',format), moment('16:00:00', format))){
         const interval = setInterval(() => {
         updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
@@ -119,6 +139,10 @@ export function Dash() {
 
     return(
         <>
+        {!loggedIn ? (
+           <Redirect to={"/login"} ></Redirect>
+) : (
+  <>
         <div className="heading">
             <h1>Dashboard</h1>
           <div className="stats">
@@ -175,6 +199,9 @@ export function Dash() {
 
 
           </div>
+          </>
+          )
+            }
       </>
       
     );
