@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 
 	_ "database/sql"
 
+	"github.com/jackc/pgx/v4"
 	_ "github.com/lib/pq"
 )
 
@@ -93,19 +93,15 @@ func returnUserData(inputUsername string) string { //turn into return for both v
 	var Passwords string
 	query := "SELECT Password, Favorites, Balance FROM userData WHERE Username = $1"
 	row := conn.QueryRow(context.Background(), query, inputUsername)
-
 	switch err := row.Scan(&Passwords, &Favorites, &Balance); err {
 	case pgx.ErrNoRows:
-		fmt.Println("Error: No rows")
-
+		return "NIL:1"
 	case nil:
-
 		return Passwords + ":" + Favorites + ":" + Balance
 	default:
 		panic(err)
 	}
 	return "" //never be reached, panic already entered if error ocurred
-
 }
 
 func updateFavorite(userData string) { //pass in new string with removed or added tickers

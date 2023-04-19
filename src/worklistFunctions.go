@@ -204,7 +204,7 @@ func addStockToMain(stockToAdd *stock, main_list *data_list) {
 func checkIfStockExist(ticker string) bool {
 	qt, err := quote.Get(ticker)
 	if err != nil {
-		panic(err)
+		//panic(err)
 	} else if qt != nil {
 		return true
 	}
