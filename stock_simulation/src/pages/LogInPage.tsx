@@ -91,7 +91,7 @@ export function Login() {
 
       //await login({ username, password });
       let attemptLogin = await sendMsg("LG:2:" + username + ":" + password + "::");
-      if(attemptLogin != "NIL:0") {
+      if(attemptLogin != "NIL:0" && attemptLogin != "NIL:1") {
         dispatch({type: "success"});
       } else {
         dispatch({type: "error"});
