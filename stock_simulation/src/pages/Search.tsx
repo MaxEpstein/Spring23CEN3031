@@ -81,9 +81,10 @@ export function Search() {
       handleClick("Search");
     }
   };
-  const saveStock = (ticker: string) => {
+  const saveStock = async (ticker: string)  => {
     console.log("Saved Stock: " + ticker);
-    //sendMsg("LG:3:"+ticker);
+    let incomming = await sendMsg("LG:3:::"+ticker+":");
+    console.log("Successfully saved?: " + incomming);
   };
 
 
@@ -226,10 +227,10 @@ export function Search() {
                     <button className='Graph_button' key={"All"} onClick={(e) => handleClick("all:1month")} >All</button>
 
                     {!loggedIn ? (
-           <></>
-) : (
-                    <button className="submit" type="submit" onClick={(e) => saveStock(prevTicker)}> Save to Dashboard </button>
-)}
+                      <></>
+                    ) : (
+                      <button className="submit" type="submit" onClick={(e) => saveStock(prevTicker)}> Save to Dashboard </button>
+                    )}
                     </div>  
                   </div>
               }
