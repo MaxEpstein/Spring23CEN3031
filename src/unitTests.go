@@ -45,8 +45,8 @@ func unitTests() { //pass in example/testing data to various functions
 
 	//passwordHashing("123456")
 
-	testAddUser("leo023:0233454:aapl,aal:154.45")
-	testAddUser("bray657:123455:aapl:100")
+	// testAddUser("leo023:0233454:aapl,aal:154.45")
+	// testAddUser("bray657:123455:aapl:100")
 	//testUpdateFavorite("bray657,aapl:amd")
 	//testUpdateBalance("leo023,aapl:aal,50")
 
@@ -128,25 +128,25 @@ func passwordHashing(password string) {
 	fmt.Println("Match:   ", match)
 }
 
-func testAddUser(userData string) {
-	fmt.Println(userData)
-	addUser(userData)
-	a := returnUserData("leo023")
-	fmt.Println("Favorites, Balances:")
-	fmt.Println(a)
-}
+// func testAddUser(userData string) {
+// 	fmt.Println(userData)
+// 	addUser(userData)
+// 	a := returnUserData("leo023")
+// 	fmt.Println("Favorites, Balances:")
+// 	fmt.Println(a)
+// }
 
-func testUpdateFavorite(userData string) {
-	updateFavorite(userData)
-	a := returnUserData("leo023")
-	fmt.Println("Favorites, Balances:")
-	fmt.Println(a)
-}
+// func testUpdateFavorite(userData string) {
+// 	updateFavorite(userData)
+// 	a := returnUserData("leo023")
+// 	fmt.Println("Favorites, Balances:")
+// 	fmt.Println(a)
+// }
 
-func testUpdateBalance(userData string) {
-	updateFavorite(userData)
-	a := returnUserData("leo023")
-	fmt.Println("Favorites, Balances:")
-	fmt.Println(a)
+// func testUpdateBalance(userData string) {
+// 	updateFavorite(userData)
+// 	a := returnUserData("leo023")
+// 	fmt.Println("Favorites, Balances:")
+// 	fmt.Println(a)
 
-}
+// }

@@ -135,6 +135,7 @@ func returnFavorites() string {
 	default:
 		panic(err)
 	}
+	return "" //never be reached, panic already entered if error ocurred
 }
 
 func returnFavoritesPrice(favoritesList string) string {
@@ -160,7 +161,13 @@ func updateFavorite(newTicker string) string { //pass in new string with removed
 	currentFavoritesList := returnFavorites()
 	if checkIfTickerAlreadyFavorited(newTicker, currentFavoritesList) {
 		update := "UPDATE userData SET Favorites = $1"
-		newFavoritesList := currentFavoritesList + "," + newTicker
+		newFavoritesList := ""
+		if currentFavoritesList != "" {
+			newFavoritesList = currentFavoritesList + "," + newTicker
+		} else {
+			newFavoritesList = newTicker
+		}
+
 		_, err := conn.Exec(context.Background(), update, newFavoritesList)
 		if err != nil {
 			panic(err)
