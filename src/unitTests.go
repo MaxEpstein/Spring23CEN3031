@@ -43,13 +43,12 @@ func unitTests() { //pass in example/testing data to various functions
 
 	//fmt.Println("Sprint 4:\n")
 
-	passwordHashing("123456")
+	//passwordHashing("123456")
 
-	testAddUser("leo023,0233454,aapl:aal,154.45")
-	testAddUser("bray657,123455,aapl,100")
-	testUpdateFavorite("bray657,aapl:amd")
-	testUpdateBalance("leo023,aapl:aal,50")
-
+	testAddUser("leo023:0233454:aapl,aal:154.45")
+	testAddUser("bray657:123455:aapl:100")
+	//testUpdateFavorite("bray657,aapl:amd")
+	//testUpdateBalance("leo023,aapl:aal,50")
 
 }
 
@@ -131,8 +130,7 @@ func passwordHashing(password string) {
 
 func testAddUser(userData string) {
 	fmt.Println(userData)
-
-	addUser("leo023,0233454,aapl:aal,154.45")
+	addUser(userData)
 	a := returnUserData("leo023")
 	fmt.Println("Favorites, Balances:")
 	fmt.Println(a)
