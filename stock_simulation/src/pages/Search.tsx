@@ -38,6 +38,7 @@ export function Search() {
   const [message, setMessage] = useState('');
   const [prevMessage, setPrevMessage] = useState('');
   const [prevTicker, setPrevTicker] = useState('');  
+  const[forceRefresh, setForceRefresh] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
@@ -63,6 +64,7 @@ export function Search() {
     //console.log("Id: " + id);
     data.splice(0);
     newData.splice(0);
+    console.log("Cleared Data; " + newData);
     priceMax = 0;
     priceMin = 1000;
 
@@ -139,6 +141,7 @@ export function Search() {
     console.log(newData);
     
     console.log("Min: " + priceMin + "  Max: " + priceMax);
+    setForceRefresh(String(newData.length));
   };
 
   return (
@@ -154,42 +157,41 @@ export function Search() {
               {validStock === true &&
                   <div>
                     <div className="graph" style={{paddingTop: "2%", marginTop : "7%"}}>
-                      <LineChart
-                          width={500}
-                          height={300}
-                          data={newData}
-                          margin={{
-                            top: 5,
-                            right: 30,
-                            left: 20,
-                            bottom: 5
-                          }}
-                          key={`rc_${data.length}`}
-                      >
-                        <CartesianGrid strokeDasharray="3 3"/>
-                        <XAxis dataKey="date" allowDataOverflow={false}/>
-                        <YAxis type="number" domain={[Math.floor(priceMin * 0.98), Math.ceil((priceMax * 1.02))]}/>
-                        <Tooltip/>
-                        <Legend/>
-                        <Line
-                            type="monotone"
-                            dataKey="price"
-                            stroke="#8884d8"
-                            dot = {false}
-                            activeDot={{r: 4}}
-                            key={`rc_${data.length}`}
-                        />
-                      </LineChart>
+                        <LineChart
+                            width={500}
+                            height={300}
+                            data={newData}
+                            margin={{
+                              top: 5,
+                              right: 30,
+                              left: 20,
+                              bottom: 5
+                            }}
+                            key={newData.length}
+                        >
+                          <CartesianGrid strokeDasharray="3 3"/>
+                          <XAxis dataKey="date" allowDataOverflow={false}/>
+                          <YAxis type="number" domain={[Math.floor(priceMin * 0.98), Math.ceil((priceMax * 1.02))]}/>
+                          <Tooltip/>
+                          <Legend/>
+                          <Line
+                              type="monotone"
+                              dataKey="price"
+                              stroke="#8884d8"
+                              dot = {false}
+                              activeDot={{r: 4}}
+                              key={newData.length}
+                          />
+                        </LineChart>
 
-
-                    <button className='Graph_button' key={"1Day"} onClick={(e) => handleClick("1day:15min")}>1 Day</button>
-                    <button className='Graph_button' key={"5Day"} onClick={(e) => handleClick("5day:1hour")}>5 Day</button>
-                    <button className='Graph_button' key={"1Month"} onClick={(e) => handleClick("1month:1day")}>1 Month</button>
-                    <button className='Graph_button' key={"3Month"} onClick={(e) => handleClick("3month:1day")}>3 Month</button>
-                    <button className='Graph_button' key={"6Month"} onClick={(e) => handleClick("6month:1day")}>6 Month</button>
-                    <button className='Graph_button' key={"1Year"} onClick={(e) => handleClick("1year:1day")}>1 Year</button>
-                    <button className='Graph_button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")}>YTD</button>
-                    <button className='Graph_button' key={"All"} onClick={(e) => handleClick("all:1month")}>All</button>
+                    <button className='Graph_button' key={"1Day"} onClick={(e) => handleClick("1day:15min")} >1 Day</button>
+                    <button className='Graph_button' key={"5Day"} onClick={(e) => handleClick("5day:1hour")} >5 Day</button>
+                    <button className='Graph_button' key={"1Month"} onClick={(e) => handleClick("1month:1day")} >1 Month</button>
+                    <button className='Graph_button' key={"3Month"} onClick={(e) => handleClick("3month:1day")} >3 Month</button>
+                    <button className='Graph_button' key={"6Month"} onClick={(e) => handleClick("6month:1day")} >6 Month</button>
+                    <button className='Graph_button' key={"1Year"} onClick={(e) => handleClick("1year:1day")} >1 Year</button>
+                    <button className='Graph_button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")} >YTD</button>
+                    <button className='Graph_button' key={"All"} onClick={(e) => handleClick("all:1month")} >All</button>
 
 
                     <button className="submit" type="submit" onClick={(e) => saveStock(prevTicker)}> Save to Dashboard </button>

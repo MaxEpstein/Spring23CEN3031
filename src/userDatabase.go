@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -94,11 +93,9 @@ func returnUserData(inputUsername string) string { //turn into return for both v
 	var Passwords string
 	query := "SELECT Password, Favorites, Balance FROM userData WHERE Username = $1"
 	row := conn.QueryRow(context.Background(), query, inputUsername)
-
 	switch err := row.Scan(&Passwords, &Favorites, &Balance); err {
 	case pgx.ErrNoRows:
-		fmt.Println("Error: No rows")
-
+		return "NIL:1"
 	case nil:
 		return Passwords + ":" + Favorites + ":" + Balance
 	default:
