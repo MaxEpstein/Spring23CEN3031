@@ -68,15 +68,16 @@ func deleteTable() {
 	}
 }
 
-func addUser(userData string) {
+func addUser(userData string) string {
 	//Username,Password,Favorites,Balance
 	// 	           Ticker:Ticker:Ticker...
 	userInfo := strings.Split(userData, ":")
 	add := "INSERT INTO userData (Username,Password,Favorites,Balance) VALUES ($1,$2,$3,$4)"
 	_, err := conn.Exec(context.Background(), add, userInfo[0], userInfo[1], userInfo[2], userInfo[3])
 	if err != nil {
-		panic(err)
+		return "NIL:2"
 	}
+	return "0"
 }
 
 func removeUser(username string) {

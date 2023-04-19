@@ -12,6 +12,8 @@ import (
 	"strings"
 ) //
 
+var looggedIn bool
+
 // We'll need to define an Upgrader
 // this will require a Read and Write buffer size
 var upgrader = websocket.Upgrader{
@@ -39,7 +41,11 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	balance := msg_cont[5]
 	switch command {
 	case "0": // AddUser
-		addUser(strings.Join(msg_cont[2:], ":"))
+		msg := addUser(strings.Join(msg_cont[2:], ":"))
+		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
+			log.Println(err)
+			return
+		}
 	case "1": //Remove user
 		removeUser(username)
 	case "2": //returnUserData
@@ -83,6 +89,16 @@ func reader(conn *websocket.Conn) {
 			//Check if message should be for the user database
 			userFinder(conn, msg_cont)
 
+		} else if msg_cont[0] == "LOG" {
+			temp_msg := "0"
+			if looggedIn == true {
+				temp_msg = "1"
+			}
+			if err := conn.WriteMessage(1, []byte(temp_msg)); err != nil {
+				//Return nill to front end with not found.
+				log.Println(err)
+				return
+			}
 		} else {
 			//Check if the stock being submitted in is real, otherwise continue listening for an input
 
