@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"strconv"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -136,6 +137,15 @@ func returnFavorites() string {
 	}
 }
 
+func returnFavoritesPrice(favoritesList string) string {
+	temp := strings.Split(favoritesList, ",")
+	FavoritesPrices := ""
+	for _, element := range temp {
+		FavoritesPrices = FavoritesPrices + strconv.FormatUint(uint64(getCurrentPrice(element)), 10) + ","
+	}
+	return FavoritesPrices[0 : len(FavoritesPrices)-1]
+}
+
 func checkIfTickerAlreadyFavorited(newTicker string, currentList string) bool {
 	temp := strings.Split(currentList, ",")
 	for _, element := range temp {
@@ -150,7 +160,7 @@ func updateFavorite(newTicker string) string { //pass in new string with removed
 	currentFavoritesList := returnFavorites()
 	if checkIfTickerAlreadyFavorited(newTicker, currentFavoritesList) {
 		update := "UPDATE userData SET Favorites = $1"
-		newFavoritesList := currentFavoritesList + ":" + newTicker
+		newFavoritesList := currentFavoritesList + "," + newTicker
 		_, err := conn.Exec(context.Background(), update, newFavoritesList)
 		if err != nil {
 			panic(err)
