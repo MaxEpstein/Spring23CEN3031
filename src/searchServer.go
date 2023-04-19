@@ -57,17 +57,17 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 			msg = "NIL:0"
 		} else {
 			msg = strings.Join(strings.Split(msg, ":")[1:], ":")
-			fmt.Println(msg)
+			looggedIn = true
 		}
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			log.Println(err)
 			return
 		} //
 	case "3": //Update favorite
-		temp := username + "," + tikers
+		temp := username + ":" + tikers
 		updateFavorite(temp)
 	case "4":
-		temp := username + "," + balance
+		temp := username + ":" + balance
 		updateBalance(temp)
 	}
 
@@ -99,6 +99,8 @@ func reader(conn *websocket.Conn) {
 				log.Println(err)
 				return
 			}
+		} else if msg_cont[0] == "LOGO" {
+			looggedIn = false
 		} else {
 			//Check if the stock being submitted in is real, otherwise continue listening for an input
 
