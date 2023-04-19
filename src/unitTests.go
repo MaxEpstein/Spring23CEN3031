@@ -8,7 +8,7 @@ import (
 //go run worklistFunctions.go searchServer.go unitTests.go userDatabase.go
 
 func unitTests() { //pass in example/testing data to various functions
-	fmt.Println("Sprint 1 and 2:\n")
+	//fmt.Println("Sprint 1 and 2:\n")
 
 	//testTypeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
 	//testTickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
@@ -41,15 +41,16 @@ func unitTests() { //pass in example/testing data to various functions
 	//testAddHistoricalData(testStock, "1year", "1year")
 	//testAddHistoricalData(testStock, "1year")
 
-	//fmt.Println("Sprint 4:\n")
+	fmt.Println("Sprint 4:\n")
 
-	//passwordHashing("123456")
+	testPasswordHashing("123456")
 
-	testAddUser("leo023:0233454:aapl,aal:154.45")
-	testAddUser("bray657:123455:aapl:100")
-	//testUpdateFavorite("bray657,aapl:amd")
-	//testUpdateBalance("leo023,aapl:aal,50")
+	testAddUser("leo023,0233454,aapl:aal,154.45")
+	testAddUser("bray657,123455,aapl,100")
+	testUpdateFavorite("bray657,aapl:amd")
+	testUpdateBalance("leo023,aapl:aal,50")
 
+	fmt.Println("END OF UNIT TESTS\n\n")
 }
 
 func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
@@ -118,7 +119,7 @@ func testAddHistoricalData(temp_stock *stock, timeFrame string, chartInterval st
 	fmt.Println()
 	//t := time.Unix(1679664600, 0)
 }
-func passwordHashing(password string) {
+func testPasswordHashing(password string) {
 	hash, _ := HashPassword(password) // ignore error for the sake of simplicity
 
 	fmt.Println("Password:", password)
@@ -130,23 +131,23 @@ func passwordHashing(password string) {
 
 func testAddUser(userData string) {
 	fmt.Println(userData)
-	addUser(userData)
-	a := returnUserData("leo023")
+
+	addUser("leo023,0233454,aapl:aal,154.45")
+	a := testHelperReturnUserData("leo023")
 	fmt.Println("Favorites, Balances:")
 	fmt.Println(a)
 }
 
 func testUpdateFavorite(userData string) {
 	updateFavorite(userData)
-	a := returnUserData("leo023")
+	a := testHelperReturnUserData("leo023")
 	fmt.Println("Favorites, Balances:")
 	fmt.Println(a)
 }
 
 func testUpdateBalance(userData string) {
 	updateFavorite(userData)
-	a := returnUserData("leo023")
+	a := testHelperReturnUserData("leo023")
 	fmt.Println("Favorites, Balances:")
 	fmt.Println(a)
-
 }
