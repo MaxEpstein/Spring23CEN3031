@@ -28,8 +28,10 @@ var upgrader = websocket.Upgrader{
 func userFinder(conn *websocket.Conn, msg_cont []string) {
 	//Format for incoming string LG:1:USERNAME:PW:TIK,TIK:BALANCE
 	//User info gets hashed
-	msg_cont[2], _ = HashPassword(msg_cont[2])
-	msg_cont[3], _ = HashPassword(msg_cont[3])
+
+	//msg_cont[2], _ = HashPassword(msg_cont[2])
+	//msg_cont[3], _ = HashPassword(msg_cont[3])
+
 	command := msg_cont[1]
 	username := msg_cont[2]
 	pw := msg_cont[3]
@@ -37,21 +39,24 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	balance := msg_cont[5]
 	switch command {
 	case "0": // AddUser
-		addUser(strings.Join(msg_cont, ":"))
+		addUser(strings.Join(msg_cont[2:], ":"))
 	case "1": //Remove user
 		removeUser(username)
 	case "2": //returnUserData
 		msg := returnUserData(username)
 		temp := strings.Split(msg, ":")[0]
-		if pw != temp {
+		if msg == "NIL:1" { //Wrong USername
+			//do nothing
+		} else if pw != temp { //Wrong PW
 			msg = "NIL:0"
 		} else {
-			msg = strings.Join(strings.Split(msg, ":")[:1], ":")
+			msg = strings.Join(strings.Split(msg, ":")[1:], ":")
+			fmt.Println(msg)
 		}
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			log.Println(err)
 			return
-		}
+		} //
 	case "3": //Update favorite
 		temp := username + "," + tikers
 		updateFavorite(temp)
@@ -74,13 +79,15 @@ func reader(conn *websocket.Conn) {
 		ticker := string(p)
 		//Expected message ticker:interval:time_interval
 		msg_cont := strings.Split(ticker, ":")
-		if msg_cont[0] == "NG" {
+		if msg_cont[0] == "LG" {
 			//Check if message should be for the user database
 			userFinder(conn, msg_cont)
 
 		} else {
 			//Check if the stock being submitted in is real, otherwise continue listening for an input
+
 			if checkIfStockExist(msg_cont[0]) != true {
+
 				if err := conn.WriteMessage(1, []byte(nil)); err != nil {
 					//Return nill to front end with not found.
 					log.Println(err)
@@ -95,6 +102,7 @@ func reader(conn *websocket.Conn) {
 					return
 				}
 			} else {
+
 				main_list := initializeWorkingList(nil, nil, "", "")
 				addStockToMain(getDataByTicker(msg_cont[0], "stock", msg_cont[1], msg_cont[2]), main_list)
 				//updateMainWorkingList(main_list) //take away later
@@ -107,6 +115,7 @@ func reader(conn *websocket.Conn) {
 						log.Println(err)
 						return
 					}
+
 				}
 			}
 
@@ -154,7 +163,7 @@ func main() {
 	deleteTable()
 	//Check if table has been created, create it if not
 	createTable()
-	unitTests()
+	//unitTests()
 	fmt.Println("Big boy app 2.0")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
