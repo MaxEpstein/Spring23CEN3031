@@ -114,7 +114,8 @@ func reader(conn *websocket.Conn) {
 			currentUsername = ""
 		} else if msg_cont[0] == "RF" {
 			favoritesList := returnFavorites()
-			if err := conn.WriteMessage(1, []byte(favoritesList)); err != nil {
+			favoritesPriceList := returnFavoritesPrice(favoritesList)
+			if err := conn.WriteMessage(1, []byte(favoritesList+";"+favoritesPriceList)); err != nil {
 				//Return nill to front end with not found.
 				log.Println(err)
 				return
