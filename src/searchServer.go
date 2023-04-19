@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gorilla/websocket"
-	"github.com/jackc/pgx/v4"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/websocket"
+	"github.com/jackc/pgx/v4"
 ) //
 
 var looggedIn bool
@@ -42,6 +43,7 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	switch command {
 	case "0": // AddUser
 		msg := addUser(strings.Join(msg_cont[2:], ":"))
+		looggedIn = true
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			log.Println(err)
 			return
@@ -57,6 +59,7 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 			msg = "NIL:0"
 		} else {
 			msg = strings.Join(strings.Split(msg, ":")[1:], ":")
+			fmt.Println(msg)
 			looggedIn = true
 		}
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {

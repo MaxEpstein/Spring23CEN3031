@@ -1,10 +1,10 @@
 //import "./Dash.tsx";
 import { ReactComponentElement, useState } from 'react';
 import {Redirect} from 'react-router-dom';
-
+import { useRef } from 'react';
 import { sendMsg } from '../server';
 import {Login} from "./LogInPage"
-
+import { useEffect } from 'react';
 import "./pageStyles.css";
 import React from "react";
 import {
@@ -25,6 +25,7 @@ let newData = [{date: "99/99/9999 15:17",price:  999.99}]
 let priceMin = 1000;
 let priceMax= 0;
 let dashTicker: string;
+let loggedIn = false;
 
 export function savedSearch(name: string) {
   window.location.replace('/search');
@@ -33,12 +34,43 @@ export function savedSearch(name: string) {
   userSearched = true;
 }
 
+const delay = async (ms: number) => new Promise(
+  resolve => setTimeout(resolve, ms)
+)
+
 export function Search() {
   console.log("User Redirect? " + userSearched + "  dashTicker: " +dashTicker);
   const [message, setMessage] = useState('');
   const [prevMessage, setPrevMessage] = useState('');
   const [prevTicker, setPrevTicker] = useState('');  
   const[forceRefresh, setForceRefresh] = useState('');
+  const dataFetchedRef = useRef(false);
+
+  const logged = async() => {
+    await delay(100);
+    let incomming = await sendMsg("LOG");
+    console.log("Incomming about log " + incomming);
+  
+    if (incomming == 1){
+      loggedIn = true;
+    }
+    else if (incomming == 0){ 
+      loggedIn = false;
+    }
+  
+    console.log("Loggedin: " + loggedIn);
+  }
+
+  useEffect(() => {    
+    if (dataFetchedRef.current) return;
+
+    else
+    {
+      logged();
+      dataFetchedRef.current = true;
+    }
+}) ;
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
@@ -51,7 +83,7 @@ export function Search() {
   };
   const saveStock = (ticker: string) => {
     console.log("Saved Stock: " + ticker);
-
+    //sendMsg("LG:3:"+ticker);
   };
 
 
@@ -193,8 +225,11 @@ export function Search() {
                     <button className='Graph_button' key={"YTD"} onClick={(e) => handleClick("YTD:1day")} >YTD</button>
                     <button className='Graph_button' key={"All"} onClick={(e) => handleClick("all:1month")} >All</button>
 
-
+                    {!loggedIn ? (
+           <></>
+) : (
                     <button className="submit" type="submit" onClick={(e) => saveStock(prevTicker)}> Save to Dashboard </button>
+)}
                     </div>  
                   </div>
               }
