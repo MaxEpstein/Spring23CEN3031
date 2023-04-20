@@ -52,6 +52,7 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	case "1": //Remove user
 		removeUser()
 	case "2": //returnUserData
+		currentUsername = username
 		msg := returnUserData()
 		temp := strings.Split(msg, ":")[0]
 		if msg == "NIL:1" { //Wrong USername
@@ -212,7 +213,7 @@ func main() {
 	deleteTable()
 	//Check if table has been created, create it if not
 	createTable()
-	//unitTests()
+	unitTests()
 	fmt.Println("Big boy app 2.0")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
