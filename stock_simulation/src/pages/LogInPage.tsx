@@ -18,7 +18,7 @@ interface LoginState {
 }
 
 type LoginAction =
-  | { type: "login" | "success" | "error" | "logout" }
+  | { type: "login" | "success" | "error" | "logout" | "signUpError" }
   | { type: "field"; fieldName: string; payload: string };
 
 const loginReducer = (state: LoginState, action: LoginAction): LoginState => {
@@ -47,6 +47,18 @@ const loginReducer = (state: LoginState, action: LoginAction): LoginState => {
         username: "",
         password: "",
         error: "Incorrect username or password!",
+        button: 1,
+        isLoadingS: false
+      };
+    }
+    case "signUpError": {
+      return{
+        ...state,
+        isLoading: false,
+        isLoggedIn: false,
+        username: "",
+        password: "",
+        error: "Username taken. Choose another!",
         button: 1,
         isLoadingS: false
       };
@@ -101,7 +113,11 @@ export function Login() {
     else if (state.button == 2){
       console.log("signing up");
       let signUp = await sendMsg("LG:0:" + username + ":" + password + "::");
-      dispatch({type: "success"});
+      if(signUp != "NIL:2") {
+        dispatch({type: "success"});
+      } else {
+        dispatch({type: "signUpError"});
+      }
     }
   };
 
