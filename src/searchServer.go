@@ -42,6 +42,7 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 	balance := msg_cont[5]
 	switch command {
 	case "0": // AddUser
+		currentUsername = username
 		msg := addUser(strings.Join(msg_cont[2:], ":"))
 		looggedIn = true
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
@@ -49,9 +50,9 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 			return
 		}
 	case "1": //Remove user
-		removeUser(username)
+		removeUser()
 	case "2": //returnUserData
-		msg := returnUserData(username)
+		msg := returnUserData()
 		temp := strings.Split(msg, ":")[0]
 		if msg == "NIL:1" { //Wrong USername
 			//do nothing
@@ -59,19 +60,38 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 			msg = "NIL:0"
 		} else {
 			msg = strings.Join(strings.Split(msg, ":")[1:], ":")
-			fmt.Println(msg)
+			//fmt.Println(msg)
 			looggedIn = true
+			//currentUsername = username
 		}
 		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			log.Println(err)
 			return
-		} //
+		}
 	case "3": //Update favorite
-		temp := username + ":" + tikers
-		updateFavorite(temp)
+		if looggedIn {
+			tempFavoriteUpdate := updateFavorite(tikers)
+			if err := conn.WriteMessage(1, []byte(tempFavoriteUpdate)); err != nil {
+				log.Println(err)
+				return
+			}
+		}
 	case "4":
 		temp := username + ":" + balance
 		updateBalance(temp)
+
+	case "5":
+		favoritesList := returnUserData()
+		favoritesList = strings.Split(favoritesList, ":")[1]
+
+		//favoritesPriceList := returnFavoritesPrice(favoritesList)
+
+		fmt.Println(favoritesList)
+		if err := conn.WriteMessage(1, []byte(favoritesList+";"+"5")); err != nil {
+			//Return nill to front end with not found.
+			log.Println(err)
+			return
+		}
 	}
 
 }
@@ -104,11 +124,19 @@ func reader(conn *websocket.Conn) {
 			}
 		} else if msg_cont[0] == "LOGO" {
 			looggedIn = false
+			currentUsername = ""
+		} else if msg_cont[0] == "RF" {
+			favoritesList := returnFavorites()
+			//favoritesPriceList := returnFavoritesPrice(favoritesList)
+			if err := conn.WriteMessage(1, []byte(favoritesList+";")); err != nil {
+				//Return nill to front end with not found.
+				log.Println(err)
+				return
+			}
 		} else {
 			//Check if the stock being submitted in is real, otherwise continue listening for an input
 
 			if checkIfStockExist(msg_cont[0]) != true {
-
 				if err := conn.WriteMessage(1, []byte(nil)); err != nil {
 					//Return nill to front end with not found.
 					log.Println(err)
