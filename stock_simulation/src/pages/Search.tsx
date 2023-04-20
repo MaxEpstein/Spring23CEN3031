@@ -26,6 +26,7 @@ let priceMin = 1000;
 let priceMax= 0;
 let dashTicker: string;
 let loggedIn = false;
+let checked = false;
 
 export function savedSearch(name: string) {
   window.location.replace('/search');
@@ -51,7 +52,7 @@ export function Search() {
     let incomming = await sendMsg("LOG");
     console.log("Incomming about log " + incomming);
   
-    if (incomming == 1){
+    if (incomming == "1"){
       loggedIn = true;
     }
     else if (incomming == 0){ 
@@ -66,7 +67,7 @@ export function Search() {
 
     else
     {
-      logged();
+      //logged();
       dataFetchedRef.current = true;
     }
 }) ;
@@ -74,6 +75,13 @@ export function Search() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
+    if (checked == false){
+      logged();
+      checked = true;
+    }
+    else{
+      return;
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -95,6 +103,7 @@ export function Search() {
   const handleClick = async (id: string) => {
 
     //console.log("Id: " + id);
+    //logged();
     data.splice(0);
     newData.splice(0);
     console.log("Cleared Data; " + newData);
