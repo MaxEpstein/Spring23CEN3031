@@ -110,9 +110,12 @@
         Tests navigation from search to home
     Tests Login Functionality
     Tests Login redirect to dashboard
+    Tests adding a stock to saved section
     Graph Change Tests
     User Login
     User Signup
+    Error Messages added for incorrect username/password and a 
+    taken user name while signing up
 
 ## Backend Tests
     Sprint 1/2:
