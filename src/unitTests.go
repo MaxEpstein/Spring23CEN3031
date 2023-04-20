@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -43,14 +44,20 @@ func unitTests() { //pass in example/testing data to various functions
 
 	fmt.Println("Sprint 4:\n")
 
-	testPasswordHashing("123456")
+	passwordHashing("123456")
 
-	testAddUser("leo023,0233454,aapl:aal,154.45")
-	testAddUser("bray657,123455,aapl,100")
-	testUpdateFavorite("bray657,aapl:amd")
-	testUpdateBalance("leo023,aapl:aal,50")
+	fmt.Println("Add users:\n")
+	testAddUser("leo023:0233454:aapl,aal:154.45", "leo023")
+	testAddUser("bray657:123455:aapl:100", "bray657")
+	testAddUser("jean904:hihi::87", "jean904")
 
-	fmt.Println("END OF UNIT TESTS\n\n")
+	fmt.Println("Update Favorites:")
+	currentUsername = "jean904"
+	testUpdateFavorite("amd", "jean904")
+	testUpdateFavorite("aapl", "jean904")
+	testUpdateFavorite("aapl", "jean904")
+
+	testReturnFavorites("jean904")
 }
 
 func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
@@ -119,7 +126,7 @@ func testAddHistoricalData(temp_stock *stock, timeFrame string, chartInterval st
 	fmt.Println()
 	//t := time.Unix(1679664600, 0)
 }
-func testPasswordHashing(password string) {
+func passwordHashing(password string) {
 	hash, _ := HashPassword(password) // ignore error for the sake of simplicity
 
 	fmt.Println("Password:", password)
@@ -127,27 +134,30 @@ func testPasswordHashing(password string) {
 
 	match := CheckPasswordHash(password, hash)
 	fmt.Println("Match:   ", match)
+	fmt.Println("")
 }
 
-func testAddUser(userData string) {
-	fmt.Println(userData)
-
-	addUser("leo023,0233454,aapl:aal,154.45")
-	a := testHelperReturnUserData("leo023")
+func testAddUser(userData string, username string) {
+	fmt.Println("Input string - " + userData)
+	currentUsername = username
+	addUser(userData)
+	a := returnUserData()
 	fmt.Println("Favorites, Balances:")
-	fmt.Println(a)
+	fmt.Println(strings.Join(strings.Split(a, ":")[1:], ":") + "\n")
 }
 
-func testUpdateFavorite(userData string) {
-	updateFavorite(userData)
-	a := testHelperReturnUserData("leo023")
+func testUpdateFavorite(newTicker string, username string) {
+	fmt.Println(newTicker)
+	currentUsername = username
+	updateFavorite(newTicker)
+	a := returnUserData()
 	fmt.Println("Favorites, Balances:")
-	fmt.Println(a)
+	fmt.Println(strings.Join(strings.Split(a, ":")[1:], ":") + "\n")
+
 }
 
-func testUpdateBalance(userData string) {
-	updateFavorite(userData)
-	a := testHelperReturnUserData("leo023")
-	fmt.Println("Favorites, Balances:")
-	fmt.Println(a)
+func testReturnFavorites(username string) {
+	currentUsername = username
+	fmt.Println("Favorites of", currentUsername)
+	fmt.Println(returnFavorites())
 }

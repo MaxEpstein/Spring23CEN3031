@@ -48,6 +48,11 @@ func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
+
+func login(username_password string) {
+
+}
+
 func createEncryptedInfo(username string, pw string) string {
 	usernameHash, _ := HashPassword(username)
 	pwHash, _ := HashPassword(pw)
@@ -98,24 +103,7 @@ func returnUserData() string { //turn into return for both vars
 	row := conn.QueryRow(context.Background(), query, currentUsername)
 	switch err := row.Scan(&Passwords, &Favorites, &Balance); err {
 	case pgx.ErrNoRows:
-		return "NIL:1"
-	case nil:
-		return Passwords + ":" + Favorites + ":" + Balance
-	default:
-		panic(err)
-	}
-	return "" //never be reached, panic already entered if error ocurred
-}
-
-func testHelperReturnUserData(username string) string { //turn into return for both vars
-	var Favorites string
-	var Balance string
-	var Passwords string
-	query := "SELECT Password, Favorites, Balance FROM userData WHERE Username = $1"
-	row := conn.QueryRow(context.Background(), query, currentUsername)
-	switch err := row.Scan(&Passwords, &Favorites, &Balance); err {
-	case pgx.ErrNoRows:
-		return "NIL:1"
+		return ""
 	case nil:
 		return Passwords + ":" + Favorites + ":" + Balance
 	default:
@@ -129,7 +117,7 @@ func returnFavorites() string {
 	row := conn.QueryRow(context.Background(), query, currentUsername)
 	switch err := row.Scan(&Favorites); err {
 	case pgx.ErrNoRows:
-		return "NIL:1"
+		return ""
 	case nil:
 		return Favorites
 	default:
@@ -150,15 +138,23 @@ func checkIfTickerAlreadyFavorited(newTicker string, currentList string) bool {
 	temp := strings.Split(currentList, ",")
 	for _, element := range temp {
 		if element == newTicker {
-			return false
+			return true
 		}
 	}
-	return true
+	return false
 }
 
 func updateFavorite(newTicker string) string { //pass in new string with removed or added tickers
 	currentFavoritesList := returnFavorites()
-	if checkIfTickerAlreadyFavorited(newTicker, currentFavoritesList) {
+	if currentFavoritesList == "" {
+		update := "UPDATE userData SET Favorites = $1"
+		newFavoritesList := newTicker
+		_, err := conn.Exec(context.Background(), update, newFavoritesList)
+		if err != nil {
+			panic(err)
+		}
+		return "1"
+	} else if !(checkIfTickerAlreadyFavorited(newTicker, currentFavoritesList)) {
 		update := "UPDATE userData SET Favorites = $1"
 		newFavoritesList := currentFavoritesList + "," + newTicker
 		_, err := conn.Exec(context.Background(), update, newFavoritesList)
@@ -166,8 +162,9 @@ func updateFavorite(newTicker string) string { //pass in new string with removed
 			panic(err)
 		}
 		return "1"
+	} else {
+		return "0"
 	}
-	return "0"
 }
 
 func updateBalance(userData string) { //pass in new string with removed or added tickers
