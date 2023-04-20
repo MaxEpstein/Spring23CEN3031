@@ -82,7 +82,7 @@ export function Dash() {
   const dataFetchedRef = useRef(false);
 
   const logged = async() => {
-    await delay(100);
+    await delay(3000);
     let incomming = await sendMsg("LOG");
     console.log("Incomming about log " + incomming);
   
