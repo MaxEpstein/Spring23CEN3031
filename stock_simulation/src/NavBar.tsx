@@ -41,6 +41,7 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
         }
 
         console.log("Loggedin: " + loggedIn);
+        setForceRefresh("10");
     }
 
     useEffect(() => {
@@ -50,7 +51,6 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
         {
             logged();
             dataFetchedRef.current = true;
-            setForceRefresh("10");
         }
     }) ;
 
@@ -83,11 +83,15 @@ const Links: React.FC<{links: Link[]}> = ({ links }) => {
 
           <div className={'link'}>
               {loggedIn === true &&
-                  <a href={"/dashboard"} style={{textDecoration: "none", color: "midnightblue"}}>
-                        {"Dashboard"}
-                  </a> &&
-                  <a href={"/Login"} style={{textDecoration: "none", color: "midnightblue"}} onClick={logOut}>
+                  <a className='link' href={"/Login"}
+                     style={{textDecoration: "none", color: "midnightblue", marginRight: ".5"}} onClick={logOut}>
                       {"Log Out"}
+                  </a>
+              }
+
+              {loggedIn === true &&
+                  <a className = 'link' href={"/dashboard"} style={{textDecoration: "none", color: "midnightblue", marginRight: ".5"}}>
+                      {"  Dashboard"}
                   </a>
               }
               {loggedIn === false &&
