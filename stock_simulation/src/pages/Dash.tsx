@@ -67,6 +67,7 @@ const data = [
 
 
 let pricesArr:string[] = [];
+let favorites:string[] = [];
 var format = 'hh:mm:ss';
 let loggedIn: boolean = true;
 
@@ -93,8 +94,39 @@ export function Dash() {
     }
   
     console.log("Loggedin: " + loggedIn);
-    if (loggedIn == true)
-      updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
+    if (loggedIn == true){
+      let added = await sendMsg("LG:3:::MSFT:");
+      await sendMsg("LG:3:::AAPL:");
+      await sendMsg("LG:3:::GOOG:");
+      await sendMsg("LG:3:::TLSA:");
+      console.log("Successfully added? " + added);
+
+      let incomming: string = "";
+      incomming = String(await sendMsg("LG:5::::"));
+      console.log("Incomming favorites " + incomming);
+
+      if (incomming != "NIL:1;"){
+        let splitMsg:string[] = incomming.split(";")
+
+        if (splitMsg[0].includes(',')){
+          console.log("Msg1: " + splitMsg[0] + " Msg2 " + splitMsg[1]);
+          favorites = splitMsg[0].split(',');
+          pricesArr = splitMsg[1].split(',');
+        }
+        else{
+          favorites[0] = splitMsg[0];
+          pricesArr[0] = splitMsg[1];
+
+        }
+          
+          
+        updateSaved(favorites);
+      }
+      else{
+        console.log("No Favorites");
+      }
+    }
+      
   }
 
    useEffect(() => {    
@@ -107,7 +139,7 @@ export function Dash() {
     }
     if (moment().isBetween(moment('9:30:00',format), moment('16:00:00', format))){
         const interval = setInterval(() => {
-        updateSaved(["AAPL", "MSFT", "GOOG", "AAL", "META", "TSLA", "RCL"]);
+        //updateSaved(favorites);
       }, 10000);
 
       return ()=> clearInterval(interval);
@@ -120,6 +152,7 @@ export function Dash() {
   const updateSaved = async(id: string[]) => {
     await delay(0)
     pricesArr = [];
+
     for (let tick of id){
         let incomming: string[] = [];
 
@@ -149,7 +182,7 @@ export function Dash() {
             <ul>
               <li>Cash:</li>
               <li>YTD:</li>
-              <li># of Stocks:</li>
+              <li># of Stocks: {favorites.length}</li>
             </ul>
           </div>
           
@@ -189,13 +222,11 @@ export function Dash() {
               <button className="Graph_button">Edit</button>
             </div>
 
-            <p> <>AAPL: {prices[0]}</></p>
-            <p> <>MSFT: {prices[1]}</></p>
-            <p> <>GOOG: {prices[2]}</></p>
-            <p> <>AAL: {prices[3]}</></p>
-            <p> <>META: {prices[4]}</></p>
-            <p> <>TSLA: {prices[5]}</></p>
-            <p> <>RCL: {prices[6]}</></p>
+            <ul>
+                {favorites.map((value, index) => {
+                  return <li key={index}>{value}: {pricesArr[index]}</li>
+                })}
+            </ul>
 
 
           </div>
