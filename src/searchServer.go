@@ -85,10 +85,10 @@ func userFinder(conn *websocket.Conn, msg_cont []string) {
 		favoritesList := returnUserData()
 		favoritesList = strings.Split(favoritesList, ":")[1]
 
-		//favoritesPriceList := returnFavoritesPrice(favoritesList)
+		favoritesPriceList := returnFavoritesPrice(favoritesList)
 
 		fmt.Println(favoritesList)
-		if err := conn.WriteMessage(1, []byte(favoritesList+";"+"5")); err != nil {
+		if err := conn.WriteMessage(1, []byte(favoritesList+";"+favoritesPriceList)); err != nil {
 			//Return nill to front end with not found.
 			log.Println(err)
 			return
@@ -128,8 +128,8 @@ func reader(conn *websocket.Conn) {
 			currentUsername = ""
 		} else if msg_cont[0] == "RF" {
 			favoritesList := returnFavorites()
-			//favoritesPriceList := returnFavoritesPrice(favoritesList)
-			if err := conn.WriteMessage(1, []byte(favoritesList+";")); err != nil {
+			favoritesPriceList := returnFavoritesPrice(favoritesList)
+			if err := conn.WriteMessage(1, []byte(favoritesList+";"+favoritesPriceList)); err != nil {
 				//Return nill to front end with not found.
 				log.Println(err)
 				return
