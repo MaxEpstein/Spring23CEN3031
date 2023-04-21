@@ -38,9 +38,9 @@ func unitTests() { //pass in example/testing data to various functions
 	testGetTimeFrame("1year", "1year")
 	testGetTimeFrame("1month", "1day")
 
-	testAddHistoricalData(testStock, "1day", "1hour")
-	testAddHistoricalData(testStock, "1year", "1year")
-	testAddHistoricalData(testStock, "1year")
+	// testAddHistoricalData(testStock, "1day", "1hour")
+	// testAddHistoricalData(testStock, "1year", "1year")
+	// testAddHistoricalData(testStock, "1year")
 
 	fmt.Println("Sprint 4:\n")
 

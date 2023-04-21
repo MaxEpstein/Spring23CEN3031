@@ -95,15 +95,10 @@ export function Dash() {
   
     console.log("Loggedin: " + loggedIn);
     if (loggedIn == true){
-      let added = await sendMsg("LG:3:::MSFT:");
-      await sendMsg("LG:3:::AAPL:");
-      await sendMsg("LG:3:::GOOG:");
-      await sendMsg("LG:3:::TLSA:");
-      console.log("Successfully added? " + added);
 
       let incomming: string = "";
       incomming = String(await sendMsg("LG:5::::"));
-      console.log("Incomming favorites " + incomming);
+      console.log("Incomming favorites " + incomming + " length: " + incomming.length);
 
       if (incomming != "NIL:1;"){
         let splitMsg:string[] = incomming.split(";")
@@ -119,11 +114,11 @@ export function Dash() {
 
         }
           
-          
-        updateSaved(favorites);
+        if (favorites[0] == "")
+            console.log("No Favorites");
       }
       else{
-        console.log("No Favorites");
+        console.log("ERR");
       }
     }
       
@@ -139,7 +134,11 @@ export function Dash() {
     }
     if (moment().isBetween(moment('9:30:00',format), moment('16:00:00', format))){
         const interval = setInterval(() => {
-        //updateSaved(favorites);
+        if (favorites[0] != ""){
+          console.log("Favorites: " + favorites);
+          updateSaved(favorites);
+        }
+          
       }, 10000);
 
       return ()=> clearInterval(interval);
@@ -224,7 +223,7 @@ export function Dash() {
 
             <ul>
                 {favorites.map((value, index) => {
-                  return <li key={index}>{value}: {pricesArr[index]}</li>
+                  return <li key={index}>{value.toUpperCase()}: {pricesArr[index]}</li>
                 })}
             </ul>
 
