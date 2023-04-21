@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -10,46 +11,53 @@ import (
 func unitTests() { //pass in example/testing data to various functions
 	fmt.Println("Sprint 1 and 2:\n")
 
-	//testTypeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
-	//testTickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
-	//testDataList := new(data_list)
-	//testDataList = testInitializeWorkingList(testTypeTickerArray, testTickerArray)
+	testTypeTickerArray := []string{"stock", "stock", "stock", "stock", "stock"}
+	testTickerArray := []string{"aapl", "amzn", "intc", "nvda", "wmt"}
+	testDataList := new(data_list)
+	testDataList = testInitializeWorkingList(testTypeTickerArray, testTickerArray)
 
-	//testStock := testGetDataByTicker("amd", "stock")
+	testStock := testGetDataByTicker("amd", "stock")
 
-	//testDataList = testAddStockToMain(testStock, testDataList)
+	testDataList = testAddStockToMain(testStock, testDataList)
 
-	//testCheckIfStockExist("aapl")
-	//testCheckIfStockExist("zzzzz")
-	//fmt.Println()
+	testCheckIfStockExist("aapl")
+	testCheckIfStockExist("zzzzz")
+	fmt.Println()
 
-	//fmt.Println("Sprint 3:\n")
+	fmt.Println("Sprint 3:\n")
 
-	//testPassWeekends(5, "5")
-	//testSkipWeekends("1year")
+	testPassWeekends(5, "5")
+	testSkipWeekends("1year")
 
-	//testGetTimeFrame("1day", "1min")
+	testGetTimeFrame("1day", "1min")
 
-	//testGetTimeFrame("5day", "5min")
-	//testGetTimeFrame("1month", "15min")
-	//testGetTimeFrame("3month", "1day")
-	//testGetTimeFrame("YTD", "1month")
-	//testGetTimeFrame("1year", "1year")
-	//testGetTimeFrame("1month", "1day")
+	testGetTimeFrame("5day", "5min")
+	testGetTimeFrame("1month", "15min")
+	testGetTimeFrame("3month", "1day")
+	testGetTimeFrame("YTD", "1month")
+	testGetTimeFrame("1year", "1year")
+	testGetTimeFrame("1month", "1day")
 
-	//testAddHistoricalData(testStock, "1day", "1hour")
-	//testAddHistoricalData(testStock, "1year", "1year")
-	//testAddHistoricalData(testStock, "1year")
+	// testAddHistoricalData(testStock, "1day", "1hour")
+	// testAddHistoricalData(testStock, "1year", "1year")
+	// testAddHistoricalData(testStock, "1year")
 
-	//fmt.Println("Sprint 4:\n")
+	fmt.Println("Sprint 4:\n")
 
-	//passwordHashing("123456")
+	passwordHashing("123456")
 
-	// testAddUser("leo023:0233454:aapl,aal:154.45")
-	// testAddUser("bray657:123455:aapl:100")
-	//testUpdateFavorite("bray657,aapl:amd")
-	//testUpdateBalance("leo023,aapl:aal,50")
+	fmt.Println("Add users:\n")
+	testAddUser("leo023:0233454:aapl,aal:154.45", "leo023")
+	testAddUser("bray657:123455:aapl:100", "bray657")
+	testAddUser("jean904:hihi::87", "jean904")
 
+	fmt.Println("Update Favorites:")
+	currentUsername = "jean904"
+	testUpdateFavorite("amd", "jean904")
+	testUpdateFavorite("aapl", "jean904")
+	testUpdateFavorite("aapl", "jean904")
+
+	testReturnFavorites("jean904")
 }
 
 func testInitializeWorkingList(typeTickerArray []string, tickerArray []string) *data_list {
@@ -126,27 +134,30 @@ func passwordHashing(password string) {
 
 	match := CheckPasswordHash(password, hash)
 	fmt.Println("Match:   ", match)
+	fmt.Println("")
 }
 
-// func testAddUser(userData string) {
-// 	fmt.Println(userData)
-// 	addUser(userData)
-// 	a := returnUserData("leo023")
-// 	fmt.Println("Favorites, Balances:")
-// 	fmt.Println(a)
-// }
+func testAddUser(userData string, username string) {
+	fmt.Println("Input string - " + userData)
+	currentUsername = username
+	addUser(userData)
+	a := returnUserData()
+	fmt.Println("Favorites, Balances:")
+	fmt.Println(strings.Join(strings.Split(a, ":")[1:], ":") + "\n")
+}
 
-// func testUpdateFavorite(userData string) {
-// 	updateFavorite(userData)
-// 	a := returnUserData("leo023")
-// 	fmt.Println("Favorites, Balances:")
-// 	fmt.Println(a)
-// }
+func testUpdateFavorite(newTicker string, username string) {
+	fmt.Println(newTicker)
+	currentUsername = username
+	updateFavorite(newTicker)
+	a := returnUserData()
+	fmt.Println("Favorites, Balances:")
+	fmt.Println(strings.Join(strings.Split(a, ":")[1:], ":") + "\n")
 
-// func testUpdateBalance(userData string) {
-// 	updateFavorite(userData)
-// 	a := returnUserData("leo023")
-// 	fmt.Println("Favorites, Balances:")
-// 	fmt.Println(a)
+}
 
-// }
+func testReturnFavorites(username string) {
+	currentUsername = username
+	fmt.Println("Favorites of", currentUsername)
+	fmt.Println(returnFavorites())
+}

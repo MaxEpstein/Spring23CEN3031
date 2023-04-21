@@ -13,7 +13,7 @@
 
 ## How to Run
 - run npm install to get dependencies
-- run go build searchServer.go and worklistFunctions.go files in src folder
+- run go build searchServer.go, userDatabase.go worklistFunctions.go files in src folder
 - run npm start in stock_simulation folder
   
 > References: https://golangdocs.com/golang-finance-go-package-stock-quote-options-chart
